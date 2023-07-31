@@ -1,0 +1,20 @@
+{
+	"block.create_tweaked_controllers.tweaked_lectern_controller": "Tweaked Lectern Controller",
+	
+	"item.create_tweaked_controllers.tweaked_linked_controller": "Tweaked Linked Controller",
+	
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip": "TWEAKED LINKED CONTROLLER",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.summary": "Grants _handheld_ _control_ over _Redstone Link_ frequencies assigned to your _Game Controller_ inputs.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition1": "R-Click",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour1": "_Toggles_ the controller. _Inputs_ from your _Game Controller_ are taken over while its active.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition2": "R-Click while Sneaking",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour2": "Opens the manual _Configuration Interface_.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition3": "R-Click on Redstone Link Receiver",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour3": "Enables _Bind Mode_, press one of your _Game Controller input_ to bind it to the _Links' Frequency_.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition4": "R-Click on Lectern",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour4": "Places the Controller into the Lectern for easy activation. (R-Click while Sneaking to retrieve it)",
+	
+	"itemGroup.create_tweaked_controllers.base": "Create tweaked Controllers",
+	
+	"_": "EOF"
+}

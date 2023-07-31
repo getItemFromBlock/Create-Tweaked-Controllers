@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "${loader_range}"
+license = "MIT"
+issueTrackerURL = "https://github.com/${github_project}/issues"
+
+[[mods]]
+modId = "create_tweaked_controllers"
+version = "${version}"
+displayName = "Create: Tweaked Controllers"
+displayURL="https://github.com/${github_project}"
+logoFile = "logo.png"
+authors = "getItemFromBlock"
+description = '''
+A Create Addon that extends the Create linked controller by adding a variant that can be controlled with a real controller.
+Compatible with Create 0.5.0.g
+'''
+
+[[dependencies.create_tweaked_controllers]]
+modId = "forge"
+mandatory = true
+versionRange = "${forge_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.create_tweaked_controllers]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.create_tweaked_controllers]]
+modId = "create"
+mandatory = true
+versionRange = "${create_range}"
+ordering = "NONE"
+side = "BOTH"
