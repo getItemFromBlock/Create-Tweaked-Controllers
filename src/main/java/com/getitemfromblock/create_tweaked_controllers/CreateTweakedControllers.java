@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -12,20 +12,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(CreateExtendedControllers.ID)
+@Mod(CreateTweakedControllers.ID)
 @Mod.EventBusSubscriber
-public class CreateExtendedControllers
+public class CreateTweakedControllers
 {
-    public static final String ID = "create_extended_controllers";
+    public static final String ID = "create_tweaked_controllers";
 
     private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(ID);
 
-    public CreateExtendedControllers()
+    public CreateTweakedControllers()
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         forgeEventBus.register(this);
-        eventBus.addListener(CreateExtendedControllers::init);
+        eventBus.addListener(CreateTweakedControllers::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ModClientStuff.onConstructor(eventBus, forgeEventBus));
         ModTab.register();
         ModBlocks.register();

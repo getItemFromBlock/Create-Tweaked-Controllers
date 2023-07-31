@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
@@ -7,9 +7,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerBindPacket;
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerInputPacket;
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerStopLecternPacket;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerBindPacket;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerInputPacket;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerStopLecternPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.minecraft.core.BlockPos;
@@ -25,14 +25,14 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public enum ModPackets
 {
-    EXTENDED_LINKED_CONTROLLER_INPUT(ExtendedLinkedControllerInputPacket.class, ExtendedLinkedControllerInputPacket::new, PLAY_TO_SERVER),
-	EXTENDED_LINKED_CONTROLLER_BIND(ExtendedLinkedControllerBindPacket.class, ExtendedLinkedControllerBindPacket::new, PLAY_TO_SERVER),
-	EXTENDED_LINKED_CONTROLLER_USE_LECTERN(ExtendedLinkedControllerStopLecternPacket.class, ExtendedLinkedControllerStopLecternPacket::new,
+    TWEAKED_LINKED_CONTROLLER_INPUT(TweakedLinkedControllerInputPacket.class, TweakedLinkedControllerInputPacket::new, PLAY_TO_SERVER),
+	TWEAKED_LINKED_CONTROLLER_BIND(TweakedLinkedControllerBindPacket.class, TweakedLinkedControllerBindPacket::new, PLAY_TO_SERVER),
+	TWEAKED_LINKED_CONTROLLER_USE_LECTERN(TweakedLinkedControllerStopLecternPacket.class, TweakedLinkedControllerStopLecternPacket::new,
 		PLAY_TO_SERVER),
 
     ;
 
-	public static final ResourceLocation CHANNEL_NAME = CreateExtendedControllers.asResource("main");
+	public static final ResourceLocation CHANNEL_NAME = CreateTweakedControllers.asResource("main");
 	public static final int NETWORK_VERSION = 2;
 	public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
 	public static SimpleChannel channel;

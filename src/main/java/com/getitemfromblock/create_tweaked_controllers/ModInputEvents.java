@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -13,6 +13,6 @@ public class ModInputEvents
     @SubscribeEvent
 	public static void onClickInput(ClickInputEvent event)
     {
-        ExtendedLinkedControllerClientHandler.deactivateInLectern();
+        TweakedLinkedControllerClientHandler.deactivateInLectern();
     }
 }

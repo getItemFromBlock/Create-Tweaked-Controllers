@@ -1,18 +1,18 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLecternControllerBlockEntity;
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLecternControllerRenderer;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class ModBlockEntityTypes
 {
-    private static final CreateRegistrate REGISTRATE = CreateExtendedControllers.registrate();
+    private static final CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
 
-    public static final BlockEntityEntry<ExtendedLecternControllerBlockEntity> EXTENDED_LECTERN_CONTROLLER = REGISTRATE
-		.tileEntity("extended_lectern_controller", ExtendedLecternControllerBlockEntity::new)
-		.validBlocks(ModBlocks.EXTENDED_LECTERN_CONTROLLER)
-		.renderer(() -> ExtendedLecternControllerRenderer::new)
+    public static final BlockEntityEntry<TweakedLecternControllerBlockEntity> TWEAKED_LECTERN_CONTROLLER = REGISTRATE
+		.tileEntity("tweaked_lectern_controller", TweakedLecternControllerBlockEntity::new)
+		.validBlocks(ModBlocks.TWEAKED_LECTERN_CONTROLLER)
+		.renderer(() -> TweakedLecternControllerRenderer::new)
 		.register();
 
 	public static void register() {}

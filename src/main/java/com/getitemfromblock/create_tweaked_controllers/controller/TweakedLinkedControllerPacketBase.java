@@ -1,8 +1,8 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.function.Supplier;
 
-import com.getitemfromblock.create_extended_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.ModItems;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.minecraft.core.BlockPos;
@@ -12,17 +12,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent.Context;
 
-public abstract class ExtendedLinkedControllerPacketBase extends SimplePacketBase
+public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
 {
 
 	private BlockPos lecternPos;
 
-	public ExtendedLinkedControllerPacketBase(BlockPos lecternPos)
+	public TweakedLinkedControllerPacketBase(BlockPos lecternPos)
 	{
 		this.lecternPos = lecternPos;
 	}
 
-	public ExtendedLinkedControllerPacketBase(FriendlyByteBuf buffer)
+	public TweakedLinkedControllerPacketBase(FriendlyByteBuf buffer)
 	{
 		if (buffer.readBoolean())
 		{
@@ -58,17 +58,17 @@ public abstract class ExtendedLinkedControllerPacketBase extends SimplePacketBas
 			if (inLectern())
 			{
 				BlockEntity be = player.level.getBlockEntity(lecternPos);
-				if (!(be instanceof ExtendedLecternControllerBlockEntity))
+				if (!(be instanceof TweakedLecternControllerBlockEntity))
 					return;
-				handleLectern(player, (ExtendedLecternControllerBlockEntity) be);
+				handleLectern(player, (TweakedLecternControllerBlockEntity) be);
 			}
 			else
 			{
 				ItemStack controller = player.getMainHandItem();
-				if (!ModItems.EXTENDED_LINKED_CONTROLLER.isIn(controller))
+				if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
 				{
 					controller = player.getOffhandItem();
-					if (!ModItems.EXTENDED_LINKED_CONTROLLER.isIn(controller))
+					if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
 						return;
 				}
 				handleItem(player, controller);
@@ -79,6 +79,6 @@ public abstract class ExtendedLinkedControllerPacketBase extends SimplePacketBas
 	}
 
 	protected abstract void handleItem(ServerPlayer player, ItemStack heldItem);
-	protected abstract void handleLectern(ServerPlayer player, ExtendedLecternControllerBlockEntity lectern);
+	protected abstract void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern);
 
 }

@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement
 {
-    EXTENDED_LINKED_CONTROLLER("extended_controller", 227, 172),
+    TWEAKED_LINKED_CONTROLLER("tweaked_linked_controller", 227, 172),
     ;
     public static final int FONT_COLOR = 0x575F7A;
 
@@ -26,14 +26,9 @@ public enum ModGuiTextures implements ScreenElement
 		this(location, 0, 0, width, height);
 	}
 
-	private ModGuiTextures(int startX, int startY)
-    {
-		this("icons", startX * 16, startY * 16, 16, 16);
-	}
-
 	private ModGuiTextures(String location, int startX, int startY, int width, int height)
     {
-		this(CreateExtendedControllers.ID, location, startX, startY, width, height);
+		this(CreateTweakedControllers.ID, location, startX, startY, width, height);
 	}
 
 	private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height)

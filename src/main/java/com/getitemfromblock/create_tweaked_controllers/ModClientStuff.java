@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
@@ -16,6 +16,6 @@ public class ModClientStuff
 
     public static void clientInit(final FMLClientSetupEvent event)
     {
-        OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Create Extended Controller's Extended Linked Controller", ExtendedLinkedControllerClientHandler.OVERLAY);
+        OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Create: Tweaked Controller's Tweaked Linked Controller", TweakedLinkedControllerClientHandler.OVERLAY);
     }
 }

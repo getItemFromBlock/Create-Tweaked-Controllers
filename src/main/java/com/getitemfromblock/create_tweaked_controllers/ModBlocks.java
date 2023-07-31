@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLecternControllerBlock;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerBlock;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.block.Blocks;
@@ -9,10 +9,10 @@ import static com.simibubi.create.foundation.data.TagGen.axeOnly;
 public class ModBlocks
 {
     private static final
-	CreateRegistrate REGISTRATE = CreateExtendedControllers.registrate().creativeModeTab(() -> ModTab.MOD_TAB);
+	CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate().creativeModeTab(() -> ModTab.MOD_TAB);
 
-    public static final BlockEntry<ExtendedLecternControllerBlock> EXTENDED_LECTERN_CONTROLLER =
-		REGISTRATE.block("extended_lectern_controller", ExtendedLecternControllerBlock::new)
+    public static final BlockEntry<TweakedLecternControllerBlock> TWEAKED_LECTERN_CONTROLLER =
+		REGISTRATE.block("tweaked_lectern_controller", TweakedLecternControllerBlock::new)
 			.initialProperties(() -> Blocks.LECTERN)
 			.transform(axeOnly())
 			.blockstate((c, p) -> p.horizontalBlock(c.get(), p.models()

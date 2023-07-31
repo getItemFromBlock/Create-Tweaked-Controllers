@@ -1,13 +1,13 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.Vector;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.getitemfromblock.create_extended_controllers.CreateExtendedControllers;
-import com.getitemfromblock.create_extended_controllers.ModItems;
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerClientHandler.Mode;
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -23,11 +23,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
-public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer<ExtendedLinkedControllerModel>
+public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer<TweakedLinkedControllerModel>
 {
 
-	protected static final PartialModel POWERED = new PartialModel(CreateExtendedControllers.asResource("item/extended_linked_controller/powered"));
-	protected static final PartialModel BUTTON = new PartialModel(CreateExtendedControllers.asResource("item/extended_linked_controller/button"));
+	protected static final PartialModel POWERED = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
+	protected static final PartialModel BUTTON = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button"));
 
 	static LerpedFloat equipProgress;
 	static Vector<LerpedFloat> buttons;
@@ -47,7 +47,7 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 		if (Minecraft.getInstance().isPaused())
 			return;
 
-		boolean active = ExtendedLinkedControllerClientHandler.MODE != Mode.IDLE;
+		boolean active = TweakedLinkedControllerClientHandler.MODE != Mode.IDLE;
 		equipProgress.chase(active ? 1 : 0, .2f, Chaser.EXP);
 		equipProgress.tickChaser();
 
@@ -57,7 +57,7 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 		for (int i = 0; i < buttons.size(); i++)
 		{
 			LerpedFloat lerpedFloat = buttons.get(i);
-			lerpedFloat.chase(ExtendedLinkedControllerClientHandler.currentlyPressed.contains(i) ? 1 : 0, .4f, Chaser.EXP);
+			lerpedFloat.chase(TweakedLinkedControllerClientHandler.currentlyPressed.contains(i) ? 1 : 0, .4f, Chaser.EXP);
 			lerpedFloat.tickChaser();
 		}
 	}
@@ -71,28 +71,28 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 	}
 
 	@Override
-	protected void render(ItemStack stack, ExtendedLinkedControllerModel model, PartialItemModelRenderer renderer,
+	protected void render(ItemStack stack, TweakedLinkedControllerModel model, PartialItemModelRenderer renderer,
 		ItemTransforms.TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light,
 		int overlay)
 	{
 		renderNormal(stack, model, renderer, transformType, ms, light);
 	}
 
-	protected static void renderNormal(ItemStack stack, ExtendedLinkedControllerModel model,
+	protected static void renderNormal(ItemStack stack, TweakedLinkedControllerModel model,
 	  	PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
   		int light)
 	{
 		render(stack, model, renderer, transformType, ms, light, RenderType.NORMAL, false, false);
 	}
 
-	public static void renderInLectern(ItemStack stack, ExtendedLinkedControllerModel model,
+	public static void renderInLectern(ItemStack stack, TweakedLinkedControllerModel model,
 	  	PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
   		int light, boolean active, boolean renderDepression)
 	{
 		render(stack, model, renderer, transformType, ms, light, RenderType.LECTERN, active, renderDepression);
 	}
 
-	protected static void render(ItemStack stack, ExtendedLinkedControllerModel model,
+	protected static void render(ItemStack stack, TweakedLinkedControllerModel model,
 	  	PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
   		int light, RenderType renderType, boolean active, boolean renderDepression)
 	{
@@ -111,7 +111,7 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 					rightHanded ? TransformType.FIRST_PERSON_LEFT_HAND : TransformType.FIRST_PERSON_RIGHT_HAND;
 
 			active = false;
-			boolean noControllerInMain = !ModItems.EXTENDED_LINKED_CONTROLLER.isIn(mc.player.getMainHandItem());
+			boolean noControllerInMain = !ModItems.TWEAKED_LINKED_CONTROLLER.isIn(mc.player.getMainHandItem());
 
 			if (transformType == mainHand || (transformType == offHand && noControllerInMain))
 			{
@@ -131,7 +131,7 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 					active = true;
 			}
 
-			active &= ExtendedLinkedControllerClientHandler.MODE != Mode.IDLE;
+			active &= TweakedLinkedControllerClientHandler.MODE != Mode.IDLE;
 
 			renderDepression = true;
 		}
@@ -151,7 +151,7 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 
 		if (renderType == RenderType.NORMAL)
 		{
-			if (ExtendedLinkedControllerClientHandler.MODE == Mode.BIND)
+			if (TweakedLinkedControllerClientHandler.MODE == Mode.BIND)
 			{
 				int i = (int) Mth.lerp((Mth.sin(AnimationTickHolder.getRenderTime() / 4f) + 1) / 2, 5, 15);
 				light = i << 20;
@@ -191,9 +191,9 @@ public class ExtendedLinkedControllerItemRenderer extends CustomRenderedItemMode
 	}
 
 	@Override
-	public ExtendedLinkedControllerModel createModel(BakedModel originalModel)
+	public TweakedLinkedControllerModel createModel(BakedModel originalModel)
 	{
-		return new ExtendedLinkedControllerModel(originalModel);
+		return new TweakedLinkedControllerModel(originalModel);
 	}
 
 	protected enum RenderType

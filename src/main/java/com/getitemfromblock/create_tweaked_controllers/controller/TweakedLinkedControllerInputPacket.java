@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,25 +11,25 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class ExtendedLinkedControllerInputPacket extends ExtendedLinkedControllerPacketBase
+public class TweakedLinkedControllerInputPacket extends TweakedLinkedControllerPacketBase
 {
 
 	private Collection<Integer> activatedButtons;
 	private boolean press;
 
-	public ExtendedLinkedControllerInputPacket(Collection<Integer> activatedButtons, boolean press)
+	public TweakedLinkedControllerInputPacket(Collection<Integer> activatedButtons, boolean press)
 	{
 		this(activatedButtons, press, null);
 	}
 
-	public ExtendedLinkedControllerInputPacket(Collection<Integer> activatedButtons, boolean press, BlockPos lecternPos)
+	public TweakedLinkedControllerInputPacket(Collection<Integer> activatedButtons, boolean press, BlockPos lecternPos)
 	{
 		super(lecternPos);
 		this.activatedButtons = activatedButtons;
 		this.press = press;
 	}
 
-	public ExtendedLinkedControllerInputPacket(FriendlyByteBuf buffer)
+	public TweakedLinkedControllerInputPacket(FriendlyByteBuf buffer)
 	{
 		super(buffer);
 		activatedButtons = new ArrayList<>();
@@ -49,7 +49,7 @@ public class ExtendedLinkedControllerInputPacket extends ExtendedLinkedControlle
 	}
 
 	@Override
-	protected void handleLectern(ServerPlayer player, ExtendedLecternControllerBlockEntity lectern)
+	protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
 	{
 		if (lectern.isUsedBy(player))
 			handleItem(player, lectern.getController());
@@ -65,8 +65,8 @@ public class ExtendedLinkedControllerInputPacket extends ExtendedLinkedControlle
 		if (player.isSpectator() && press)
 			return;
 		
-		ExtendedLinkedControllerServerHandler.receivePressed(world, pos, uniqueID, activatedButtons.stream()
-			.map(i -> ExtendedLinkedControllerItem.toFrequency(heldItem, i))
+		TweakedLinkedControllerServerHandler.receivePressed(world, pos, uniqueID, activatedButtons.stream()
+			.map(i -> TweakedLinkedControllerItem.toFrequency(heldItem, i))
 			.collect(Collectors.toList()), press);
 	}
 

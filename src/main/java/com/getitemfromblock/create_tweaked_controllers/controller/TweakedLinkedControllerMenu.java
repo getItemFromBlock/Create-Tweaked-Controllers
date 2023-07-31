@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
-import com.getitemfromblock.create_extended_controllers.ModMenuTypes;
+import com.getitemfromblock.create_tweaked_controllers.ModMenuTypes;
 import com.simibubi.create.foundation.gui.container.GhostItemContainer;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,22 +12,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ExtendedLinkedControllerMenu extends GhostItemContainer<ItemStack>
+public class TweakedLinkedControllerMenu extends GhostItemContainer<ItemStack>
 {
 
-	public ExtendedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData)
+	public TweakedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData)
 	{
 		super(type, id, inv, extraData);
 	}
 
-	public ExtendedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, ItemStack filterItem)
+	public TweakedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, ItemStack filterItem)
 	{
 		super(type, id, inv, filterItem);
 	}
 
-	public static ExtendedLinkedControllerMenu create(int id, Inventory inv, ItemStack filterItem)
+	public static TweakedLinkedControllerMenu create(int id, Inventory inv, ItemStack filterItem)
 	{
-		return new ExtendedLinkedControllerMenu(ModMenuTypes.EXTENDED_LINKED_CONTROLLER.get(), id, inv, filterItem);
+		return new TweakedLinkedControllerMenu(ModMenuTypes.TWEAKED_LINKED_CONTROLLER.get(), id, inv, filterItem);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class ExtendedLinkedControllerMenu extends GhostItemContainer<ItemStack>
 	@Override
 	protected ItemStackHandler createGhostInventory()
 	{
-		return ExtendedLinkedControllerItem.getFrequencyItems(contentHolder);
+		return TweakedLinkedControllerItem.getFrequencyItems(contentHolder);
 	}
 
 	protected static final int[] guiItemSlots =

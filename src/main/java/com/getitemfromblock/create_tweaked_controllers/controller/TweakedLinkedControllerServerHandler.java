@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,29 +21,29 @@ import com.simibubi.create.foundation.utility.WorldAttached;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 
-public class ExtendedLinkedControllerServerHandler
+public class TweakedLinkedControllerServerHandler
 {
 
-	public static WorldAttached<Map<UUID, Collection<ExtendedManualFrequency>>> receivedInputs =
+	public static WorldAttached<Map<UUID, Collection<TweakedManualFrequency>>> receivedInputs =
 		new WorldAttached<>($ -> new HashMap<>());
 	static final int TIMEOUT = 30;
 
 	public static void tick(LevelAccessor world)
 	{
-		Map<UUID, Collection<ExtendedManualFrequency>> map = receivedInputs.get(world);
-		for (Iterator<Entry<UUID, Collection<ExtendedManualFrequency>>> iterator = map.entrySet()
+		Map<UUID, Collection<TweakedManualFrequency>> map = receivedInputs.get(world);
+		for (Iterator<Entry<UUID, Collection<TweakedManualFrequency>>> iterator = map.entrySet()
 			.iterator(); iterator.hasNext();) {
 
-			Entry<UUID, Collection<ExtendedManualFrequency>> entry = iterator.next();
-			Collection<ExtendedManualFrequency> list = entry.getValue();
+			Entry<UUID, Collection<TweakedManualFrequency>> entry = iterator.next();
+			Collection<TweakedManualFrequency> list = entry.getValue();
 
-			for (Iterator<ExtendedManualFrequency> entryIterator = list.iterator(); entryIterator.hasNext();)
+			for (Iterator<TweakedManualFrequency> entryIterator = list.iterator(); entryIterator.hasNext();)
 			{
-				ExtendedManualFrequency ExtendedManualFrequency = entryIterator.next();
-				ExtendedManualFrequency.decrement();
-				if (!ExtendedManualFrequency.isAlive())
+				TweakedManualFrequency TweakedManualFrequency = entryIterator.next();
+				TweakedManualFrequency.decrement();
+				if (!TweakedManualFrequency.isAlive())
 				{
-					Create.REDSTONE_LINK_NETWORK_HANDLER.removeFromNetwork(world, ExtendedManualFrequency);
+					Create.REDSTONE_LINK_NETWORK_HANDLER.removeFromNetwork(world, TweakedManualFrequency);
 					entryIterator.remove();
 				}
 			}
@@ -56,14 +56,14 @@ public class ExtendedLinkedControllerServerHandler
 	public static void receivePressed(LevelAccessor world, BlockPos pos, UUID uniqueID, List<Couple<Frequency>> collect,
 		boolean pressed)
 		{
-		Map<UUID, Collection<ExtendedManualFrequency>> map = receivedInputs.get(world);
-		Collection<ExtendedManualFrequency> list = map.computeIfAbsent(uniqueID, $ -> new ArrayList<>());
+		Map<UUID, Collection<TweakedManualFrequency>> map = receivedInputs.get(world);
+		Collection<TweakedManualFrequency> list = map.computeIfAbsent(uniqueID, $ -> new ArrayList<>());
 
 		WithNext: for (Couple<Frequency> activated : collect)
 		{
-			for (Iterator<ExtendedManualFrequency> iterator = list.iterator(); iterator.hasNext();)
+			for (Iterator<TweakedManualFrequency> iterator = list.iterator(); iterator.hasNext();)
 			{
-				ExtendedManualFrequency entry = iterator.next();
+				TweakedManualFrequency entry = iterator.next();
 				if (entry.getSecond()
 					.equals(activated)) {
 					if (!pressed)
@@ -77,7 +77,7 @@ public class ExtendedLinkedControllerServerHandler
 			if (!pressed)
 				continue;
 
-			ExtendedManualFrequency entry = new ExtendedManualFrequency(pos, activated);
+			TweakedManualFrequency entry = new TweakedManualFrequency(pos, activated);
 			Create.REDSTONE_LINK_NETWORK_HANDLER.addToNetwork(world, entry);
 			list.add(entry);
 			
@@ -87,12 +87,12 @@ public class ExtendedLinkedControllerServerHandler
 		}
 	}
 
-	static class ExtendedManualFrequency extends IntAttached<Couple<Frequency>> implements IRedstoneLinkable
+	static class TweakedManualFrequency extends IntAttached<Couple<Frequency>> implements IRedstoneLinkable
 	{
 
 		private BlockPos pos;
 
-		public ExtendedManualFrequency(BlockPos pos, Couple<Frequency> second)
+		public TweakedManualFrequency(BlockPos pos, Couple<Frequency> second)
 		{
 			super(TIMEOUT, second);
 			this.pos = pos;

@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
@@ -21,7 +21,7 @@ public class ModClientEvents
 		//Level world = Minecraft.getInstance().level;
 		if (event.phase == Phase.START)
         {
-			ExtendedLinkedControllerClientHandler.tick();
+			TweakedLinkedControllerClientHandler.tick();
 			return;
 		}
     }

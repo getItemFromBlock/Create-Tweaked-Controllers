@@ -1,6 +1,6 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerServerHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
 
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -19,6 +19,6 @@ public class ModCommonEvents
 		if (event.phase == Phase.START || event.side == LogicalSide.CLIENT)
 			return;
 		Level world = event.world;
-		ExtendedLinkedControllerServerHandler.tick(world);
+		TweakedLinkedControllerServerHandler.tick(world);
 	}
 }

@@ -1,7 +1,7 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerMenu;
-import com.getitemfromblock.create_extended_controllers.controller.extended.ExtendedLinkedControllerScreen;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerScreen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.MenuBuilder.ForgeMenuFactory;
 import com.tterrag.registrate.builders.MenuBuilder.ScreenFactory;
@@ -15,10 +15,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 public class ModMenuTypes
 {
     private static final
-	CreateRegistrate REGISTRATE = CreateExtendedControllers.registrate();
+	CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
 
-    public static final MenuEntry<ExtendedLinkedControllerMenu> EXTENDED_LINKED_CONTROLLER =
-		register("extended_linked_controller", ExtendedLinkedControllerMenu::new, () -> ExtendedLinkedControllerScreen::new);
+    public static final MenuEntry<TweakedLinkedControllerMenu> TWEAKED_LINKED_CONTROLLER =
+		register("tweaked_linked_controller", TweakedLinkedControllerMenu::new, () -> TweakedLinkedControllerScreen::new);
 
         private static <C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> MenuEntry<C> register(
 		String name, ForgeMenuFactory<C> factory, NonNullSupplier<ScreenFactory<C, S>> screenFactory) {

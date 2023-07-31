@@ -1,11 +1,11 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
-import com.getitemfromblock.create_extended_controllers.ControllerInputs;
+import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
-public class ExtendedControlsUtil
+public class TweakedControlsUtil
 {
     protected static GLFWGamepadState state = null;
 

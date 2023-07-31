@@ -1,9 +1,9 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
 
-import com.getitemfromblock.create_extended_controllers.ModItems;
-import com.getitemfromblock.create_extended_controllers.ModBlockEntityTypes;
+import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.ModBlockEntityTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.schematics.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.ItemRequirement;
@@ -24,26 +24,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class ExtendedLecternControllerBlock extends LecternBlock
-	implements ITE<ExtendedLecternControllerBlockEntity>, ISpecialBlockItemRequirement
+public class TweakedLecternControllerBlock extends LecternBlock
+	implements ITE<TweakedLecternControllerBlockEntity>, ISpecialBlockItemRequirement
 	{
 
-	public ExtendedLecternControllerBlock(Properties properties)
+	public TweakedLecternControllerBlock(Properties properties)
 	{
 		super(properties);
 		registerDefaultState(defaultBlockState().setValue(HAS_BOOK, true));
 	}
 
 	@Override
-	public Class<ExtendedLecternControllerBlockEntity> getTileEntityClass()
+	public Class<TweakedLecternControllerBlockEntity> getTileEntityClass()
 	{
-		return ExtendedLecternControllerBlockEntity.class;
+		return TweakedLecternControllerBlockEntity.class;
 	}
 
 	@Override
-	public BlockEntityType<? extends ExtendedLecternControllerBlockEntity> getTileEntityType()
+	public BlockEntityType<? extends TweakedLecternControllerBlockEntity> getTileEntityType()
 	{
-		return ModBlockEntityTypes.EXTENDED_LECTERN_CONTROLLER.get();
+		return ModBlockEntityTypes.TWEAKED_LECTERN_CONTROLLER.get();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ExtendedLecternControllerBlock extends LecternBlock
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
 		BlockHitResult hit)
 		{
-		if (!player.isShiftKeyDown() && ExtendedLecternControllerBlockEntity.playerInRange(player, world, pos))
+		if (!player.isShiftKeyDown() && TweakedLecternControllerBlockEntity.playerInRange(player, world, pos))
 		{
 			if (!world.isClientSide)
 				withTileEntityDo(world, pos, be -> be.tryStartUsing(player));
@@ -76,7 +76,8 @@ public class ExtendedLecternControllerBlock extends LecternBlock
 	@Override
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if (!state.is(newState.getBlock())) {
+		if (!state.is(newState.getBlock()))
+		{
 			if (!world.isClientSide)
 				withTileEntityDo(world, pos, be -> be.dropController(state));
 
@@ -116,7 +117,7 @@ public class ExtendedLecternControllerBlock extends LecternBlock
 	{
 		ArrayList<ItemStack> requiredItems = new ArrayList<>();
 		requiredItems.add(new ItemStack(Blocks.LECTERN));
-		requiredItems.add(new ItemStack(ModItems.EXTENDED_LINKED_CONTROLLER.get()));
+		requiredItems.add(new ItemStack(ModItems.TWEAKED_LINKED_CONTROLLER.get()));
 		return new ItemRequirement(ItemRequirement.ItemUseType.CONSUME, requiredItems);
 	}
 }

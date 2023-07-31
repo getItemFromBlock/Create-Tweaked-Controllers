@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
@@ -10,20 +10,20 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ExtendedLinkedControllerBindPacket extends ExtendedLinkedControllerPacketBase
+public class TweakedLinkedControllerBindPacket extends TweakedLinkedControllerPacketBase
 {
 
 	private int button;
 	private BlockPos linkLocation;
 
-	public ExtendedLinkedControllerBindPacket(int button, BlockPos linkLocation)
+	public TweakedLinkedControllerBindPacket(int button, BlockPos linkLocation)
 	{
 		super((BlockPos) null);
 		this.button = button;
 		this.linkLocation = linkLocation;
 	}
 
-	public ExtendedLinkedControllerBindPacket(FriendlyByteBuf buffer)
+	public TweakedLinkedControllerBindPacket(FriendlyByteBuf buffer)
 	{
 		super(buffer);
 		this.button = buffer.readVarInt();
@@ -44,7 +44,7 @@ public class ExtendedLinkedControllerBindPacket extends ExtendedLinkedController
 		if (player.isSpectator())
 			return;
 
-		ItemStackHandler frequencyItems = ExtendedLinkedControllerItem.getFrequencyItems(heldItem);
+		ItemStackHandler frequencyItems = TweakedLinkedControllerItem.getFrequencyItems(heldItem);
 		LinkBehaviour linkBehaviour = TileEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
 		if (linkBehaviour == null)
 			return;
@@ -58,6 +58,6 @@ public class ExtendedLinkedControllerBindPacket extends ExtendedLinkedController
 	}
 
 	@Override
-	protected void handleLectern(ServerPlayer player, ExtendedLecternControllerBlockEntity lectern) {}
+	protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern) {}
 
 }

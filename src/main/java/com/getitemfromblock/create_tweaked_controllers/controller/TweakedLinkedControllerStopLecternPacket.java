@@ -1,25 +1,25 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-public class ExtendedLinkedControllerStopLecternPacket extends ExtendedLinkedControllerPacketBase
+public class TweakedLinkedControllerStopLecternPacket extends TweakedLinkedControllerPacketBase
 {
 
-	public ExtendedLinkedControllerStopLecternPacket(FriendlyByteBuf buffer)
+	public TweakedLinkedControllerStopLecternPacket(FriendlyByteBuf buffer)
 	{
 		super(buffer);
 	}
 
-	public ExtendedLinkedControllerStopLecternPacket(BlockPos lecternPos)
+	public TweakedLinkedControllerStopLecternPacket(BlockPos lecternPos)
 	{
 		super(lecternPos);
 	}
 
 	@Override
-	protected void handleLectern(ServerPlayer player, ExtendedLecternControllerBlockEntity lectern)
+	protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
 	{
 		lectern.tryStopUsing(player);
 	}

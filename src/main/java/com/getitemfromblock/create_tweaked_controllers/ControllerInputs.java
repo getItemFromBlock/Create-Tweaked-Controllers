@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers;
+package com.getitemfromblock.create_tweaked_controllers;
 
 import org.lwjgl.glfw.GLFWGamepadState;
 
@@ -60,12 +60,12 @@ public class ControllerInputs
         }
     }
 
-    public final String GetButtonName(int index)
+    public static final String GetButtonName(int index)
     {
         return buttonNames[index];
     }
 
-    public final String GetAxisName(int index)
+    public static final String GetAxisName(int index)
     {
         return axisNames[index];
     }

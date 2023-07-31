@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import static com.simibubi.create.foundation.gui.AllGuiTextures.PLAYER_INVENTORY;
 
@@ -8,12 +8,12 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.getitemfromblock.create_extended_controllers.ModGuiTextures;
+import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
+import com.getitemfromblock.create_tweaked_controllers.ModGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.ControlsUtil;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
@@ -22,7 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-public class ExtendedLinkedControllerScreen extends AbstractSimiContainerScreen<ExtendedLinkedControllerMenu>
+public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<TweakedLinkedControllerMenu>
 {
 
 	protected ModGuiTextures background;
@@ -31,10 +31,10 @@ public class ExtendedLinkedControllerScreen extends AbstractSimiContainerScreen<
 	private IconButton resetButton;
 	private IconButton confirmButton;
 
-	public ExtendedLinkedControllerScreen(ExtendedLinkedControllerMenu menu, Inventory inv, Component title)
+	public TweakedLinkedControllerScreen(TweakedLinkedControllerMenu menu, Inventory inv, Component title)
 	{
 		super(menu, inv, title);
-		this.background = ModGuiTextures.EXTENDED_LINKED_CONTROLLER;
+		this.background = ModGuiTextures.TWEAKED_LINKED_CONTROLLER;
 	}
 
 	@Override
@@ -116,13 +116,10 @@ public class ExtendedLinkedControllerScreen extends AbstractSimiContainerScreen<
 
 	private List<Component> addToTooltip(List<Component> list, int slot)
 	{
-		if (slot < 0 || slot >= 12)
+		if (slot < 0 || slot >= 30)
 			return list;
-		list.add(Lang.translateDirect("linked_controller.frequency_slot_" + ((slot % 2) + 1), ControlsUtil.getControls()
-			.get(slot / 2)
-			.getTranslatedKeyMessage()
-			.getString())
-			.withStyle(ChatFormatting.GOLD));
+		list.add(Lang.translateDirect("linked_controller.frequency_slot_" + ((slot % 2) + 1),
+			ControllerInputs.GetButtonName(slot/2)).withStyle(ChatFormatting.GOLD));
 		return list;
 	}
 

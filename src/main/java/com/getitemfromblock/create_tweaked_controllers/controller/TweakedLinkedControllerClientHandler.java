@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,10 +8,10 @@ import java.util.Vector;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.getitemfromblock.create_extended_controllers.ControllerInputs;
-import com.getitemfromblock.create_extended_controllers.ModBlocks;
-import com.getitemfromblock.create_extended_controllers.ModItems;
-import com.getitemfromblock.create_extended_controllers.ModPackets;
+import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
+import com.getitemfromblock.create_tweaked_controllers.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.ModPackets;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -21,11 +21,9 @@ import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 //import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.ControlsUtil;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -36,10 +34,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.IIngameOverlay;
 
-public class ExtendedLinkedControllerClientHandler
+public class TweakedLinkedControllerClientHandler
 {
 
-	public static final IIngameOverlay OVERLAY = ExtendedLinkedControllerClientHandler::renderOverlay;
+	public static final IIngameOverlay OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
 
 	public static Mode MODE = Mode.IDLE;
 	public static int PACKET_RATE = 5;
@@ -105,19 +103,19 @@ public class ExtendedLinkedControllerClientHandler
 		selectedLocation = BlockPos.ZERO;
 
 		if (inLectern())
-			ModPackets.channel.sendToServer(new ExtendedLinkedControllerStopLecternPacket(lecternPos));
+			ModPackets.channel.sendToServer(new TweakedLinkedControllerStopLecternPacket(lecternPos));
 		lecternPos = null;
 
 		if (!currentlyPressed.isEmpty())
-			ModPackets.channel.sendToServer(new ExtendedLinkedControllerInputPacket(currentlyPressed, false));
+			ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(currentlyPressed, false));
 		currentlyPressed.clear();
 
-		ExtendedLinkedControllerItemRenderer.resetButtons();
+		TweakedLinkedControllerItemRenderer.resetButtons();
 	}
 
 	public static void tick()
 	{
-		ExtendedLinkedControllerItemRenderer.tick();
+		TweakedLinkedControllerItemRenderer.tick();
 
 		if (MODE == Mode.IDLE)
 			return;
@@ -135,10 +133,10 @@ public class ExtendedLinkedControllerClientHandler
 			return;
 		}
 
-		if (!inLectern() && !ModItems.EXTENDED_LINKED_CONTROLLER.isIn(heldItem))
+		if (!inLectern() && !ModItems.TWEAKED_LINKED_CONTROLLER.isIn(heldItem))
 		{
 			heldItem = player.getOffhandItem();
-			if (!ModItems.EXTENDED_LINKED_CONTROLLER.isIn(heldItem))
+			if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(heldItem))
 			{
 				MODE = Mode.IDLE;
 				onReset();
@@ -146,7 +144,7 @@ public class ExtendedLinkedControllerClientHandler
 			}
 		}
 
-		if (inLectern() && ModBlocks.EXTENDED_LECTERN_CONTROLLER.get()
+		if (inLectern() && ModBlocks.TWEAKED_LECTERN_CONTROLLER.get()
 			.getTileEntityOptional(mc.level, lecternPos)
 			.map(be -> !be.isUsedBy(mc.player))
 			.orElse(true)) {
@@ -169,11 +167,11 @@ public class ExtendedLinkedControllerClientHandler
 			return;
 		}
 		ControllerInputs controls = new ControllerInputs();
-		ExtendedControlsUtil.GetControls(controls);
+		TweakedControlsUtil.GetControls(controls);
 		Collection<Integer> pressedKeys = new HashSet<>();
 		for (int i = 0; i < controls.buttons.length; i++)
 		{
-			if (ExtendedControlsUtil.IsPressed(controls, i))
+			if (TweakedControlsUtil.IsPressed(controls, i))
 				pressedKeys.add(i);
 		}
 
@@ -187,14 +185,14 @@ public class ExtendedLinkedControllerClientHandler
 			// Released Keys
 			if (!releasedKeys.isEmpty())
 			{
-				ModPackets.channel.sendToServer(new ExtendedLinkedControllerInputPacket(releasedKeys, false, lecternPos));
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(releasedKeys, false, lecternPos));
 				AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .5f, true);
 			}
 
 			// Newly Pressed Keys
 			if (!newKeys.isEmpty())
 			{
-				ModPackets.channel.sendToServer(new ExtendedLinkedControllerInputPacket(newKeys, true, lecternPos));
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(newKeys, true, lecternPos));
 				packetCooldown = PACKET_RATE;
 				AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .75f, true);
 			}
@@ -204,7 +202,7 @@ public class ExtendedLinkedControllerClientHandler
 			{
 				if (!pressedKeys.isEmpty())
 				{
-					ModPackets.channel.sendToServer(new ExtendedLinkedControllerInputPacket(pressedKeys, true, lecternPos));
+					ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(pressedKeys, true, lecternPos));
 					packetCooldown = PACKET_RATE;
 				}
 			}
@@ -225,7 +223,7 @@ public class ExtendedLinkedControllerClientHandler
 				LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 				if (linkBehaviour != null)
 				{
-					ModPackets.channel.sendToServer(new ExtendedLinkedControllerBindPacket(integer, selectedLocation));
+					ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(integer, selectedLocation));
 					Lang.translate("linked_controller.key_bound", controls.GetButtonName(integer)).sendStatus(mc.player);
 				}
 				MODE = Mode.IDLE;
@@ -250,15 +248,6 @@ public class ExtendedLinkedControllerClientHandler
 		Screen tooltipScreen = new Screen(Components.immutableEmpty()) {
 		};
 		tooltipScreen.init(mc, width1, height1);
-
-		Object[] keys = new Object[6];
-		Vector<KeyMapping> controls = ControlsUtil.getControls();
-		for (int i = 0; i < controls.size(); i++)
-		{
-			KeyMapping keyBinding = controls.get(i);
-			keys[i] = keyBinding.getTranslatedKeyMessage()
-				.getString();
-		}
 
 		List<Component> list = new ArrayList<>();
 		list.add(Lang.translateDirect("linked_controller.bind_mode")

@@ -1,9 +1,9 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.function.Consumer;
 
-import com.getitemfromblock.create_extended_controllers.ModBlocks;
-import com.getitemfromblock.create_extended_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.ModItems;
 import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import com.simibubi.create.foundation.utility.Couple;
@@ -35,10 +35,10 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 
-public class ExtendedLinkedControllerItem extends Item implements MenuProvider
+public class TweakedLinkedControllerItem extends Item implements MenuProvider
 {
 
-	public ExtendedLinkedControllerItem(Properties properties)
+	public TweakedLinkedControllerItem(Properties properties)
 	{
 		super(properties);
 	}
@@ -56,10 +56,10 @@ public class ExtendedLinkedControllerItem extends Item implements MenuProvider
 		{
 			if (player.isShiftKeyDown())
 			{
-				if (ModBlocks.EXTENDED_LECTERN_CONTROLLER.has(hitState))
+				if (ModBlocks.TWEAKED_LECTERN_CONTROLLER.has(hitState))
 				{
 					if (!world.isClientSide)
-						ModBlocks.EXTENDED_LECTERN_CONTROLLER.get().withTileEntityDo(world, pos, be ->
+						ModBlocks.TWEAKED_LECTERN_CONTROLLER.get().withTileEntityDo(world, pos, be ->
 								be.swapControllers(stack, player, ctx.getHand(), hitState));
 					return InteractionResult.SUCCESS;
 				}
@@ -80,12 +80,12 @@ public class ExtendedLinkedControllerItem extends Item implements MenuProvider
 					if (!world.isClientSide)
 					{
 						ItemStack lecternStack = player.isCreative() ? stack.copy() : stack.split(1);
-						ModBlocks.EXTENDED_LECTERN_CONTROLLER.get().replaceLectern(hitState, world, pos, lecternStack);
+						ModBlocks.TWEAKED_LECTERN_CONTROLLER.get().replaceLectern(hitState, world, pos, lecternStack);
 					}
 					return InteractionResult.SUCCESS;
 				}
 
-				if (ModBlocks.EXTENDED_LECTERN_CONTROLLER.has(hitState))
+				if (ModBlocks.TWEAKED_LECTERN_CONTROLLER.has(hitState))
 					return InteractionResult.PASS;
 			}
 		}
@@ -121,19 +121,19 @@ public class ExtendedLinkedControllerItem extends Item implements MenuProvider
 	@OnlyIn(Dist.CLIENT)
 	private void toggleBindMode(BlockPos pos)
 	{
-		ExtendedLinkedControllerClientHandler.toggleBindMode(pos);
+		TweakedLinkedControllerClientHandler.toggleBindMode(pos);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	private void toggleActive()
 	{
-		ExtendedLinkedControllerClientHandler.toggle();
+		TweakedLinkedControllerClientHandler.toggle();
 	}
 
 	public static ItemStackHandler getFrequencyItems(ItemStack stack)
 	{
 		ItemStackHandler newInv = new ItemStackHandler(30);
-		if (ModItems.EXTENDED_LINKED_CONTROLLER.get() != stack.getItem())
+		if (ModItems.TWEAKED_LINKED_CONTROLLER.get() != stack.getItem())
 			throw new IllegalArgumentException("Cannot get frequency items from non-controller: " + stack);
 		CompoundTag invNBT = stack.getOrCreateTagElement("Items");
 		if (!invNBT.isEmpty())
@@ -151,7 +151,7 @@ public class ExtendedLinkedControllerItem extends Item implements MenuProvider
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
 		ItemStack heldItem = player.getMainHandItem();
-		return ExtendedLinkedControllerMenu.create(id, inv, heldItem);
+		return TweakedLinkedControllerMenu.create(id, inv, heldItem);
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class ExtendedLinkedControllerItem extends Item implements MenuProvider
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-		consumer.accept(SimpleCustomRenderer.create(this, new ExtendedLinkedControllerItemRenderer()));
+		consumer.accept(SimpleCustomRenderer.create(this, new TweakedLinkedControllerItemRenderer()));
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_extended_controllers.controller.extended;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.DistExecutor;
 
-public class ExtendedLecternControllerBlockEntity extends SmartTileEntity
+public class TweakedLecternControllerBlockEntity extends SmartTileEntity
 {
 
 	private ItemStack controller;
@@ -34,7 +34,7 @@ public class ExtendedLecternControllerBlockEntity extends SmartTileEntity
 	private UUID prevUser;	// used only on client
 	private boolean deactivatedThisTick;	// used only on server
 
-	public ExtendedLecternControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+	public TweakedLecternControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
 	{
 		super(type, pos, state);
 	}
@@ -151,11 +151,11 @@ public class ExtendedLecternControllerBlockEntity extends SmartTileEntity
 	{
 		if (user == null && Minecraft.getInstance().player.getUUID().equals(prevUser))
 		{
-			ExtendedLinkedControllerClientHandler.deactivateInLectern();
+			TweakedLinkedControllerClientHandler.deactivateInLectern();
 		}
 		else if (prevUser == null && Minecraft.getInstance().player.getUUID().equals(user))
 		{
-			ExtendedLinkedControllerClientHandler.activateInLectern(worldPosition);
+			TweakedLinkedControllerClientHandler.activateInLectern(worldPosition);
 		}
 	}
 
@@ -188,7 +188,7 @@ public class ExtendedLecternControllerBlockEntity extends SmartTileEntity
 		if (playerEntity instanceof Player)
 			stopUsing((Player) playerEntity);
 
-		Direction dir = state.getValue(ExtendedLecternControllerBlock.FACING);
+		Direction dir = state.getValue(TweakedLecternControllerBlock.FACING);
 		double x = worldPosition.getX() + 0.5 + 0.25*dir.getStepX();
 		double y = worldPosition.getY() + 1;
 		double z = worldPosition.getZ() + 0.5 + 0.25*dir.getStepZ();
