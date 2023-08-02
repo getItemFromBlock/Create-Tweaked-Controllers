@@ -25,7 +25,7 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
 	{
 		super(lecternPos);
         if (axesIn == null) return;
-        for (int i = 0; i < 6; ++i)
+        for (int i = 0; i < 6; i++)
         {
             axes[i] = axesIn[i];
         }
@@ -78,7 +78,7 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
             }
             else
             {
-                float dt = axes[i - 2];
+                float dt = axes[i - 4];
                 if (dt < 0) dt = 0;
                 if (dt > 1) dt = 1;
                 axesValues.add((int)(dt * 15));

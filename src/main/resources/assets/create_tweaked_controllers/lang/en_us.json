@@ -14,7 +14,13 @@
 	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition4": "R-Click on Lectern",
 	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour4": "Places the Controller into the Lectern for easy activation. (R-Click while Sneaking to retrieve it)",
 	
-	"itemGroup.create_tweaked_controllers.base": "Create tweaked Controllers",
+	"create_tweaked_controllers.tweaked_linked_controller.bind_mode": "Bind mode active",
+	"create_tweaked_controllers.tweaked_linked_controller.press_keybind": "Press any gamepad button, or move an axis to bind this frequency to the respective input",
+	"create_tweaked_controllers.tweaked_linked_controller.key_bound": "Frequency bound to %1$s",
+	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_1": "Keybind: %1$s, Freq. #1",
+	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_2": "Keybind: %1$s, Freq. #2",
+	
+	"itemGroup.create_tweaked_controllers.base": "Create: Tweaked Controllers",
 	
 	"_": "EOF"
 }

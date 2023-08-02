@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec2;
 
 public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<TweakedLinkedControllerMenu>
 {
@@ -103,8 +104,12 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		{
 			background1.render(ms, x, y, this);
 			TweakedControlsUtil.GetControls(inputs);
-			lStick.move((int)(inputs.axis[0] * 10), (int)(inputs.axis[1] * 10));
-			rStick.move((int)(inputs.axis[2] * 10), (int)(inputs.axis[3] * 10));
+			Vec2 v = new Vec2(inputs.axis[0], inputs.axis[1]);
+			if (v.lengthSquared() > 1) v = v.normalized();
+			lStick.move((int)(v.x * 10), (int)(v.y * 10));
+			v = new Vec2(inputs.axis[2], inputs.axis[3]);
+			if (v.lengthSquared() > 1) v = v.normalized();
+			rStick.move((int)(v.x * 10), (int)(v.y * 10));
 			lStick.visible = true;
 			lStick.active = true;
 			rStick.visible = true;

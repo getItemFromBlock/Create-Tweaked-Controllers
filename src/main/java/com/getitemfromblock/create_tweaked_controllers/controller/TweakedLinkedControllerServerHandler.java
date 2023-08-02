@@ -1,7 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,6 +53,32 @@ public class TweakedLinkedControllerServerHandler
 			if (list.isEmpty())
 				iterator.remove();
 		}
+
+		Map<UUID, Vector<TweakedManualAxisFrequency>> map2 = receivedAxes.get(world);
+		for (Iterator<Entry<UUID, Vector<TweakedManualAxisFrequency>>> iterator = map2.entrySet()
+			.iterator(); iterator.hasNext();) {
+
+			Entry<UUID, Vector<TweakedManualAxisFrequency>> entry = iterator.next();
+			Vector<TweakedManualAxisFrequency> list = entry.getValue();
+
+			for (Iterator<TweakedManualAxisFrequency> entryIterator = list.iterator(); entryIterator.hasNext();)
+			{
+				TweakedManualAxisFrequency TweakedManualAxisFrequency = entryIterator.next();
+				TweakedManualAxisFrequency.decrement();
+				if (!TweakedManualAxisFrequency.isAlive())
+				{
+					Create.REDSTONE_LINK_NETWORK_HANDLER.removeFromNetwork(world, TweakedManualAxisFrequency);
+					entryIterator.remove();
+				}
+				else
+				{
+					Create.REDSTONE_LINK_NETWORK_HANDLER.updateNetworkOf(world, TweakedManualAxisFrequency);
+				}
+			}
+
+			if (list.isEmpty())
+				iterator.remove();
+		}
 	}
 
 	public static void receivePressed(LevelAccessor world, BlockPos pos, UUID uniqueID, List<Couple<Frequency>> collect,
@@ -94,7 +119,6 @@ public class TweakedLinkedControllerServerHandler
 		{
 		Map<UUID, Vector<TweakedManualAxisFrequency>> map = receivedAxes.get(world);
 		Vector<TweakedManualAxisFrequency> list = map.computeIfAbsent(uniqueID, $ -> new Vector<>(10));
-
 		WithNext: for (int i = 0; i < 10; i++)
 		{
 			for (Iterator<TweakedManualAxisFrequency> iterator = list.iterator(); iterator.hasNext();)
@@ -104,6 +128,7 @@ public class TweakedLinkedControllerServerHandler
 					.equals(collect.get(i)))
 				{
 					entry.SetLevel(values.get(i));
+					entry.updatePosition(pos);
 					continue WithNext;
 				}
 			}
@@ -111,10 +136,6 @@ public class TweakedLinkedControllerServerHandler
 			TweakedManualAxisFrequency entry = new TweakedManualAxisFrequency(pos, values.get(i), collect.get(i));
 			Create.REDSTONE_LINK_NETWORK_HANDLER.addToNetwork(world, entry);
 			list.add(entry);
-			
-			for (IRedstoneLinkable linkable : Create.REDSTONE_LINK_NETWORK_HANDLER.getNetworkOf(world, entry)) 
-				if (linkable instanceof LinkBehaviour lb && lb.isListening())
-					AllAdvancements.LINKED_CONTROLLER.awardTo(world.getPlayerByUUID(uniqueID));
 		}
 	}
 
@@ -182,7 +203,7 @@ public class TweakedLinkedControllerServerHandler
 			this.pos = pos;
 			this.level = level;
 		}
-
+		
 		public void updatePosition(BlockPos pos)
 		{
 			this.pos = pos;
