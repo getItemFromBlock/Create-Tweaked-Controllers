@@ -17,6 +17,20 @@
 				"west": {"uv": [3, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [3, 12, 4, 13], "texture": "#redstone_bridge"}
 			}
+		},
+		{
+			"name": "joystick",
+			"from": [-0.1, 1.4, -0.1],
+			"to": [1.1, 2.6, 1.1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
+			"faces": {
+				"north": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"},
+				"east": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"},
+				"south": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"},
+				"west": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"},
+				"up": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"},
+				"down": {"uv": [14, 9, 15, 10], "texture": "#redstone_bridge"}
+			}
 		}
 	]
 }

@@ -44,7 +44,7 @@ public class ControllerInputs
         }
         for (int i = 0; i < axis.length; i++)
         {
-            axis[i] = 0.0f;
+            axis[i] = i < 4 ? 0.0f : -1.0f;
         }
     }
 

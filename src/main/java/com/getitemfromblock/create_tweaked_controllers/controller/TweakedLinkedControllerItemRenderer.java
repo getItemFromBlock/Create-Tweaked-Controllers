@@ -36,8 +36,8 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 	{
 		equipProgress = LerpedFloat.linear()
 			.startWithValue(0);
-		buttons = new Vector<>(6);
-		for (int i = 0; i < 6; i++)
+		buttons = new Vector<>(14);
+		for (int i = 0; i < 14; i++)
 			buttons.add(LerpedFloat.linear()
 				.startWithValue(0));
 	}

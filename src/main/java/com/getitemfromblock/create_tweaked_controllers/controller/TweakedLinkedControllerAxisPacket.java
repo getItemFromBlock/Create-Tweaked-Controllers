@@ -68,21 +68,20 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
         for (int i = 0; i < 10; ++i)
         {
             axesCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i + 15));
-            if (i < 8)
+            float dt;
+			if (i < 8)
             {
-                float dt = (i % 2 == 1) ? -1 : 1;
+                dt = (i % 2 == 1) ? -1 : 1;
                 dt *= axes[i / 2];
-                if (dt < 0) dt = 0;
-                if (dt > 1) dt = 1;
-                axesValues.add((int)(dt * 15));
             }
             else
             {
-                float dt = axes[i - 4];
-                if (dt < 0) dt = 0;
-                if (dt > 1) dt = 1;
-                axesValues.add((int)(dt * 15));
+                dt = axes[i - 4];
+				dt = (dt + 1) / 2;
             }
+			if (dt < 0) dt = 0;
+			if (dt > 1) dt = 1;
+			axesValues.add((int)(dt * 15));
         }
 		TweakedLinkedControllerServerHandler.receiveAxes(world, pos, uniqueID, axesCouples, axesValues);
 	}
