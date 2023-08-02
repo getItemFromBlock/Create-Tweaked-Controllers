@@ -132,7 +132,7 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
 
 	public static ItemStackHandler getFrequencyItems(ItemStack stack)
 	{
-		ItemStackHandler newInv = new ItemStackHandler(30);
+		ItemStackHandler newInv = new ItemStackHandler(50);
 		if (ModItems.TWEAKED_LINKED_CONTROLLER.get() != stack.getItem())
 			throw new IllegalArgumentException("Cannot get frequency items from non-controller: " + stack);
 		CompoundTag invNBT = stack.getOrCreateTagElement("Items");

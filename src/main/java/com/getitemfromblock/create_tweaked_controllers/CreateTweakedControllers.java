@@ -1,7 +1,12 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Lang;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,5 +53,10 @@ public class CreateTweakedControllers
     public static ResourceLocation asResource(String path)
     {
 		return new ResourceLocation(ID, path);
+	}
+
+    public static MutableComponent translateDirect(String key, Object... args)
+    {
+		return Components.translatable(CreateTweakedControllers.ID + "." + key, Lang.resolveBuilders(args));
 	}
 }

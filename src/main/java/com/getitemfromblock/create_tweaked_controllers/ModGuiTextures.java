@@ -13,7 +13,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement
 {
-    TWEAKED_LINKED_CONTROLLER("tweaked_linked_controller", 227, 172),
+    TWEAKED_LINKED_CONTROLLER_0("tweaked_linked_controller_0", 227, 172),
+    TWEAKED_LINKED_CONTROLLER_1("tweaked_linked_controller_1", 227, 172),
     ;
     public static final int FONT_COLOR = 0x575F7A;
 

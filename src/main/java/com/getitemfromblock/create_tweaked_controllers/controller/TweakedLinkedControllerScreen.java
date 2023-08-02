@@ -9,12 +9,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.JoystickIcon;
 import com.getitemfromblock.create_tweaked_controllers.ModGuiTextures;
+import com.getitemfromblock.create_tweaked_controllers.ModIcons;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.Rect2i;
@@ -25,59 +27,101 @@ import net.minecraft.world.item.ItemStack;
 public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<TweakedLinkedControllerMenu>
 {
 
-	protected ModGuiTextures background;
+	protected ModGuiTextures background0;
+	protected ModGuiTextures background1;
 	private List<Rect2i> extraAreas = Collections.emptyList();
 
 	private IconButton resetButton;
 	private IconButton confirmButton;
+	private IconButton firstTabButton;
+	private IconButton secondTabButton;
+	private JoystickIcon lStick;
+	private JoystickIcon rStick;
+	private boolean isSecondPage = false;
+	private ControllerInputs inputs = new ControllerInputs();
 
 	public TweakedLinkedControllerScreen(TweakedLinkedControllerMenu menu, Inventory inv, Component title)
 	{
 		super(menu, inv, title);
-		this.background = ModGuiTextures.TWEAKED_LINKED_CONTROLLER;
+		this.background0 = ModGuiTextures.TWEAKED_LINKED_CONTROLLER_0;
+		this.background1 = ModGuiTextures.TWEAKED_LINKED_CONTROLLER_1;
 	}
 
 	@Override
 	protected void init()
 	{
-		setWindowSize(background.width, background.height + 4 + PLAYER_INVENTORY.height);
+		setWindowSize(background0.width, background0.height + 4 + PLAYER_INVENTORY.height);
 		setWindowOffset(1, 0);
 		super.init();
 
 		int x = leftPos;
 		int y = topPos;
-
-		resetButton = new IconButton(x + background.width - 62, y + background.height - 24, AllIcons.I_TRASH);
+		
+		resetButton = new IconButton(x + background0.width - 62, y + background0.height - 24, AllIcons.I_TRASH);
 		resetButton.withCallback(() -> {
 			menu.clearContents();
 			menu.sendClearPacket();
 		});
-		confirmButton = new IconButton(x + background.width - 33, y + background.height - 24, AllIcons.I_CONFIRM);
+		confirmButton = new IconButton(x + background0.width - 33, y + background0.height - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(() -> {
 			minecraft.player.closeContainer();
 		});
+		firstTabButton = new IconButton(x + 17, y + background0.height - 27, ModIcons.I_BUTTON);
+		firstTabButton.withCallback(() -> {
+			this.isSecondPage = false;
+			menu.SetPage(this.isSecondPage);
+		});
+		secondTabButton = new IconButton(x + 42, y + background0.height - 27, ModIcons.I_AXES);
+		secondTabButton.withCallback(() -> {
+			this.isSecondPage = true;
+			menu.SetPage(this.isSecondPage);
+		});
+		lStick = new JoystickIcon(x + 16, y + 38, ModIcons.I_LEFT_JOYSTICK);
+		rStick = new JoystickIcon(x + 16, y + 101, ModIcons.I_RIGHT_JOYSTICK);
 
 		addRenderableWidget(resetButton);
 		addRenderableWidget(confirmButton);
+		addRenderableWidget(firstTabButton);
+		addRenderableWidget(secondTabButton);
+		addRenderableWidget(lStick);
+		addRenderableWidget(rStick);
 
-		extraAreas = ImmutableList.of(new Rect2i(x + background.width + 4, y + background.height - 44, 64, 56));
+		extraAreas = ImmutableList.of(new Rect2i(x + background0.width + 4, y + background0.height - 44, 64, 56));
 	}
 
 	@Override
 	protected void renderBg(PoseStack ms, float partialTicks, int mouseX, int mouseY)
 	{
 		int invX = getLeftOfCentered(PLAYER_INVENTORY.width);
-		int invY = topPos + background.height + 4;
+		int invY = topPos + background0.height + 4;
 		renderPlayerInventory(ms, invX, invY);
 
 		int x = leftPos;
 		int y = topPos;
 
-		background.render(ms, x, y, this);
-		font.draw(ms, title, x + 15, y + 4, 0x592424);
+		if (isSecondPage)
+		{
+			background1.render(ms, x, y, this);
+			TweakedControlsUtil.GetControls(inputs);
+			lStick.move((int)(inputs.axis[0] * 10), (int)(inputs.axis[1] * 10));
+			rStick.move((int)(inputs.axis[2] * 10), (int)(inputs.axis[3] * 10));
+			lStick.visible = true;
+			lStick.active = true;
+			rStick.visible = true;
+			rStick.active = true;
+		}
+		else
+		{
+			background0.render(ms, x, y, this);
+			lStick.visible = false;
+			lStick.active = false;
+			rStick.visible = false;
+			rStick.active = false;
+		}
+		font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
 
 		GuiGameElement.of(menu.contentHolder).<GuiGameElement
-			.GuiRenderBuilder>at(x + background.width - 4, y + background.height - 56, -200)
+			.GuiRenderBuilder>at(x + background0.width - 4, y + background0.height - 56, -200)
 			.scale(5)
 			.render(ms);
 	}
@@ -116,10 +160,24 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 
 	private List<Component> addToTooltip(List<Component> list, int slot)
 	{
-		if (slot < 0 || slot >= 30)
+		if (slot < 0 || slot >= 50)
 			return list;
-		list.add(Lang.translateDirect("linked_controller.frequency_slot_" + ((slot % 2) + 1),
-			ControllerInputs.GetButtonName(slot/2)).withStyle(ChatFormatting.GOLD));
+		if (slot >= 46)
+		{
+			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
+				ControllerInputs.GetAxisName((slot - 46) / 2)).withStyle(ChatFormatting.GOLD));
+		}
+		else if (slot >= 30)
+		{
+			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
+				ControllerInputs.GetAxisName((slot - 30) / 4)).withStyle(ChatFormatting.GOLD));
+		}
+		else
+		{
+			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
+				ControllerInputs.GetButtonName(slot / 2)).withStyle(ChatFormatting.GOLD));
+		}
+		
 		return list;
 	}
 

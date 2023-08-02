@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Vector;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -16,11 +15,13 @@ import com.getitemfromblock.create_tweaked_controllers.ModPackets;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.Create;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 //import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Debug;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
@@ -40,11 +41,9 @@ public class TweakedLinkedControllerClientHandler
 	public static final IIngameOverlay OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
 
 	public static Mode MODE = Mode.IDLE;
-	public static int PACKET_RATE = 5;
 	public static Collection<Integer> currentlyPressed = new HashSet<>();
 	private static BlockPos lecternPos;
 	private static BlockPos selectedLocation = BlockPos.ZERO;
-	private static int packetCooldown;
 
 	public static void toggleBindMode(BlockPos location)
 	{
@@ -99,7 +98,6 @@ public class TweakedLinkedControllerClientHandler
 
 	protected static void onReset()
 	{
-		packetCooldown = 0;
 		selectedLocation = BlockPos.ZERO;
 
 		if (inLectern())
@@ -108,7 +106,8 @@ public class TweakedLinkedControllerClientHandler
 
 		if (!currentlyPressed.isEmpty())
 			ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(currentlyPressed, false));
-		currentlyPressed.clear();
+			currentlyPressed.clear();
+		ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(null, null));
 
 		TweakedLinkedControllerItemRenderer.resetButtons();
 	}
@@ -119,8 +118,6 @@ public class TweakedLinkedControllerClientHandler
 
 		if (MODE == Mode.IDLE)
 			return;
-		if (packetCooldown > 0)
-			packetCooldown--;
 
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
@@ -193,19 +190,10 @@ public class TweakedLinkedControllerClientHandler
 			if (!newKeys.isEmpty())
 			{
 				ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(newKeys, true, lecternPos));
-				packetCooldown = PACKET_RATE;
 				AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .75f, true);
 			}
 
-			// Keepalive Pressed Keys
-			if (packetCooldown == 0)
-			{
-				if (!pressedKeys.isEmpty())
-				{
-					ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(pressedKeys, true, lecternPos));
-					packetCooldown = PACKET_RATE;
-				}
-			}
+			ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(controls.axis, lecternPos));
 		}
 
 		if (MODE == Mode.BIND)
@@ -217,17 +205,35 @@ public class TweakedLinkedControllerClientHandler
 					.move(selectedLocation))
 					.colored(0x0104FF)
 					.lineWidth(1 / 16f);
-
 			for (Integer integer : newKeys)
 			{
 				LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 				if (linkBehaviour != null)
 				{
 					ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(integer, selectedLocation));
-					Lang.translate("linked_controller.key_bound", controls.GetButtonName(integer)).sendStatus(mc.player);
+					Lang.translate("tweaked_linked_controller.key_bound", ControllerInputs.GetButtonName(integer)).sendStatus(mc.player);
 				}
 				MODE = Mode.IDLE;
 				break;
+			}
+			if (MODE == Mode.BIND)
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					if ((i < 4 && Math.abs(controls.axis[i]) > 0.8f) || (i >= 4 && controls.axis[i] > 0))
+					{
+						LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
+						if (linkBehaviour != null)
+						{
+							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket((i >= 4 ? i + 4 : i * 2 + (controls.axis[i] < 0 ? 1 : 0)) + 15, selectedLocation));
+							Lang.translate("tweaked_linked_controller.axis_bound", ControllerInputs.GetAxisName(i)).sendStatus(mc.player);
+						}
+						MODE = Mode.IDLE;
+						if (Minecraft.getInstance().player != null)
+							Minecraft.getInstance().player.displayClientMessage(Components.literal("Axis: " + i + " Value : " + controls.axis[i]), false);
+						break;
+					}
+				}
 			}
 		}
 
@@ -250,7 +256,7 @@ public class TweakedLinkedControllerClientHandler
 		tooltipScreen.init(mc, width1, height1);
 
 		List<Component> list = new ArrayList<>();
-		list.add(Lang.translateDirect("linked_controller.bind_mode")
+		list.add(Lang.translateDirect("tweaked_linked_controller.bind_mode")
 			.withStyle(ChatFormatting.GOLD));
 		
 		//	list.addAll(TooltipHelper.cutTextComponent(Lang.translateDirect("linked_controller.press_keybind", keys),

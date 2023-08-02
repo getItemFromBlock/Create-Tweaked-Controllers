@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerAxisPacket;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerBindPacket;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerInputPacket;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerStopLecternPacket;
@@ -26,10 +27,10 @@ import net.minecraftforge.network.simple.SimpleChannel;
 public enum ModPackets
 {
     TWEAKED_LINKED_CONTROLLER_INPUT(TweakedLinkedControllerInputPacket.class, TweakedLinkedControllerInputPacket::new, PLAY_TO_SERVER),
+	TWEAKED_LINKED_CONTROLLER_INPUT_AXIS(TweakedLinkedControllerAxisPacket.class, TweakedLinkedControllerAxisPacket::new, PLAY_TO_SERVER),
 	TWEAKED_LINKED_CONTROLLER_BIND(TweakedLinkedControllerBindPacket.class, TweakedLinkedControllerBindPacket::new, PLAY_TO_SERVER),
 	TWEAKED_LINKED_CONTROLLER_USE_LECTERN(TweakedLinkedControllerStopLecternPacket.class, TweakedLinkedControllerStopLecternPacket::new,
 		PLAY_TO_SERVER),
-
     ;
 
 	public static final ResourceLocation CHANNEL_NAME = CreateTweakedControllers.asResource("main");
