@@ -4,43 +4,37 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.element.ScreenElement;
 import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 
 import net.minecraft.network.chat.Component;
 
-public class JoystickIcon extends AbstractSimiWidget
+public class DigitIcon extends AbstractSimiWidget
 {
+    protected ScreenElement icon;
+    public Vector3f color;
 
-	protected ScreenElement icon;
-    protected int deltaX = 0;
-    protected int deltaY = 0;
-
-	public JoystickIcon(int x, int y, ScreenElement icon)
+	public DigitIcon(int x, int y, DigitIconRenderer digit, Vector3f color)
     {
-		this(x, y, 18, 18, icon);
+		this(x, y, DigitIconRenderer.DIGIT_WIDTH, DigitIconRenderer.DIGIT_HEIGHT, digit, color);
 	}
 	
-	public JoystickIcon(int x, int y, int w, int h, ScreenElement icon)
+	public DigitIcon(int x, int y, int w, int h, ScreenElement icon, Vector3f color)
     {
 		super(x, y, w, h);
 		this.active = false;
 		this.icon = icon;
+		this.color = color;
 	}
-
-    public void move(int dx, int dy)
-    {
-        deltaX = dx;
-        deltaY = dy;
-    }
 
 	@Override
 	public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
 		if (visible)
         {
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			icon.render(matrixStack, x + 1 + deltaX, y + 1 + deltaY);
+			RenderSystem.setShaderColor(color.x(), color.y(), color.z(), 1.0F);
+			icon.render(matrixStack, x, y);
 		}
 	}
 
@@ -48,6 +42,11 @@ public class JoystickIcon extends AbstractSimiWidget
     {
 		toolTip.clear();
 		toolTip.add(text);
+	}
+
+	public void setColor(Vector3f color)
+    {
+		this.color = color;
 	}
 
 	public void setIcon(ScreenElement icon)

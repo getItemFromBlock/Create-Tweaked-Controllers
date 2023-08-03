@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
@@ -20,6 +21,7 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
@@ -37,6 +39,8 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 	private IconButton secondTabButton;
 	private JoystickIcon lStick;
 	private JoystickIcon rStick;
+	private DigitIcon controllerID_0;
+	private DigitIcon controllerID_1;
 	private boolean isSecondPage = false;
 	private ControllerInputs inputs = new ControllerInputs();
 
@@ -71,20 +75,26 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 			this.isSecondPage = false;
 			menu.SetPage(this.isSecondPage);
 		});
+		firstTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_button"));
 		secondTabButton = new IconButton(x + 42, y + background0.height - 27, ModIcons.I_AXES);
 		secondTabButton.withCallback(() -> {
 			this.isSecondPage = true;
 			menu.SetPage(this.isSecondPage);
 		});
+		secondTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_axis"));
 		lStick = new JoystickIcon(x + 16, y + 38, ModIcons.I_LEFT_JOYSTICK);
 		rStick = new JoystickIcon(x + 16, y + 101, ModIcons.I_RIGHT_JOYSTICK);
+		controllerID_0 = new DigitIcon(x + 107, y + 151, DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
+		controllerID_1 = new DigitIcon(x + 114, y + 151, DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
 
 		addRenderableWidget(resetButton);
 		addRenderableWidget(confirmButton);
 		addRenderableWidget(firstTabButton);
 		addRenderableWidget(secondTabButton);
-		addRenderableWidget(lStick);
-		addRenderableWidget(rStick);
+		addRenderableOnly(lStick);
+		addRenderableOnly(rStick);
+		addRenderableOnly(controllerID_0);
+		addRenderableOnly(controllerID_1);
 
 		extraAreas = ImmutableList.of(new Rect2i(x + background0.width + 4, y + background0.height - 44, 64, 56));
 	}
@@ -122,6 +132,22 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 			rStick.visible = false;
 			rStick.active = false;
 		}
+		MutableComponent text;
+		int index = TweakedControlsUtil.GetGamepadIndex();
+		if (index < 0)
+		{
+			text = CreateTweakedControllers.translateDirect("gui_gamepad_unavailable");
+			controllerID_0.setIcon(DigitIconRenderer.D_DASH);
+			controllerID_1.setIcon(DigitIconRenderer.D_DASH);
+		}
+		else
+		{
+			text = CreateTweakedControllers.translateDirect("gui_gamepad_selected", "" + index);
+			controllerID_0.setIcon(DigitIconRenderer.D_NUMBERS[index/10]);
+			controllerID_1.setIcon(DigitIconRenderer.D_NUMBERS[index%10]);
+		}
+		controllerID_0.setToolTip(text);
+		controllerID_1.setToolTip(text);
 		font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
 
 		GuiGameElement.of(menu.contentHolder).<GuiGameElement

@@ -20,6 +20,11 @@
 	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_1": "Keybind: %1$s, Freq. #1",
 	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_2": "Keybind: %1$s, Freq. #2",
 	
+	"create_tweaked_controllers.gui_tab_button": "Button settings",
+	"create_tweaked_controllers.gui_tab_axis": "Axis settings",
+	"create_tweaked_controllers.gui_gamepad_unavailable": "No gamepad found",
+	"create_tweaked_controllers.gui_gamepad_selected": "Selected gamepad: %1$s",
+	
 	"itemGroup.create_tweaked_controllers.base": "Create: Tweaked Controllers",
 	
 	"_": "EOF"
