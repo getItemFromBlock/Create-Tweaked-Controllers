@@ -167,15 +167,10 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 	{
 		if (slot < 0 || slot >= 50)
 			return list;
-		if (slot >= 46)
+		if (slot >= 30)
 		{
 			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
-				ControllerInputs.GetAxisName((slot - 46) / 2)).withStyle(ChatFormatting.GOLD));
-		}
-		else if (slot >= 30)
-		{
-			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
-				ControllerInputs.GetAxisName((slot - 30) / 4)).withStyle(ChatFormatting.GOLD));
+				ControllerInputs.GetAxisName((slot - 30) / 2)).withStyle(ChatFormatting.GOLD));
 		}
 		else
 		{

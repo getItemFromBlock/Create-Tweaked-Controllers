@@ -13,8 +13,8 @@ public class ControllerInputs
         "Gamepad B",
         "Gamepad X",
         "Gamepad Y",
-        "Gamepad Left Trigger",
-        "Gamepad Right Trigger",
+        "Gamepad Left Shoulder",
+        "Gamepad Right Shoulder",
         "Gamepad Back",
         "Gamepad Start",
         "Gamepad Guide",
@@ -28,10 +28,14 @@ public class ControllerInputs
 
     static final private String[] axisNames =
     {
-        "Gamepad Left X Axis",
-        "Gamepad Left Y Axis",
-        "Gamepad Right X Axis",
-        "Gamepad Right Y Axis",
+        "Gamepad Left +X Axis",
+        "Gamepad Left -X Axis",
+        "Gamepad Left +Y Axis",
+        "Gamepad Left -Y Axis",
+        "Gamepad Right +X Axis",
+        "Gamepad Right -X Axis",
+        "Gamepad Right +Y Axis",
+        "Gamepad Right -Y Axis",
         "Gamepad Left Trigger Axis",
         "Gamepad Right Trigger Axis"
     };

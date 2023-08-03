@@ -5,6 +5,8 @@ import java.util.Vector;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
@@ -22,22 +24,30 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer<TweakedLinkedControllerModel>
 {
 
-	protected static final PartialModel POWERED = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
+	protected static final PartialModel BASE = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
 	protected static final PartialModel BUTTON = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button"));
+	protected static final PartialModel JOYSTICK = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/joystick"));
+	protected static final PartialModel TRIGGER = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/trigger"));
+	protected static final PartialModel BUTTON_X = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_blue"));
+	protected static final PartialModel BUTTON_Y = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_yellow"));
+	protected static final PartialModel BUTTON_A = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_green"));
+	protected static final PartialModel BUTTON_B = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_red"));
 
 	static LerpedFloat equipProgress;
 	static Vector<LerpedFloat> buttons;
+	static float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f};
 
 	static
 	{
 		equipProgress = LerpedFloat.linear()
 			.startWithValue(0);
-		buttons = new Vector<>(14);
-		for (int i = 0; i < 14; i++)
+		buttons = new Vector<>(15);
+		for (int i = 0; i < 15; i++)
 			buttons.add(LerpedFloat.linear()
 				.startWithValue(0));
 	}
@@ -60,6 +70,10 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			lerpedFloat.chase(TweakedLinkedControllerClientHandler.currentlyPressed.contains(i) ? 1 : 0, .4f, Chaser.EXP);
 			lerpedFloat.tickChaser();
 		}
+		for (int i = 0; i < axes.length; i++)
+		{
+			axes[i] = TweakedLinkedControllerClientHandler.axes[i];
+		}
 	}
 
 	static void resetButtons()
@@ -67,6 +81,10 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		for (int i = 0; i < buttons.size(); i++)
 		{
 			buttons.get(i).startWithValue(0);
+		}
+		for (int i = 0; i < axes.length; i++)
+		{
+			axes[i] = i < 4 ? 0.0f : -1.0f;
 		}
 	}
 
@@ -91,6 +109,27 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 	{
 		render(stack, model, renderer, transformType, ms, light, RenderType.LECTERN, active, renderDepression);
 	}
+
+	private static final Vec3[] positionList =
+	{
+		new Vec3(3, 0.9, 11.5).multiply(1/16.0, 1/16.0, 1/16.0), // SHOULDER BUTTONS
+		new Vec3(3, 0.9, 2.5).multiply(1/16.0, 1/16.0, 1/16.0),
+
+		new Vec3(6, 1, 8.5).multiply(1/16.0, 1/16.0, 1/16.0), // FACE BUTTONS
+		new Vec3(6, 1, 6.5).multiply(1/16.0, 1/16.0, 1/16.0),
+		new Vec3(5, 1, 7.5).multiply(1/16.0, 1/16.0, 1/16.0),
+
+		new Vec3(6, 0.5, 11.5).multiply(1/16.0, 1/16.0, 1/16.0), // JOYSTICK
+		new Vec3(9, 0.5, 5.5).multiply(1/16.0, 1/16.0, 1/16.0),
+
+		new Vec3(8, 1, 9.5).multiply(1/16.0, 1/16.0, 1/16.0), // DPAD
+		new Vec3(9, 1, 8.5).multiply(1/16.0, 1/16.0, 1/16.0),
+		new Vec3(10, 1, 9.5).multiply(1/16.0, 1/16.0, 1/16.0),
+		new Vec3(9, 1, 10.5).multiply(1/16.0, 1/16.0, 1/16.0),
+
+		new Vec3(3, -0.1, 11.5).multiply(1/16.0, 1/16.0, 1/16.0), // TRIGGERS
+		new Vec3(3, -0.1, 2.5).multiply(1/16.0, 1/16.0, 1/16.0),
+	};
 
 	protected static void render(ItemStack stack, TweakedLinkedControllerModel model,
 	  	PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
@@ -136,7 +175,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			renderDepression = true;
 		}
 
-		renderer.render(active ? POWERED.get() : model.getOriginalModel(), light);
+		renderer.render(active ? BASE.get() : model.getOriginalModel(), light);
 
 		if (!active)
 		{
@@ -144,50 +183,115 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			return;
 		}
 
-		BakedModel button = BUTTON.get();
 		float s = 1 / 16f;
 		float b = s * -.75f;
 		int index = 0;
-
-		if (renderType == RenderType.NORMAL)
+		if (renderType == RenderType.NORMAL && TweakedLinkedControllerClientHandler.MODE == Mode.BIND)
 		{
-			if (TweakedLinkedControllerClientHandler.MODE == Mode.BIND)
-			{
-				int i = (int) Mth.lerp((Mth.sin(AnimationTickHolder.getRenderTime() / 4f) + 1) / 2, 5, 15);
-				light = i << 20;
-			}
+			int i = (int) Mth.lerp((Mth.sin(AnimationTickHolder.getRenderTime() / 4f) + 1) / 2, 5, 15);
+			light = i << 20;
 		}
 
 		ms.pushPose();
-		msr.translate(2 * s, 0, 8 * s);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
-		msr.translate(4 * s, 0, 0);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
-		msr.translate(-2 * s, 0, 2 * s);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
-		msr.translate(0, 0, -4 * s);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
+		BakedModel button = BUTTON_A.get();
+		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
+		button = BUTTON_B.get();
+		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
+		button = BUTTON_X.get();
+		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
+		button = BUTTON_Y.get();
+		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
+		button = TRIGGER.get();
+		for (; index < 6; index++)
+		{
+			ms.pushPose();
+			msr.translate(positionList[index - 4]);
+			renderButton(renderer, ms, light, pt, button, b, index, renderDepression, true);
+			ms.popPose();
+		}
+		button = BUTTON.get();
+		for (; index < 15; index++)
+		{
+			if (index == 9 || index == 10) continue;
+			ms.pushPose();
+			msr.translate(positionList[index - 4]);
+			renderButton(renderer, ms, light, pt, button, b, index, renderDepression, false);
+			ms.popPose();
+		}
+		button = JOYSTICK.get();
+		renderJoystick(renderer, ms, light, pt, button, b, renderDepression, false);
+		renderJoystick(renderer, ms, light, pt, button, b, renderDepression, true);
+		button = TRIGGER.get();
+		renderTrigger(renderer, ms, light, button, false);
+		renderTrigger(renderer, ms, light, button, true);
+		
 		ms.popPose();
-
-		msr.translate(3 * s, 0, 3 * s);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
-		msr.translate(2 * s, 0, 0);
-		renderButton(renderer, ms, light, pt, button, b, index++, renderDepression);
-
 		ms.popPose();
 	}
 
 	protected static void renderButton(PartialItemModelRenderer renderer, PoseStack ms, int light, float pt, BakedModel button,
-		float b, int index, boolean renderDepression)
+		float b, int index, boolean renderDepression, boolean isSideway)
 		{
-		ms.pushPose();
-		if (renderDepression)
+			ms.pushPose();
+			if (renderDepression)
+			{
+				float depression = b * buttons.get(index).getValue(pt);
+				if (isSideway)
+				{
+					ms.translate(-depression, 0, 0);
+				}
+				else
+				{
+					ms.translate(0, depression, 0);
+				}
+			}
+			renderer.renderSolid(button, light);
+			ms.popPose();
+	}
+
+	protected static void renderTrigger(PartialItemModelRenderer renderer, PoseStack ms, int light, BakedModel trigger, boolean isRight)
 		{
-			float depression = b * buttons.get(index).getValue(pt);
-			ms.translate(0, depression, 0);
-		}
-		renderer.renderSolid(button, light);
-		ms.popPose();
+			ms.pushPose();
+			final float delta = 1 / 16f * -0.75f;
+			Vec3 pos = positionList[isRight ? 12 : 11];
+			float value = axes[isRight ? 5 : 4];
+			value = (value + 1) / 2 * delta;
+			ms.translate(pos.x - value, pos.y, pos.z);
+			renderer.renderSolid(trigger, light);
+			ms.popPose();
+	}
+
+	protected static void renderJoystick(PartialItemModelRenderer renderer, PoseStack ms, int light, float pt, BakedModel joystick,
+		float b, boolean renderDepression, boolean isRight)
+		{
+			ms.pushPose();
+			final double delta = 7.5/16;
+			Vec3 pos = positionList[isRight ? 6 : 5].subtract(delta, delta, delta);
+			ms.translate(pos.x, pos.y, pos.z);
+			ms.pushPose();
+			Vector3f axis;
+			double angle;
+			if (renderDepression)
+			{
+				float depression = b * buttons.get(isRight ? 10 : 9).getValue(pt);
+				ms.translate(0, depression, 0);
+			}
+			if (isRight)
+			{
+				axis = new Vector3f(-axes[2], 0, -axes[3]);
+				angle = axes[2] * axes[2] + axes[3] * axes[3];
+			}
+			else
+			{
+				axis = new Vector3f(-axes[0], 0, -axes[1]);
+				angle = axes[0] * axes[0] + axes[1] * axes[1];
+			}
+			angle = Math.min(Math.sqrt(angle), 1.0) / 2.0f;
+			axis.normalize();
+			ms.mulPose(new Quaternion(axis, (float)angle, false));
+			renderer.renderSolid(joystick, light);
+			ms.popPose();
+			ms.popPose();
 	}
 
 	@Override

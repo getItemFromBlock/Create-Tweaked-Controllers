@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPacketBase
 {
-	private float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+	private float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f};
 
 	public TweakedLinkedControllerAxisPacket(float[] axesIn)
 	{

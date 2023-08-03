@@ -123,8 +123,7 @@ public class TweakedLecternControllerBlockEntity extends SmartTileEntity
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::tryToggleActive);
 			prevUser = user;
 		}
-
-		if (!level.isClientSide)
+		else
 		{
 			deactivatedThisTick = false;
 

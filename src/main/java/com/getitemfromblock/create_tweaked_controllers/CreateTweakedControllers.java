@@ -1,6 +1,5 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
@@ -63,7 +62,7 @@ public class CreateTweakedControllers
 
     public static LangBuilder builder()
     {
-		return new LangBuilder(Create.ID);
+		return new LangBuilder(CreateTweakedControllers.ID);
 	}
 
     public static LangBuilder translate(String langKey, Object... args)

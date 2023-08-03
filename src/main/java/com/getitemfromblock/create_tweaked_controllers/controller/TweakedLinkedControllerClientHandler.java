@@ -40,6 +40,7 @@ public class TweakedLinkedControllerClientHandler
 	public static Mode MODE = Mode.IDLE;
 	public static int PACKET_RATE = 5;
 	public static Collection<Integer> currentlyPressed = new HashSet<>();
+	public static float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f};
 	private static BlockPos lecternPos;
 	private static BlockPos selectedLocation = BlockPos.ZERO;
 	private static int packetCooldown;
@@ -70,6 +71,14 @@ public class TweakedLinkedControllerClientHandler
 			MODE = Mode.IDLE;
 			onReset();
 		}
+	}
+
+	public static void ClearAxes()
+	{
+		for (int i = 0; i < axes.length; i++)
+        {
+            axes[i] = i < 4 ? 0.0f : -1.0f;
+        }
 	}
 
 	public static void activateInLectern(BlockPos lecternAt)
@@ -105,9 +114,10 @@ public class TweakedLinkedControllerClientHandler
 
 		if (!currentlyPressed.isEmpty())
 			ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(currentlyPressed, false));
-			currentlyPressed.clear();
+		currentlyPressed.clear();
 		ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(null, null));
-
+		ClearAxes();
+			
 		TweakedLinkedControllerItemRenderer.resetButtons();
 	}
 
@@ -166,6 +176,10 @@ public class TweakedLinkedControllerClientHandler
 		}
 		ControllerInputs controls = new ControllerInputs();
 		TweakedControlsUtil.GetControls(controls);
+		for (int i = 0; i < 6; i++)
+		{
+			axes[i] = controls.axis[i];
+		}
 		Collection<Integer> pressedKeys = new HashSet<>();
 		for (int i = 0; i < controls.buttons.length; i++)
 		{
@@ -237,8 +251,9 @@ public class TweakedLinkedControllerClientHandler
 						LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 						if (linkBehaviour != null)
 						{
-							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket((i >= 4 ? i + 4 : i * 2 + (controls.axis[i] < 0 ? 1 : 0)) + 15, selectedLocation));
-							CreateTweakedControllers.translate("tweaked_linked_controller.axis_bound", ControllerInputs.GetAxisName(i)).sendStatus(mc.player);
+							int a = i >= 4 ? i + 4 : i * 2 + (controls.axis[i] < 0 ? 1 : 0);
+							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
+							CreateTweakedControllers.translate("tweaked_linked_controller.axis_bound", ControllerInputs.GetAxisName(a)).sendStatus(mc.player);
 						}
 						MODE = Mode.IDLE;
 						break;
@@ -268,7 +283,7 @@ public class TweakedLinkedControllerClientHandler
 		list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.bind_mode")
 			.withStyle(ChatFormatting.GOLD));
 		
-		list.add(CreateTweakedControllers.translateDirect("linked_controller.press_keybind")
+		list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.press_keybind")
 			.withStyle(ChatFormatting.GRAY));
 
 		int width = 0;
