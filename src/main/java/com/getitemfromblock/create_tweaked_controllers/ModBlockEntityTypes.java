@@ -1,6 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;

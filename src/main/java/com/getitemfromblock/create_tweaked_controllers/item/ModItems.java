@@ -1,10 +1,12 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.item;
 
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import static com.simibubi.create.content.AllSections.CURIOSITIES;
+
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.ModTab;
 
 public class ModItems
 {

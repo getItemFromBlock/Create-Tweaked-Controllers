@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;

@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.item;
 
 import java.util.Vector;
 
@@ -8,7 +8,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerModel;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
@@ -56,7 +57,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 				.startWithValue(i < 4 ? 0 : -1));
 	}
 
-	static void tick()
+	public static void tick()
 	{
 		if (Minecraft.getInstance().isPaused())
 			return;
@@ -83,7 +84,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		}
 	}
 
-	static void resetButtons()
+	public static void resetButtons()
 	{
 		for (int i = 0; i < buttons.size(); i++)
 		{

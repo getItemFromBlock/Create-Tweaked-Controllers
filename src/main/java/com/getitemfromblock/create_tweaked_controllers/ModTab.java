@@ -1,5 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;

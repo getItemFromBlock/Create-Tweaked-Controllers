@@ -1,8 +1,9 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.block;
 
 import java.util.List;
 import java.util.UUID;
 
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;

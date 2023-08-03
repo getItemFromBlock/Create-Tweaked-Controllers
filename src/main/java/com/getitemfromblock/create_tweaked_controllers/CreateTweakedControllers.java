@@ -1,5 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
+import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;

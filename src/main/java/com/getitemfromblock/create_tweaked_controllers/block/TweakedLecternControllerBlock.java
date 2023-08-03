@@ -1,9 +1,9 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.block;
 
 import java.util.ArrayList;
 
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.ModBlockEntityTypes;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.schematics.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.ItemRequirement;

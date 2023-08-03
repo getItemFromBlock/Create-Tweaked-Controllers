@@ -1,7 +1,7 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerScreen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.builders.MenuBuilder.ForgeMenuFactory;
 import com.tterrag.registrate.builders.MenuBuilder.ScreenFactory;

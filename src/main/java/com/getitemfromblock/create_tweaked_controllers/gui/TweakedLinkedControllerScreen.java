@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import static com.simibubi.create.foundation.gui.AllGuiTextures.PLAYER_INVENTORY;
 
@@ -10,9 +10,8 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.JoystickIcon;
-import com.getitemfromblock.create_tweaked_controllers.ModGuiTextures;
-import com.getitemfromblock.create_tweaked_controllers.ModIcons;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;

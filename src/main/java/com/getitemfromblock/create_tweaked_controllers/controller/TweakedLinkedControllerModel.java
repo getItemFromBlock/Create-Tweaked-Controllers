@@ -9,7 +9,7 @@ public class TweakedLinkedControllerModel extends CreateCustomRenderedItemModel
 
 	public TweakedLinkedControllerModel(BakedModel template) {
 		super(template, "tweaked_linked_controller");
-		addPartials("powered", "button");
+		addPartials("powered", "button", "button_blue", "button_red", "button_yellow", "button_blue", "joystick", "trigger");
 	}
 
 }

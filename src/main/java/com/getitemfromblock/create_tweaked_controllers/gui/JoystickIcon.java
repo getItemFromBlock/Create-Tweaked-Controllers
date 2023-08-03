@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import javax.annotation.Nonnull;
 

@@ -1,9 +1,13 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

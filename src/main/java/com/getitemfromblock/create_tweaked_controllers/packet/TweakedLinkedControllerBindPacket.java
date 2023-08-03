@@ -1,6 +1,8 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.packet;
 
 
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
 

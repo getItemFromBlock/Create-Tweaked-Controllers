@@ -1,5 +1,6 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.UIRenderHelper;

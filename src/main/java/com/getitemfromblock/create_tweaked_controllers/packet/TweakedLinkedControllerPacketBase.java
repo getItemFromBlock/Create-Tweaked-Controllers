@@ -1,8 +1,9 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import java.util.function.Supplier;
 
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.minecraft.core.BlockPos;

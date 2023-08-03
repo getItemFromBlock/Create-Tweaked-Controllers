@@ -1,8 +1,11 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import java.util.UUID;
 import java.util.Vector;
 
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.utility.Couple;
 

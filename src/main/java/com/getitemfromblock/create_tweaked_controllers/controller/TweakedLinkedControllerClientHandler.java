@@ -9,10 +9,14 @@ import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.ModBlocks;
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
-import com.getitemfromblock.create_tweaked_controllers.ModPackets;
-
+import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItemRenderer;
+import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
+import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerAxisPacket;
+import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerBindPacket;
+import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerInputPacket;
+import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerStopLecternPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllSoundEvents;

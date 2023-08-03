@@ -1,10 +1,12 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.block;
 
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLecternControllerBlock;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.block.Blocks;
 import static com.simibubi.create.foundation.data.TagGen.axeOnly;
+
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.ModTab;
 
 public class ModBlocks
 {

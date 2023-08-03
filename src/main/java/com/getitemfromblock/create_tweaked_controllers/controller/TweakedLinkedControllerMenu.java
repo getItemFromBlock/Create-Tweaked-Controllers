@@ -1,7 +1,8 @@
 package com.getitemfromblock.create_tweaked_controllers.controller;
 
-import com.getitemfromblock.create_tweaked_controllers.ControllerItemSlot;
-import com.getitemfromblock.create_tweaked_controllers.ModMenuTypes;
+import com.getitemfromblock.create_tweaked_controllers.gui.ControllerItemSlot;
+import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.foundation.gui.container.GhostItemContainer;
 
 import net.minecraft.network.FriendlyByteBuf;

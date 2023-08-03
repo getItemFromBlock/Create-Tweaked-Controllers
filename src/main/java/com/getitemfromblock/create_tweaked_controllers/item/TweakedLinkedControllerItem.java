@@ -1,9 +1,10 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.item;
 
 import java.util.function.Consumer;
 
-import com.getitemfromblock.create_tweaked_controllers.ModBlocks;
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import com.simibubi.create.foundation.utility.Couple;

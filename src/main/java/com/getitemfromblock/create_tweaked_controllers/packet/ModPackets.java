@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers;
+package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
@@ -7,10 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerAxisPacket;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerBindPacket;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerInputPacket;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerStopLecternPacket;
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.minecraft.core.BlockPos;

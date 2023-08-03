@@ -1,4 +1,6 @@
-package com.getitemfromblock.create_tweaked_controllers.controller;
+package com.getitemfromblock.create_tweaked_controllers.packet;
+
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

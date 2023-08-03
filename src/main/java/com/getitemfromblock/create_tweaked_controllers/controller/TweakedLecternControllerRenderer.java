@@ -2,7 +2,10 @@ package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.getitemfromblock.create_tweaked_controllers.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlock;
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
+import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItemRenderer;
 import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AngleHelper;
