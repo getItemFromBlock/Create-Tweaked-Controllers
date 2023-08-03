@@ -253,7 +253,7 @@ public class TweakedLinkedControllerClientHandler
 						{
 							int a = i >= 4 ? i + 4 : i * 2 + (controls.axis[i] < 0 ? 1 : 0);
 							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
-							CreateTweakedControllers.translate("tweaked_linked_controller.axis_bound", ControllerInputs.GetAxisName(a)).sendStatus(mc.player);
+							CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", ControllerInputs.GetAxisName(a)).sendStatus(mc.player);
 						}
 						MODE = Mode.IDLE;
 						break;

@@ -40,7 +40,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 
 	static LerpedFloat equipProgress;
 	static Vector<LerpedFloat> buttons;
-	static float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f};
+	static Vector<LerpedFloat> axes;
 
 	static
 	{
@@ -50,6 +50,10 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		for (int i = 0; i < 15; i++)
 			buttons.add(LerpedFloat.linear()
 				.startWithValue(0));
+		axes = new Vector<>(6);
+		for (int i = 0; i < 6; i++)
+			axes.add(LerpedFloat.linear()
+				.startWithValue(i < 4 ? 0 : -1));
 	}
 
 	static void tick()
@@ -70,9 +74,12 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			lerpedFloat.chase(TweakedLinkedControllerClientHandler.currentlyPressed.contains(i) ? 1 : 0, .4f, Chaser.EXP);
 			lerpedFloat.tickChaser();
 		}
-		for (int i = 0; i < axes.length; i++)
+		for (int i = 0; i < axes.size(); i++)
 		{
-			axes[i] = TweakedLinkedControllerClientHandler.axes[i];
+			LerpedFloat lerpedFloat = axes.get(i);
+			lerpedFloat.chase(TweakedLinkedControllerClientHandler.axes[i], 1.0f, Chaser.LINEAR);
+			lerpedFloat.tickChaser();
+
 		}
 	}
 
@@ -82,9 +89,9 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		{
 			buttons.get(i).startWithValue(0);
 		}
-		for (int i = 0; i < axes.length; i++)
+		for (int i = 0; i < axes.size(); i++)
 		{
-			axes[i] = i < 4 ? 0.0f : -1.0f;
+			axes.get(i).startWithValue(i < 4 ? 0.0f : -1.0f);
 		}
 	}
 
@@ -222,8 +229,8 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		renderJoystick(renderer, ms, light, pt, button, b, renderDepression, false);
 		renderJoystick(renderer, ms, light, pt, button, b, renderDepression, true);
 		button = TRIGGER.get();
-		renderTrigger(renderer, ms, light, button, false);
-		renderTrigger(renderer, ms, light, button, true);
+		renderTrigger(renderer, ms, light, pt, button, false);
+		renderTrigger(renderer, ms, light, pt, button, true);
 		
 		ms.popPose();
 		ms.popPose();
@@ -249,12 +256,12 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			ms.popPose();
 	}
 
-	protected static void renderTrigger(PartialItemModelRenderer renderer, PoseStack ms, int light, BakedModel trigger, boolean isRight)
+	protected static void renderTrigger(PartialItemModelRenderer renderer, PoseStack ms, int light, float pt, BakedModel trigger, boolean isRight)
 		{
 			ms.pushPose();
 			final float delta = 1 / 16f * -0.75f;
 			Vec3 pos = positionList[isRight ? 12 : 11];
-			float value = axes[isRight ? 5 : 4];
+			float value = axes.get(isRight ? 5 : 4).getValue(pt);
 			value = (value + 1) / 2 * delta;
 			ms.translate(pos.x - value, pos.y, pos.z);
 			renderer.renderSolid(trigger, light);
@@ -269,26 +276,27 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			Vec3 pos = positionList[isRight ? 6 : 5].subtract(delta, delta, delta);
 			ms.translate(pos.x, pos.y, pos.z);
 			ms.pushPose();
-			Vector3f axis;
-			double angle;
+			float x, y;
+			if (isRight)
+			{
+				x = axes.get(2).getValue(pt);
+				y = axes.get(3).getValue(pt);
+			}
+			else
+			{
+				x = axes.get(0).getValue(pt);
+				y = axes.get(1).getValue(pt);
+			}
+			Vector3f axis = new Vector3f(-x, 0, -y);
+			double angle = x * x + y * y;
+			angle = Math.min(Math.sqrt(angle), 1.0) * 0.6f;
+			axis.normalize();
+			ms.mulPose(new Quaternion(axis, (float)angle, false));
 			if (renderDepression)
 			{
 				float depression = b * buttons.get(isRight ? 10 : 9).getValue(pt);
 				ms.translate(0, depression, 0);
 			}
-			if (isRight)
-			{
-				axis = new Vector3f(-axes[2], 0, -axes[3]);
-				angle = axes[2] * axes[2] + axes[3] * axes[3];
-			}
-			else
-			{
-				axis = new Vector3f(-axes[0], 0, -axes[1]);
-				angle = axes[0] * axes[0] + axes[1] * axes[1];
-			}
-			angle = Math.min(Math.sqrt(angle), 1.0) / 2.0f;
-			axis.normalize();
-			ms.mulPose(new Quaternion(axis, (float)angle, false));
 			renderer.renderSolid(joystick, light);
 			ms.popPose();
 			ms.popPose();
