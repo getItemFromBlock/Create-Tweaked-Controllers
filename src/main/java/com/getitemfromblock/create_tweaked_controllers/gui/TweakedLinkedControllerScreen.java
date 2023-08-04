@@ -35,12 +35,13 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 
 	private IconButton resetButton;
 	private IconButton confirmButton;
+	private IconButton refreshButton;
 	private IconButton firstTabButton;
 	private IconButton secondTabButton;
 	private JoystickIcon lStick;
 	private JoystickIcon rStick;
-	private DigitIcon controllerID_0;
-	private DigitIcon controllerID_1;
+	private DigitIcon controllerDigits[];
+	private DigitIcon axisDigits[];
 	private boolean isSecondPage = false;
 	private ControllerInputs inputs = new ControllerInputs();
 
@@ -50,6 +51,16 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		this.background0 = ModGuiTextures.TWEAKED_LINKED_CONTROLLER_0;
 		this.background1 = ModGuiTextures.TWEAKED_LINKED_CONTROLLER_1;
 	}
+
+	private static final int[] axisDigitPositions =
+	{
+		19, 54,
+		19, 64,
+		19, 117,
+		19, 127,
+		162, 53,
+		162, 116
+	};
 
 	@Override
 	protected void init()
@@ -70,6 +81,11 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		confirmButton.withCallback(() -> {
 			minecraft.player.closeContainer();
 		});
+		refreshButton = new IconButton(x + background0.width - 91, y + background0.height - 24, AllIcons.I_REFRESH);
+		refreshButton.withCallback(() -> {
+			TweakedControlsUtil.SearchGamepad();
+		});
+		refreshButton.setToolTip(CreateTweakedControllers.translateDirect("gui_button_refresh"));
 		firstTabButton = new IconButton(x + 17, y + background0.height - 27, ModIcons.I_BUTTON);
 		firstTabButton.withCallback(() -> {
 			this.isSecondPage = false;
@@ -82,19 +98,28 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 			menu.SetPage(this.isSecondPage);
 		});
 		secondTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_axis"));
-		lStick = new JoystickIcon(x + 16, y + 38, ModIcons.I_LEFT_JOYSTICK);
-		rStick = new JoystickIcon(x + 16, y + 101, ModIcons.I_RIGHT_JOYSTICK);
-		controllerID_0 = new DigitIcon(x + 107, y + 151, DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
-		controllerID_1 = new DigitIcon(x + 114, y + 151, DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
+		lStick = new JoystickIcon(x + 16, y + 26, ModIcons.I_LEFT_JOYSTICK);
+		rStick = new JoystickIcon(x + 16, y + 89, ModIcons.I_RIGHT_JOYSTICK);
+		controllerDigits = new DigitIcon[2];
+		for (int i = 0; i < controllerDigits.length; i++)
+		{
+			controllerDigits[i] = new DigitIcon(x + 107 + i * 6, y + 151, DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
+			addRenderableOnly(controllerDigits[i]);
+		}
+		axisDigits = new DigitIcon[18];
+		for (int i = 0; i < axisDigits.length; i++)
+		{
+			axisDigits[i] = new DigitIcon(x + axisDigitPositions[i/3*2] + (i % 3) * 6, y + axisDigitPositions[i/3*2 + 1], DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
+			addRenderableOnly(axisDigits[i]);
+		}
 
 		addRenderableWidget(resetButton);
 		addRenderableWidget(confirmButton);
+		addRenderableWidget(refreshButton);
 		addRenderableWidget(firstTabButton);
 		addRenderableWidget(secondTabButton);
 		addRenderableOnly(lStick);
 		addRenderableOnly(rStick);
-		addRenderableOnly(controllerID_0);
-		addRenderableOnly(controllerID_1);
 
 		extraAreas = ImmutableList.of(new Rect2i(x + background0.width + 4, y + background0.height - 44, 64, 56));
 	}
@@ -109,45 +134,68 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		int x = leftPos;
 		int y = topPos;
 
+		TweakedControlsUtil.GetControls(inputs);
 		if (isSecondPage)
 		{
 			background1.render(ms, x, y, this);
-			TweakedControlsUtil.GetControls(inputs);
 			Vec2 v = new Vec2(inputs.axis[0], inputs.axis[1]);
-			if (v.lengthSquared() > 1) v = v.normalized();
+			if (v.lengthSquared() > 1)
+				v = v.normalized();
 			lStick.move((int)(v.x * 10), (int)(v.y * 10));
 			v = new Vec2(inputs.axis[2], inputs.axis[3]);
-			if (v.lengthSquared() > 1) v = v.normalized();
+			if (v.lengthSquared() > 1)
+				v = v.normalized();
 			rStick.move((int)(v.x * 10), (int)(v.y * 10));
 			lStick.visible = true;
-			lStick.active = true;
 			rStick.visible = true;
-			rStick.active = true;
+			for (int i = 0; i < 6; i++)
+			{
+				if (i < 4 && inputs.axis[i] < 0)
+				{
+					axisDigits[i*3].setIcon(DigitIconRenderer.D_DASH);
+				}
+				else
+				{
+					axisDigits[i*3].setIcon(DigitIconRenderer.D_EMPTY);
+				}
+				float value = i < 4 ? Math.abs(inputs.axis[i]) : (inputs.axis[i] + 1) / 2;
+				if (value < 0) value = 0;
+				if (value > 1) value = 1;
+				int index = (int)(value * 15); 
+				axisDigits[i*3+1].setIcon(DigitIconRenderer.D_NUMBERS[index/10]);
+				axisDigits[i*3+2].setIcon(DigitIconRenderer.D_NUMBERS[index%10]);
+				for (int j = 0; j < 3; j++)
+				{
+					axisDigits[i*3+j].visible = true;
+				}
+			}
 		}
 		else
 		{
 			background0.render(ms, x, y, this);
 			lStick.visible = false;
-			lStick.active = false;
 			rStick.visible = false;
-			rStick.active = false;
+			for (int i = 0; i < axisDigits.length; i++)
+			{
+				axisDigits[i].visible = false;
+			}
 		}
 		MutableComponent text;
 		int index = TweakedControlsUtil.GetGamepadIndex();
 		if (index < 0)
 		{
 			text = CreateTweakedControllers.translateDirect("gui_gamepad_unavailable");
-			controllerID_0.setIcon(DigitIconRenderer.D_DASH);
-			controllerID_1.setIcon(DigitIconRenderer.D_DASH);
+			controllerDigits[0].setIcon(DigitIconRenderer.D_DASH);
+			controllerDigits[1].setIcon(DigitIconRenderer.D_DASH);
 		}
 		else
 		{
 			text = CreateTweakedControllers.translateDirect("gui_gamepad_selected", "" + index);
-			controllerID_0.setIcon(DigitIconRenderer.D_NUMBERS[index/10]);
-			controllerID_1.setIcon(DigitIconRenderer.D_NUMBERS[index%10]);
+			controllerDigits[0].setIcon(DigitIconRenderer.D_NUMBERS[index/10]);
+			controllerDigits[1].setIcon(DigitIconRenderer.D_NUMBERS[index%10]);
 		}
-		controllerID_0.setToolTip(text);
-		controllerID_1.setToolTip(text);
+		controllerDigits[0].setToolTip(text);
+		controllerDigits[1].setToolTip(text);
 		font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
 
 		GuiGameElement.of(menu.contentHolder).<GuiGameElement

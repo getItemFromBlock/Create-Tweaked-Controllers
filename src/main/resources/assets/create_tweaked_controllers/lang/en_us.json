@@ -22,6 +22,7 @@
 	
 	"create_tweaked_controllers.gui_tab_button": "Button settings",
 	"create_tweaked_controllers.gui_tab_axis": "Axis settings",
+	"create_tweaked_controllers.gui_button_refresh": "Research gamepad",
 	"create_tweaked_controllers.gui_gamepad_unavailable": "No gamepad found",
 	"create_tweaked_controllers.gui_gamepad_selected": "Selected gamepad: %1$s",
 	
