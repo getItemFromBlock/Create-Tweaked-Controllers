@@ -2,7 +2,7 @@
 
 <img src="src/main/resources/logo.png" width="" height="100">
 
-A mod that let you control your contraptions using a gamepad instead of your keyboard !
+A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you control your contraptions using a gamepad instead of your keyboard !
 
 ## Building
 
