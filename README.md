@@ -27,10 +27,10 @@ You can rescan for gamepads with the "Research" button at the bottom.
 
 This mod relies on GLFW (the input/output library used by Minecraft) to handle gamepad inputs.  
 GLFW handle gamepads as follows:  
-- If it is detected by GLFW, it will be labelled as a joystick; it will have all of its axis and buttons stored in an unorganised way (the way the driver read the values)  
-- If it has a known mapping, GLFW will also register it as a gamepad. In this situations there will always be 6 axis ant 15 buttons which should be roughly the same on all gamepads (note that on some gamepads the A/B-X/Y buttons are inverted, and the two back triggers axis can just be shoulder buttons)  
+- If it is detected by GLFW, it will be labelled as a joystick; it will have all of its axis and buttons stored in an unorganised way (the way the driver reads the values)  
+- If it has a known mapping, GLFW will also register it as a gamepad. In this situation there will always be 6 axis ant 15 buttons which should be roughly the same on all gamepads (note that on some gamepads the A/B-X/Y buttons are inverted, and the two back trigger axis can just be shoulder buttons)  
   
-For now only GLFW gamepads works in the mod, support for joystick is planed for later.  
+For now, only GLFW gamepads work on the mod. Support for joystick is planned for later.  
 Here is a list of supported gamepads:  
 - Official gamepads such as Xbox controllers or Playstation DualShock are supported
 - Knockoff/alternate gamepads (like a Logitech controller) should be supported
