@@ -32,10 +32,10 @@ GLFW handle gamepads as follows:
   
 For now, only GLFW gamepads work on the mod. Support for joystick is planned for later.  
 Here is a list of supported gamepads:  
-- Official gamepads such as Xbox controllers or Playstation DualShock are supported
-- Knockoff/alternate gamepads (like a Logitech controller) should be supported
-- Joysticks/hotas/racing wheels and other devices are probably not supported for now
-- WiiMotes are (sadly) not supported
+- Official gamepads such as Xbox controllers or Playstation DualShock are supported  
+- Knockoff/alternate gamepads (like a Logitech controller) should be supported  
+- Joysticks/hotas/racing wheels and other devices are probably not supported, but may be later  
+- WiiMotes are (sadly) not supported  
 
 If you really want to try the mod with a joystick, you can try using an emulator such as [this one](https://github.com/x360ce/x360ce).
 
