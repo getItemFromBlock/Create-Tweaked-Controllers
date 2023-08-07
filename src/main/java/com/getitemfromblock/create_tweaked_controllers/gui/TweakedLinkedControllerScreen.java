@@ -9,10 +9,10 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
+import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;
@@ -43,7 +43,6 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 	private DigitIcon controllerDigits[];
 	private DigitIcon axisDigits[];
 	private boolean isSecondPage = false;
-	private ControllerInputs inputs = new ControllerInputs();
 
 	public TweakedLinkedControllerScreen(TweakedLinkedControllerMenu menu, Inventory inv, Component title)
 	{
@@ -83,7 +82,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		});
 		refreshButton = new IconButton(x + background0.width - 91, y + background0.height - 24, AllIcons.I_REFRESH);
 		refreshButton.withCallback(() -> {
-			TweakedControlsUtil.SearchGamepad();
+			GamepadInputs.SearchGamepad();
 		});
 		refreshButton.setToolTip(CreateTweakedControllers.translateDirect("gui_button_refresh"));
 		firstTabButton = new IconButton(x + 17, y + background0.height - 27, ModIcons.I_BUTTON);
@@ -133,16 +132,15 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 
 		int x = leftPos;
 		int y = topPos;
-
-		TweakedControlsUtil.GetControls(inputs);
+		GamepadInputs.GetControls();
 		if (isSecondPage)
 		{
 			background1.render(ms, x, y, this);
-			Vec2 v = new Vec2(inputs.axis[0], inputs.axis[1]);
+			Vec2 v = new Vec2(GamepadInputs.axis[0], GamepadInputs.axis[1]);
 			if (v.lengthSquared() > 1)
 				v = v.normalized();
 			lStick.move((int)(v.x * 10), (int)(v.y * 10));
-			v = new Vec2(inputs.axis[2], inputs.axis[3]);
+			v = new Vec2(GamepadInputs.axis[2], GamepadInputs.axis[3]);
 			if (v.lengthSquared() > 1)
 				v = v.normalized();
 			rStick.move((int)(v.x * 10), (int)(v.y * 10));
@@ -150,7 +148,11 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 			rStick.visible = true;
 			for (int i = 0; i < 6; i++)
 			{
-				if (i < 4 && inputs.axis[i] < 0)
+				float value = i < 4 ? Math.abs(GamepadInputs.axis[i]) : (GamepadInputs.axis[i] + 1) / 2;
+				if (value < 0) value = 0;
+				if (value > 1) value = 1;
+				int index = (int)(value * 15); 
+				if (i < 4 && GamepadInputs.axis[i] < 0 && index != 0)
 				{
 					axisDigits[i*3].setIcon(DigitIconRenderer.D_DASH);
 				}
@@ -158,10 +160,6 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 				{
 					axisDigits[i*3].setIcon(DigitIconRenderer.D_EMPTY);
 				}
-				float value = i < 4 ? Math.abs(inputs.axis[i]) : (inputs.axis[i] + 1) / 2;
-				if (value < 0) value = 0;
-				if (value > 1) value = 1;
-				int index = (int)(value * 15); 
 				axisDigits[i*3+1].setIcon(DigitIconRenderer.D_NUMBERS[index/10]);
 				axisDigits[i*3+2].setIcon(DigitIconRenderer.D_NUMBERS[index%10]);
 				for (int j = 0; j < 3; j++)
@@ -181,7 +179,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 			}
 		}
 		MutableComponent text;
-		int index = TweakedControlsUtil.GetGamepadIndex();
+		int index = GamepadInputs.GetGamepadIndex();
 		if (index < 0)
 		{
 			text = CreateTweakedControllers.translateDirect("gui_gamepad_unavailable");
@@ -243,12 +241,12 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		if (slot >= 30)
 		{
 			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
-				ControllerInputs.GetAxisName((slot - 30) / 2)).withStyle(ChatFormatting.GOLD));
+				GamepadInputs.GetAxisName((slot - 30) / 2)).withStyle(ChatFormatting.GOLD));
 		}
 		else
 		{
 			list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.frequency_slot_" + ((slot % 2) + 1),
-				ControllerInputs.GetButtonName(slot / 2)).withStyle(ChatFormatting.GOLD));
+				GamepadInputs.GetButtonName(slot / 2)).withStyle(ChatFormatting.GOLD));
 		}
 		
 		return list;

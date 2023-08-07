@@ -22,5 +22,5 @@ public class ModBlocks
 			.loot((lt, block) -> lt.dropOther(block, Blocks.LECTERN))
 			.register();
 
-            public static void register() {}
+    public static void register() {}
 }

@@ -18,7 +18,7 @@ public class ModTab
 	private static final CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
 
 	static {
-		REGISTRATE.creativeModeTab(() -> MOD_TAB);
+		REGISTRATE.creativeModeTab(() -> MOD_TAB, "Create: Tweaked Controllers");
 	}
 
 	public static void register() {}

@@ -164,9 +164,20 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			{
 				float equip = equipProgress.getValue(pt);
 				int handModifier = transformType == TransformType.FIRST_PERSON_LEFT_HAND ? -1 : 1;
-				msr.translate(0, equip / 4, equip / 4 * handModifier);
-				msr.rotateY(equip * -30 * handModifier);
-				msr.rotateZ(equip * -30);
+				if ((transformType == mainHand && mc.player.getOffhandItem().isEmpty())
+					|| (transformType == offHand && mc.player.getMainHandItem().isEmpty()))
+					{
+						// Number calculated based on the displacement in the model file and its scaling
+						final float modelDisplacementValue = 0.93106617f;
+						msr.translate(0.1f * equip, equip / 4, equip * handModifier * modelDisplacementValue);
+						msr.rotateZ(equip * -30);
+					}
+					else
+					{
+						msr.translate(0, equip / 4, equip / 4 * handModifier);
+						msr.rotateY(equip * -30 * handModifier);
+						msr.rotateZ(equip * -30);
+					}
 				active = true;
 			}
 

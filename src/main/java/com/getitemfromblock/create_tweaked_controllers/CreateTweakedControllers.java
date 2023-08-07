@@ -1,6 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
@@ -16,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -27,50 +29,52 @@ public class CreateTweakedControllers
 {
     public static final String ID = "create_tweaked_controllers";
 
-    private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(ID);
+    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
     public CreateTweakedControllers()
     {
+        ModLoadingContext modLoadingContext = ModLoadingContext.get();
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         forgeEventBus.register(this);
         eventBus.addListener(CreateTweakedControllers::init);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ModClientStuff.onConstructor(eventBus, forgeEventBus));
+        REGISTRATE.registerEventListeners(eventBus);
         ModTab.register();
-        ModBlocks.register();
         ModItems.register();
+        ModBlocks.register();
         ModBlockEntityTypes.register();
         ModMenuTypes.register();
+        ModConfigs.register(modLoadingContext);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ModClientStuff.onConstructor(eventBus, forgeEventBus));
     }
 
     public static void init(final FMLCommonSetupEvent event)
     {
-		ModPackets.registerPackets();
-	}
+        ModPackets.registerPackets();
+    }
 
     public static CreateRegistrate registrate()
     {
-        return REGISTRATE.get();
+        return REGISTRATE;
     }
-    
 
     public static ResourceLocation asResource(String path)
     {
-		return new ResourceLocation(ID, path);
-	}
+        return new ResourceLocation(ID, path);
+    }
 
     public static MutableComponent translateDirect(String key, Object... args)
     {
-		return Components.translatable(CreateTweakedControllers.ID + "." + key, Lang.resolveBuilders(args));
-	}
+        return Components.translatable(CreateTweakedControllers.ID + "." + key, Lang.resolveBuilders(args));
+    }
 
     public static LangBuilder builder()
     {
-		return new LangBuilder(CreateTweakedControllers.ID);
-	}
+        return new LangBuilder(CreateTweakedControllers.ID);
+    }
 
     public static LangBuilder translate(String langKey, Object... args)
     {
-		return builder().translate(langKey, args);
-	}
+        return builder().translate(langKey, args);
+    }
 }

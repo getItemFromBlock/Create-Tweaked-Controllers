@@ -100,7 +100,7 @@
 			"scale": [0.97, 0.97, 0.97]
 		},
 		"firstperson_lefthand": {
-			"rotation": [0, 47, 27],
+			"rotation": [0, 67, 27],
 			"translation": [-2, 9, 1.13],
 			"scale": [0.97, 0.97, 0.97]
 		},

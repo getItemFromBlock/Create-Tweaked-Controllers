@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.getitemfromblock.create_tweaked_controllers.ControllerInputs;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItemRenderer;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
@@ -178,16 +178,16 @@ public class TweakedLinkedControllerClientHandler
 			onReset();
 			return;
 		}
-		ControllerInputs controls = new ControllerInputs();
-		TweakedControlsUtil.GetControls(controls);
+
+		GamepadInputs.GetControls();
 		for (int i = 0; i < 6; i++)
 		{
-			axes[i] = controls.axis[i];
+			axes[i] = GamepadInputs.axis[i];
 		}
 		Collection<Integer> pressedKeys = new HashSet<>();
-		for (int i = 0; i < controls.buttons.length; i++)
+		for (int i = 0; i < GamepadInputs.buttons.length; i++)
 		{
-			if (TweakedControlsUtil.IsPressed(controls, i))
+			if (GamepadInputs.GetButton(i))
 				pressedKeys.add(i);
 		}
 
@@ -223,7 +223,7 @@ public class TweakedLinkedControllerClientHandler
 				}
 			}
 
-			ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(controls.axis, lecternPos));
+			ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(GamepadInputs.axis, lecternPos));
 		}
 
 		if (MODE == Mode.BIND)
@@ -241,7 +241,7 @@ public class TweakedLinkedControllerClientHandler
 				if (linkBehaviour != null)
 				{
 					ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(integer, selectedLocation));
-					CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", ControllerInputs.GetButtonName(integer)).sendStatus(mc.player);
+					CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetButtonName(integer)).sendStatus(mc.player);
 				}
 				MODE = Mode.IDLE;
 				break;
@@ -250,14 +250,14 @@ public class TweakedLinkedControllerClientHandler
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					if ((i < 4 && Math.abs(controls.axis[i]) > 0.8f) || (i >= 4 && controls.axis[i] > 0))
+					if ((i < 4 && Math.abs(GamepadInputs.axis[i]) > 0.8f) || (i >= 4 && GamepadInputs.axis[i] > 0))
 					{
 						LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 						if (linkBehaviour != null)
 						{
-							int a = i >= 4 ? i + 4 : i * 2 + (controls.axis[i] < 0 ? 1 : 0);
+							int a = i >= 4 ? i + 4 : i * 2 + (GamepadInputs.axis[i] < 0 ? 1 : 0);
 							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
-							CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", ControllerInputs.GetAxisName(a)).sendStatus(mc.player);
+							CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetAxisName(a)).sendStatus(mc.player);
 						}
 						MODE = Mode.IDLE;
 						break;
@@ -267,7 +267,7 @@ public class TweakedLinkedControllerClientHandler
 		}
 
 		currentlyPressed = pressedKeys;
-		controls.Empty();
+		GamepadInputs.Empty();
 	}
 
 	public static void renderOverlay(ForgeIngameGui gui, PoseStack poseStack, float partialTicks, int width1,
