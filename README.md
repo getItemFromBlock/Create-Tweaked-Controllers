@@ -4,6 +4,8 @@
 
 A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you control your contraptions using a gamepad instead of your keyboard !
 
+CurseForge link [here](https://www.curseforge.com/minecraft/mc-mods/create-tweaked-controllers)
+
 ## Building
 
 First of all, you will need a JDK (java development kit) version 17 to build this mod.  
