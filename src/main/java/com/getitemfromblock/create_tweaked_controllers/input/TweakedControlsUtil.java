@@ -65,14 +65,14 @@ public class TweakedControlsUtil
         {
             ControllerRedstoneOutput.buttons[i] = GamepadInputs.GetButton(i);
         }
-        for (int i = 0; i < ControllerRedstoneOutput.axes.length; i++)
+        for (int i = 0; i < ControllerRedstoneOutput.axis.length; i++)
         {
             if (i >= 4) // triggers
             {
                 float v = (GamepadInputs.GetAxis(i) + 1) / 2;
                 if (v < 0) v = 0;
                 if (v > 1) v = 1;
-                ControllerRedstoneOutput.axes[i] = (byte)(Math.round(v * 15));
+                ControllerRedstoneOutput.axis[i] = (byte)(Math.round(v * 15));
             }
             else // joystick axis
             {
@@ -81,8 +81,8 @@ public class TweakedControlsUtil
                 if (negative) v = -v;
                 if (v < 0) v = 0;
                 if (v > 1) v = 1;
-                ControllerRedstoneOutput.axes[i] = (byte)Math.round(v * 15);
-                if (negative && ControllerRedstoneOutput.axes[i] > 0) ControllerRedstoneOutput.axes[i] += 16;
+                ControllerRedstoneOutput.axis[i] = (byte)Math.round(v * 15);
+                if (negative && ControllerRedstoneOutput.axis[i] > 0) ControllerRedstoneOutput.axis[i] += 16;
             }
         }
     }
