@@ -1,5 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.input;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.create.AllKeys;
@@ -14,11 +18,13 @@ public class KeyboardInput implements GenericInput
         this.key = key;
     }
 
+    public KeyboardInput()
+    {
+    }
+
     @Override
     public boolean GetButtonValue()
     {
-        // TODO
-        // Minecraft.getInstance().options.keyMappings
         return invertValue ? !AllKeys.isKeyDown(key): AllKeys.isKeyDown(key);
     }
 
@@ -39,4 +45,31 @@ public class KeyboardInput implements GenericInput
     {
         return key != GLFW.GLFW_KEY_UNKNOWN;
     }
+
+    @Override
+    public void Serialize(DataOutputStream buf) throws IOException
+    {
+        buf.writeBoolean(invertValue);
+        buf.writeInt(key);
+    }
+
+    @Override
+    public void Deserialize(DataInputStream buf) throws IOException
+    {
+        invertValue = buf.readBoolean();
+        key = buf.readInt();
+    }
+
+    @Override
+    public InputType GetType()
+    {
+        return InputType.KEYBOARD_KEY;
+    }
+
+    @Override
+    public int GetValue()
+    {
+        return key;
+    }
+
 }

@@ -4,26 +4,22 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class JoystickAxisInput implements GenericInput
+public class MouseAxisInput implements GenericInput
 {
-    private int axisID = -1;
+    private boolean useVelocity = false;
+    private boolean isYAxis = false;
     private float minBound = 0.0f;
-    private float maxBound = 1.0f;
+    private float maxBound = 1000.0f;
 
-    public JoystickAxisInput(int axisID)
+    public MouseAxisInput(boolean axis, float min, float max)
     {
-        this.axisID = axisID;
-    }
-
-    public JoystickAxisInput()
-    {
-    }
-
-    public JoystickAxisInput(int axisID, float min, float max)
-    {
-        this.axisID = axisID;
+        this.isYAxis = axis;
         this.minBound = min;
         this.maxBound = max;
+    }
+    
+    public MouseAxisInput()
+    {
     }
 
     @Override
@@ -35,7 +31,8 @@ public class JoystickAxisInput implements GenericInput
     @Override
     public float GetAxisValue()
     {
-        float v = (JoystickInputs.GetAxis(axisID) - minBound) / (maxBound - minBound);
+        float v = isYAxis ? MouseCursorHandler.GetY(useVelocity) : MouseCursorHandler.GetX(useVelocity);
+        v = (v - minBound) / (maxBound - minBound);
         if (v < 0) v = 0;
         if (v > 1) v = 1;
         return v;
@@ -44,41 +41,51 @@ public class JoystickAxisInput implements GenericInput
     @Override
     public String GetDisplayName()
     {
-        return "Joystick axis " + axisID;
+        if (useVelocity)
+        {
+            return isYAxis ? "Mouse Y velocity" : "Mouse X velocity";
+        }
+        else
+        {
+            return isYAxis ? "Mouse Y position" : "Mouse X position";
+        }
     }
 
     @Override
     public boolean IsInputValid()
     {
-        return axisID < JoystickInputs.GetAxisCount() && axisID >= 0 && minBound != maxBound;
+        return minBound != maxBound;
     }
 
     @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
+        byte val = (byte)((useVelocity ? 0x1 : 0) | (isYAxis ? 0x2 : 0));
+        buf.writeByte(val);
         buf.writeFloat(minBound);
         buf.writeFloat(maxBound);
-        buf.writeInt(axisID);
     }
 
     @Override
     public void Deserialize(DataInputStream buf) throws IOException
     {
+        Byte val = buf.readByte();
+        useVelocity = (val & 0x1) != 0;
+        isYAxis = (val & 0x2) != 0;
         minBound = buf.readFloat();
         maxBound = buf.readFloat();
-        axisID = buf.readInt();
     }
 
     @Override
     public InputType GetType()
     {
-        return InputType.JOYSTICK_AXIS;
+        return InputType.MOUSE_AXIS;
     }
 
     @Override
     public int GetValue()
     {
-        return axisID;
+        return isYAxis ? 1 : 0;
     }
     
 }

@@ -1,5 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
+import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraftforge.client.gui.ForgeIngameGui;
@@ -16,6 +17,7 @@ public class ModClientStuff
 
     public static void clientInit(final FMLClientSetupEvent event)
     {
+        ModKeyMappings.init();
         OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Create: Tweaked Controller's Tweaked Linked Controller", TweakedLinkedControllerClientHandler.OVERLAY);
     }
 }

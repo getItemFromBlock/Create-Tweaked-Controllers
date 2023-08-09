@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.gui.AllIcons;

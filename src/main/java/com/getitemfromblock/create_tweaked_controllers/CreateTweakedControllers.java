@@ -28,6 +28,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class CreateTweakedControllers
 {
     public static final String ID = "create_tweaked_controllers";
+    public static final String NAME = "Create: Tweaked Controllers";
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 

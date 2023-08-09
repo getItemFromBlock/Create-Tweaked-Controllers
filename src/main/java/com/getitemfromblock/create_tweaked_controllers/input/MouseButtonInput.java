@@ -4,24 +4,26 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class JoystickButtonInput implements GenericInput
+import com.simibubi.create.AllKeys;
+
+public class MouseButtonInput implements GenericInput
 {
     private int buttonID = -1;
     private boolean invertValue = false;
 
-    public JoystickButtonInput(int buttonID)
+    public MouseButtonInput(int button)
     {
-        this.buttonID = buttonID;
+        this.buttonID = button;
     }
-
-    public JoystickButtonInput()
+    
+    public MouseButtonInput()
     {
     }
 
     @Override
     public boolean GetButtonValue()
     {
-        return invertValue ? !JoystickInputs.GetButton(buttonID) : JoystickInputs.GetButton(buttonID);
+        return invertValue ? !AllKeys.isMouseButtonDown(buttonID) : AllKeys.isMouseButtonDown(buttonID);
     }
 
     @Override
@@ -33,13 +35,13 @@ public class JoystickButtonInput implements GenericInput
     @Override
     public String GetDisplayName()
     {
-        return "Joystick button " + buttonID;
+        return "Mouse button " + buttonID;
     }
 
     @Override
     public boolean IsInputValid()
     {
-        return buttonID < JoystickInputs.GetButtonCount() && buttonID >= 0;
+        return buttonID >= 0;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class JoystickButtonInput implements GenericInput
     @Override
     public InputType GetType()
     {
-        return InputType.JOYSTICK_BUTTON;
+        return InputType.MOUSE_BUTTON;
     }
 
     @Override
