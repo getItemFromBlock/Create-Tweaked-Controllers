@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-import java.util.Vector;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.content.logistics.IRedstoneLinkable;
@@ -26,7 +24,7 @@ public class TweakedLinkedControllerServerHandler
 {
 	public static WorldAttached<Map<UUID, Collection<TweakedManualFrequency>>> receivedInputs =
 		new WorldAttached<>($ -> new HashMap<>());
-	public static WorldAttached<Map<UUID, Vector<TweakedManualAxisFrequency>>> receivedAxes =
+	public static WorldAttached<Map<UUID, ArrayList<TweakedManualAxisFrequency>>> receivedAxes =
 		new WorldAttached<>($ -> new HashMap<>());
 	static final int TIMEOUT = 30;
 
@@ -54,12 +52,12 @@ public class TweakedLinkedControllerServerHandler
 				iterator.remove();
 		}
 
-		Map<UUID, Vector<TweakedManualAxisFrequency>> map2 = receivedAxes.get(world);
-		for (Iterator<Entry<UUID, Vector<TweakedManualAxisFrequency>>> iterator = map2.entrySet()
+		Map<UUID, ArrayList<TweakedManualAxisFrequency>> map2 = receivedAxes.get(world);
+		for (Iterator<Entry<UUID, ArrayList<TweakedManualAxisFrequency>>> iterator = map2.entrySet()
 			.iterator(); iterator.hasNext();) {
 
-			Entry<UUID, Vector<TweakedManualAxisFrequency>> entry = iterator.next();
-			Vector<TweakedManualAxisFrequency> list = entry.getValue();
+			Entry<UUID, ArrayList<TweakedManualAxisFrequency>> entry = iterator.next();
+			ArrayList<TweakedManualAxisFrequency> list = entry.getValue();
 
 			for (Iterator<TweakedManualAxisFrequency> entryIterator = list.iterator(); entryIterator.hasNext();)
 			{
@@ -81,20 +79,20 @@ public class TweakedLinkedControllerServerHandler
 		}
 	}
 
-	public static void receivePressed(LevelAccessor world, BlockPos pos, UUID uniqueID, List<Couple<Frequency>> collect,
-		boolean pressed)
+	public static void ReceivePressed(LevelAccessor world, BlockPos pos, UUID uniqueID, ArrayList<Couple<Frequency>> collect, ArrayList<Boolean> values)
 		{
 		Map<UUID, Collection<TweakedManualFrequency>> map = receivedInputs.get(world);
 		Collection<TweakedManualFrequency> list = map.computeIfAbsent(uniqueID, $ -> new ArrayList<>());
 
-		WithNext: for (Couple<Frequency> activated : collect)
+		WithNext: for (int i = 0; i < collect.size(); i++)
 		{
 			for (Iterator<TweakedManualFrequency> iterator = list.iterator(); iterator.hasNext();)
 			{
 				TweakedManualFrequency entry = iterator.next();
 				if (entry.getSecond()
-					.equals(activated)) {
-					if (!pressed)
+					.equals(collect.get(i)))
+				{
+					if (!values.get(i))
 						entry.setFirst(0);
 					else
 						entry.updatePosition(pos);
@@ -102,10 +100,10 @@ public class TweakedLinkedControllerServerHandler
 				}
 			}
 
-			if (!pressed)
+			if (!values.get(i))
 				continue;
 
-			TweakedManualFrequency entry = new TweakedManualFrequency(pos, activated);
+			TweakedManualFrequency entry = new TweakedManualFrequency(pos, collect.get(i));
 			Create.REDSTONE_LINK_NETWORK_HANDLER.addToNetwork(world, entry);
 			list.add(entry);
 			
@@ -115,11 +113,11 @@ public class TweakedLinkedControllerServerHandler
 		}
 	}
 
-	public static void receiveAxes(LevelAccessor world, BlockPos pos, UUID uniqueID, Vector<Couple<Frequency>> collect, Vector<Integer> values)
+	public static void ReceiveAxis(LevelAccessor world, BlockPos pos, UUID uniqueID, ArrayList<Couple<Frequency>> collect, ArrayList<Byte> values)
 		{
-		Map<UUID, Vector<TweakedManualAxisFrequency>> map = receivedAxes.get(world);
-		Vector<TweakedManualAxisFrequency> list = map.computeIfAbsent(uniqueID, $ -> new Vector<>(10));
-		WithNext: for (int i = 0; i < 10; i++)
+		Map<UUID, ArrayList<TweakedManualAxisFrequency>> map = receivedAxes.get(world);
+		ArrayList<TweakedManualAxisFrequency> list = map.computeIfAbsent(uniqueID, $ -> new ArrayList<>(10));
+		WithNext: for (int i = 0; i < collect.size(); i++)
 		{
 			for (Iterator<TweakedManualAxisFrequency> iterator = list.iterator(); iterator.hasNext();)
 			{

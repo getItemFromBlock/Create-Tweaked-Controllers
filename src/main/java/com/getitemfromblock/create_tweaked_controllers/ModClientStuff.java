@@ -2,6 +2,7 @@ package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
@@ -17,6 +18,7 @@ public class ModClientStuff
 
     public static void clientInit(final FMLClientSetupEvent event)
     {
+        MouseCursorHandler.InitValues();
         ModKeyMappings.init();
         OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Create: Tweaked Controller's Tweaked Linked Controller", TweakedLinkedControllerClientHandler.OVERLAY);
     }

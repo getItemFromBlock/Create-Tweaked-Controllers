@@ -4,31 +4,35 @@ import com.mojang.blaze3d.Blaze3D;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.Options;
 import net.minecraft.world.phys.Vec2;
 
 public class MouseCursorHandler
 {
     public static Vec2 delta = null;
+    public static Vec2 lastPos = null;
+    public static Vec2 vel = null;
     private static MouseHandler m = null;
+    private static Options o = null;
     private static double lastMouseEventTime;
     private static float deltaT = 0;
-    private static Vec2 a, b;
+    private static double sensitivity = 0.5;
 
     public static void ResetCenter()
     {
-        CheckValues();
         delta = new Vec2(0, 0);
+        vel = new Vec2(0, 0);
+        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
     }
 
-    private static void CheckValues()
+    public static void InitValues()
     {
-        if (delta == null)
-        {
-            delta = new Vec2(0, 0);
-            m = Minecraft.getInstance().mouseHandler;
-            lastMouseEventTime = Blaze3D.getTime();
-        }
+        delta = new Vec2(0, 0);
+        vel = new Vec2(0, 0);
+        m = Minecraft.getInstance().mouseHandler;
+        o = Minecraft.getInstance().options;
+        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastMouseEventTime = Blaze3D.getTime();
     }
 
     public static void Update()
@@ -36,15 +40,17 @@ public class MouseCursorHandler
         double d0 = Blaze3D.getTime();
         deltaT = (float)(d0 - lastMouseEventTime);
         lastMouseEventTime = d0;
-        delta = new Vec2((float)m.getXVelocity() + delta.x, (float)m.getYVelocity() + delta.y);
+        vel = new Vec2((float)(m.xpos() - lastPos.x), (float)(m.ypos() - lastPos.y));
+        delta = delta.add(vel);
+        vel = vel.scale(1/deltaT);
+        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
     }
 
     public static float GetX(boolean useVelocity)
     {
         if (useVelocity)
         {
-            CheckValues();
-            return (float)m.getXVelocity() / deltaT;
+            return vel.x;
         }
         else
         {
@@ -56,8 +62,7 @@ public class MouseCursorHandler
     {
         if (useVelocity)
         {
-            CheckValues();
-            return (float)m.getYVelocity() / deltaT;
+            return vel.y;
         }
         else
         {
@@ -65,19 +70,19 @@ public class MouseCursorHandler
         }
     }
 
-    public static void RestorePlayerRotation()
+    public static void ActivateMouseLock()
     {
-        Player p = Minecraft.getInstance().player;
-        p.setXRot(a.x);
-        p.setYRot(a.y);
-        p.xRotO = b.x;
-        p.yRotO = b.y;
+        if (o.sensitivity != -1/3.0)
+        {
+            sensitivity = o.sensitivity;
+        }
+        o.sensitivity = -1/3.0;
+        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastMouseEventTime = Blaze3D.getTime();
     }
 
-    public static void StorePlayerRotations()
+    public static void DeactivateMouseLock()
     {
-        Player p = Minecraft.getInstance().player;
-        a = new Vec2(p.getXRot(), p.getYRot());
-        b = new Vec2(p.xRotO, p.yRotO);
+        o.sensitivity = sensitivity;
     }
 }

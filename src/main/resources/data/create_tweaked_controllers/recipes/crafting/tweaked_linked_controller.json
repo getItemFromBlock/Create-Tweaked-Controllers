@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BUB",
+    "SUS",
+    "PNP"
+  ],
+  "key": {
+    "B": {
+      "tag": "minecraft:wooden_buttons"
+    },
+	"S": {
+      "item": "create:analog_lever"
+    },
+    "P": {
+      "item": "create:electron_tube"
+    },
+	"U": {
+      "item": "create:linked_controller"
+    },
+	"N": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "result": {
+    "item": "create_tweaked_controllers:tweaked_linked_controller"
+  }
+}

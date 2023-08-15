@@ -32,12 +32,12 @@ public interface GenericInput
         MOUSE_AXIS,
         KEYBOARD_KEY;
 
-        static InputType GetType(byte v)
+        public static InputType GetType(byte v)
         {
             return values()[v];
         }
 
-        static byte GetValue(InputType v)
+        public static byte GetValue(InputType v)
         {
             return (byte)v.ordinal();
         }

@@ -1,6 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers.packet;
 
-import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
+//import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
 import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
 
 import java.util.function.BiConsumer;
@@ -23,7 +23,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public enum ModPackets
 {
-    TWEAKED_LINKED_CONTROLLER_INPUT(TweakedLinkedControllerInputPacket.class, TweakedLinkedControllerInputPacket::new, PLAY_TO_SERVER),
+    TWEAKED_LINKED_CONTROLLER_INPUT(TweakedLinkedControllerButtonPacket.class, TweakedLinkedControllerButtonPacket::new, PLAY_TO_SERVER),
 	TWEAKED_LINKED_CONTROLLER_INPUT_AXIS(TweakedLinkedControllerAxisPacket.class, TweakedLinkedControllerAxisPacket::new, PLAY_TO_SERVER),
 	TWEAKED_LINKED_CONTROLLER_BIND(TweakedLinkedControllerBindPacket.class, TweakedLinkedControllerBindPacket::new, PLAY_TO_SERVER),
 	TWEAKED_LINKED_CONTROLLER_USE_LECTERN(TweakedLinkedControllerStopLecternPacket.class, TweakedLinkedControllerStopLecternPacket::new,

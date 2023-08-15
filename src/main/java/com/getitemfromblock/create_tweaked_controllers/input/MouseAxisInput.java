@@ -11,11 +11,12 @@ public class MouseAxisInput implements GenericInput
     private float minBound = 0.0f;
     private float maxBound = 1000.0f;
 
-    public MouseAxisInput(boolean axis, float min, float max)
+    public MouseAxisInput(boolean axis, float min, float max, boolean useVel)
     {
         this.isYAxis = axis;
         this.minBound = min;
         this.maxBound = max;
+        this.useVelocity = useVel;
     }
     
     public MouseAxisInput()

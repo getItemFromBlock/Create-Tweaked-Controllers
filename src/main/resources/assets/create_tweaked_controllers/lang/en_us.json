@@ -26,7 +26,13 @@
 	"create_tweaked_controllers.gui_gamepad_unavailable": "No gamepad found",
 	"create_tweaked_controllers.gui_gamepad_selected": "Selected gamepad: %1$s",
 	
+	"create_tweaked_controllers.keybind.mouse_focus" : "Focus mouse movement",
+	"create_tweaked_controllers.keybind.mouse_reset" : "Reset mouse center",
+	"create_tweaked_controllers.keybind.controller_exit" : "Exit controller",
+	
 	"itemGroup.create_tweaked_controllers.base": "Create: Tweaked Controllers",
+	
+	"create_tweaked_controllers.menu.return": "",
 	
 	"_": "EOF"
 }

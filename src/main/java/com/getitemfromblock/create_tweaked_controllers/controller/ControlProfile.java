@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.input;
+package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,10 +7,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
+import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
+import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
+import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput.InputType;
 import com.mojang.blaze3d.platform.InputConstants.Key;
 
@@ -20,8 +26,8 @@ import net.minecraft.client.Minecraft;
 public class ControlProfile
 {
     protected GenericInput[] layout = new GenericInput[25];
-    protected boolean hasJoystickInput = false;
-    protected HashMap<Integer, KeyMapping> duplicatedKeys = new HashMap<Integer, KeyMapping>();
+    public boolean hasJoystickInput = false;
+    public ArrayList<KeyMapping> duplicatedKeys = new ArrayList<KeyMapping>();
     
     public ControlProfile()
     {
@@ -32,6 +38,7 @@ public class ControlProfile
     {
         Load("profiles/gamepad_profile_" + id);
         UpdateProfileData();
+        Save("profiles/gamepad_profile_" + id);
     }
 
     protected void InitDefaultLayout()
@@ -95,11 +102,11 @@ public class ControlProfile
             {
                 if (i > 18)
                 {
-                    layout[i] = new MouseAxisInput(i == 22, 0.0f, -1000.0f);
+                    layout[i] = new MouseAxisInput(i == 22, 0.0f, -1000.0f, false);
                 }
                 else
                 {
-                    layout[i] = new KeyboardInput(i == 16 ? GLFW.GLFW_KEY_S : GLFW.GLFW_KEY_A);
+                    layout[i] = new KeyboardInput(i == 16 ? GLFW.GLFW_KEY_A : GLFW.GLFW_KEY_W);
                 }
             }
             else if (i > 22)
@@ -110,11 +117,11 @@ public class ControlProfile
             {
                 if (i > 18)
                 {
-                    layout[i] = new MouseAxisInput(i == 21, 0.0f, 1000.0f);
+                    layout[i] = new MouseAxisInput(i == 21, 0.0f, 1000.0f, false);
                 }
                 else
                 {
-                    layout[i] = new KeyboardInput(i == 15 ? GLFW.GLFW_KEY_W : GLFW.GLFW_KEY_D);
+                    layout[i] = new KeyboardInput(i == 15 ? GLFW.GLFW_KEY_D : GLFW.GLFW_KEY_S);
                 }
             }
         }
@@ -245,7 +252,7 @@ public class ControlProfile
             for (int i = 0; i < 25; i++)
             {
                 if (!layout[i].IsInputValid() || id != GetUniqueKeyIndex(layout[i])) continue;
-                duplicatedKeys.putIfAbsent(id, key);
+                duplicatedKeys.add(key);
             }
         }
     }

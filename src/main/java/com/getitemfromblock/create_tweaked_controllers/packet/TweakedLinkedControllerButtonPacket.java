@@ -1,7 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.packet;
 
-import java.util.UUID;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
@@ -16,32 +16,33 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPacketBase
+public class TweakedLinkedControllerButtonPacket extends TweakedLinkedControllerPacketBase
 {
-	private int axis = 0;
 
-	public TweakedLinkedControllerAxisPacket(int axisIn)
+	private short buttonStates = 0;
+
+	public TweakedLinkedControllerButtonPacket(short buttons)
 	{
-		this(axisIn, null);
+		this(buttons, null);
 	}
 
-	public TweakedLinkedControllerAxisPacket(int axisIn, BlockPos lecternPos)
+	public TweakedLinkedControllerButtonPacket(short button, BlockPos lecternPos)
 	{
 		super(lecternPos);
-		this.axis = axisIn;
+		this.buttonStates = button;
 	}
 
-	public TweakedLinkedControllerAxisPacket(FriendlyByteBuf buffer)
+	public TweakedLinkedControllerButtonPacket(FriendlyByteBuf buffer)
 	{
 		super(buffer);
-		axis = buffer.readInt();
+		buttonStates = buffer.readShort();
 	}
 
 	@Override
 	public void write(FriendlyByteBuf buffer)
 	{
 		super.write(buffer);
-		buffer.writeInt(axis);
+		buffer.writeShort(buttonStates);
 	}
 
 	@Override
@@ -60,30 +61,16 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
 
 		if (player.isSpectator())
 			return;
-		
 		ControllerRedstoneOutput output = new ControllerRedstoneOutput();
-		output.DecodeAxis(axis);
-        ArrayList<Couple<Frequency>> axisCouples = new ArrayList<>(10);
-        ArrayList<Byte> axisValues = new ArrayList<>(10);
-        for (int i = 0; i < 10; ++i)
+		output.DecodeButtons(buttonStates);
+		ArrayList<Couple<Frequency>> buttonCouples = new ArrayList<>(15);
+        ArrayList<Boolean> buttonValues = new ArrayList<>(15);
+        for (int i = 0; i < 15; ++i)
         {
-            axisCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i + 15));
-            byte dt = 0;
-			if (i < 8)
-            {
-				boolean hasHighBit = (output.axis[i/2] & 0x10) != 0;
-                if ((i % 2 == 1) == hasHighBit)
-				{
-					dt = (byte)(output.axis[i/2] & 0x0f);
-				}
-            }
-            else
-            {
-                dt = output.axis[i - 4];
-            }
-			axisValues.add(dt);
+            buttonCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i));
+			buttonValues.add((buttonStates & 1 << i) != 0);
         }
-		TweakedLinkedControllerServerHandler.ReceiveAxis(world, pos, uniqueID, axisCouples, axisValues);
+		TweakedLinkedControllerServerHandler.ReceivePressed(world, pos, uniqueID, buttonCouples, buttonValues);
 	}
 
 }

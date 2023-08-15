@@ -1,21 +1,21 @@
 package com.getitemfromblock.create_tweaked_controllers.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItemRenderer;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerAxisPacket;
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerBindPacket;
-import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerInputPacket;
+import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerButtonPacket;
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerStopLecternPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -43,11 +43,12 @@ public class TweakedLinkedControllerClientHandler
 
 	public static Mode MODE = Mode.IDLE;
 	public static int PACKET_RATE = 5;
-	public static Collection<Integer> currentlyPressed = new HashSet<>();
-	public static float[] axes = {0.0f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f};
+	public static short buttonStates = 0;
+	public static int axisStates = 0;
 	private static BlockPos lecternPos;
 	private static BlockPos selectedLocation = BlockPos.ZERO;
-	private static int packetCooldown;
+	private static int buttonPacketCooldown = 0;
+	private static int axisPacketCooldown = 0;
 
 	public static void toggleBindMode(BlockPos location)
 	{
@@ -77,14 +78,6 @@ public class TweakedLinkedControllerClientHandler
 		}
 	}
 
-	public static void ClearAxes()
-	{
-		for (int i = 0; i < axes.length; i++)
-        {
-            axes[i] = i < 4 ? 0.0f : -1.0f;
-        }
-	}
-
 	public static void activateInLectern(BlockPos lecternAt)
 	{
 		if (MODE == Mode.IDLE)
@@ -110,18 +103,22 @@ public class TweakedLinkedControllerClientHandler
 
 	protected static void onReset()
 	{
+		MouseCursorHandler.DeactivateMouseLock(); // Make sure to free the camera when exiting the controller
+		MouseCursorHandler.ResetCenter();
 		selectedLocation = BlockPos.ZERO;
-		packetCooldown = 0;
+		buttonPacketCooldown = 0;
+		axisPacketCooldown = 0;
 		if (inLectern())
 			ModPackets.channel.sendToServer(new TweakedLinkedControllerStopLecternPacket(lecternPos));
 		lecternPos = null;
 
-		if (!currentlyPressed.isEmpty())
-			ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(currentlyPressed, false));
-		currentlyPressed.clear();
-		ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(null, null));
-		ClearAxes();
-			
+		if (buttonStates != 0)
+		{
+			buttonStates = 0;
+			ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(buttonStates));
+		}
+		axisStates = 0;
+		ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axisStates, null));
 		TweakedLinkedControllerItemRenderer.resetButtons();
 	}
 
@@ -131,8 +128,10 @@ public class TweakedLinkedControllerClientHandler
 
 		if (MODE == Mode.IDLE)
 			return;
-		if (packetCooldown > 0)
-			packetCooldown--;
+		if (buttonPacketCooldown > 0)
+			buttonPacketCooldown--;
+		if (axisPacketCooldown > 0)
+			axisPacketCooldown--;
 
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
@@ -159,7 +158,8 @@ public class TweakedLinkedControllerClientHandler
 		if (inLectern() && ModBlocks.TWEAKED_LECTERN_CONTROLLER.get()
 			.getTileEntityOptional(mc.level, lecternPos)
 			.map(be -> !be.isUsedBy(mc.player))
-			.orElse(true)) {
+			.orElse(true))
+		{
 			deactivateInLectern();
 			return;
 		}
@@ -171,59 +171,50 @@ public class TweakedLinkedControllerClientHandler
 			return;
 		}
 
-		if (InputConstants.isKeyDown(mc.getWindow()
+		if (ModKeyMappings.KEY_CONTROLLER_EXIT.isDown() || InputConstants.isKeyDown(mc.getWindow()
 			.getWindow(), GLFW.GLFW_KEY_ESCAPE))
-			{
+		{
 			MODE = Mode.IDLE;
 			onReset();
 			return;
 		}
-
-		GamepadInputs.GetControls();
-		for (int i = 0; i < 6; i++)
-		{
-			axes[i] = GamepadInputs.axis[i];
-		}
-		Collection<Integer> pressedKeys = new HashSet<>();
-		for (int i = 0; i < GamepadInputs.buttons.length; i++)
-		{
-			if (GamepadInputs.GetButton(i))
-				pressedKeys.add(i);
-		}
-
-		Collection<Integer> newKeys = new HashSet<>(pressedKeys);
-		Collection<Integer> releasedKeys = currentlyPressed;
-		newKeys.removeAll(releasedKeys);
-		releasedKeys.removeAll(pressedKeys);
+		TweakedControlsUtil.Update();
+		short pressedKeys = TweakedControlsUtil.output.EncodeButtons();
+		int axis = TweakedControlsUtil.output.EncodeAxis();
 
 		if (MODE == Mode.ACTIVE)
 		{
-			// Released Keys
-			if (!releasedKeys.isEmpty())
+			if (pressedKeys != buttonStates)
 			{
-				ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(releasedKeys, false, lecternPos));
-				AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .5f, true);
-			}
-
-			// Newly Pressed Keys
-			if (!newKeys.isEmpty())
-			{
-				ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(newKeys, true, lecternPos));
-				packetCooldown = PACKET_RATE;
-				AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .75f, true);
-			}
-
-			// Keepalive Pressed Keys
-			if (packetCooldown == 0)
-			{
-				if (!pressedKeys.isEmpty())
+				if ((pressedKeys & ~buttonStates) != 0)
 				{
-					ModPackets.channel.sendToServer(new TweakedLinkedControllerInputPacket(pressedKeys, true, lecternPos));
-					packetCooldown = PACKET_RATE;
+					AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .75f, true);
 				}
+				if ((buttonStates & ~pressedKeys) != 0)
+				{
+					AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .5f, true);
+				}
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
+				buttonPacketCooldown = PACKET_RATE;
 			}
-
-			ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(GamepadInputs.axis, lecternPos));
+			if (axis != axisStates)
+			{
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+				axisPacketCooldown = PACKET_RATE;
+			}
+			// Keepalive Keys
+			if (buttonPacketCooldown == 0 && pressedKeys != 0)
+			{
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
+				buttonPacketCooldown = PACKET_RATE;
+			}
+			if (axisPacketCooldown == 0 && axis != 0)
+			{
+				ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+				axisPacketCooldown = PACKET_RATE;
+			}
+			buttonStates = pressedKeys;
+			axisStates = axis;
 		}
 
 		if (MODE == Mode.BIND)
@@ -235,39 +226,36 @@ public class TweakedLinkedControllerClientHandler
 					.move(selectedLocation))
 					.colored(0x0104FF)
 					.lineWidth(1 / 16f);
-			for (Integer integer : newKeys)
+			for (int i = 0; i < 15; i++)
 			{
+				if (!GamepadInputs.buttons[i]) continue;
 				LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 				if (linkBehaviour != null)
 				{
-					ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(integer, selectedLocation));
-					CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetButtonName(integer)).sendStatus(mc.player);
+					ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(i, selectedLocation));
+					CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetButtonName(i)).sendStatus(mc.player);
 				}
 				MODE = Mode.IDLE;
+				onReset();
 				break;
 			}
-			if (MODE == Mode.BIND)
+			for (int i = 0; i < 6; i++)
 			{
-				for (int i = 0; i < 6; i++)
+				if ((i < 4 && Math.abs(GamepadInputs.axis[i]) > 0.8f) || (i >= 4 && GamepadInputs.axis[i] > 0))
 				{
-					if ((i < 4 && Math.abs(GamepadInputs.axis[i]) > 0.8f) || (i >= 4 && GamepadInputs.axis[i] > 0))
+					LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
+					if (linkBehaviour != null)
 					{
-						LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
-						if (linkBehaviour != null)
-						{
-							int a = i >= 4 ? i + 4 : i * 2 + (GamepadInputs.axis[i] < 0 ? 1 : 0);
-							ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
-							CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetAxisName(a)).sendStatus(mc.player);
-						}
-						MODE = Mode.IDLE;
-						break;
+						int a = i >= 4 ? i + 4 : i * 2 + (GamepadInputs.axis[i] < 0 ? 1 : 0);
+						ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
+						CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetAxisName(a)).sendStatus(mc.player);
 					}
+					MODE = Mode.IDLE;
+					onReset();
+					break;
 				}
 			}
 		}
-
-		currentlyPressed = pressedKeys;
-		GamepadInputs.Empty();
 	}
 
 	public static void renderOverlay(ForgeIngameGui gui, PoseStack poseStack, float partialTicks, int width1,

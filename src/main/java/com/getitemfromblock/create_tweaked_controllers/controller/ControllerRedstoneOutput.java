@@ -2,10 +2,10 @@ package com.getitemfromblock.create_tweaked_controllers.controller;
 
 public class ControllerRedstoneOutput
 {
-    public static boolean[] buttons = new boolean[15];
-    public static byte[] axis = new byte[6];
+    public Boolean[] buttons = new Boolean[15];
+    public Byte[] axis = new Byte[6];
 
-    public static void Clear()
+    public void Clear()
     {
         for (int i = 0; i < buttons.length; i++)
         {
@@ -17,7 +17,7 @@ public class ControllerRedstoneOutput
         }
     }
 
-    public static short EncodeButtons() // Returns buttons packed in a short
+    public short EncodeButtons() // Returns buttons packed in a short
     {
         short result = 0;
         for (int i = 0; i < buttons.length; i++)
@@ -28,7 +28,7 @@ public class ControllerRedstoneOutput
         return result;
     }
 
-    public static void DecodeButtons(short value) // Decode buttons from packed value
+    public void DecodeButtons(short value) // Decode buttons from packed value
     {
         for (int i = 0; i < buttons.length; i++)
         {
@@ -36,7 +36,7 @@ public class ControllerRedstoneOutput
         }
     }
 
-    public static int EncodeAxis() // Returns axis packed in an integer
+    public int EncodeAxis() // Returns axis packed in an integer
     {
         int result = 0;
         for (int i = 0; i < axis.length; i++)
@@ -53,18 +53,18 @@ public class ControllerRedstoneOutput
         return result;
     }
 
-    public static void DecodeAxis(int value) // Decode axis from packed value
+    public void DecodeAxis(int value) // Decode axis from packed value
     {
         for (int i = 0; i < axis.length; i++)
         {
             if (i < 4)
             {
-                axis[i] = (byte)((value & 0x1f << i*5) >> i*5);
+                axis[i] = (byte)((value & 0x1f << i*5) >>> i*5);
             }
             else
             {
                 int dec = i == 4 ? 20 : 24;
-                axis[i] = (byte)((value & 0xf << dec) >> dec);
+                axis[i] = (byte)((value & 0xf << dec) >>> dec);
             }
         }
     }

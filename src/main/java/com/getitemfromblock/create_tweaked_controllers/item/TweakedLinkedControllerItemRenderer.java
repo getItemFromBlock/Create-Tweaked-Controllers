@@ -1,6 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers.item;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
@@ -11,6 +11,7 @@ import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerModel;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
+import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -40,20 +41,20 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 	protected static final PartialModel BUTTON_B = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_red"));
 
 	static LerpedFloat equipProgress;
-	static Vector<LerpedFloat> buttons;
-	static Vector<LerpedFloat> axes;
+	static ArrayList<LerpedFloat> buttons;
+	static ArrayList<LerpedFloat> axis;
 
 	static
 	{
 		equipProgress = LerpedFloat.linear()
 			.startWithValue(0);
-		buttons = new Vector<>(15);
+		buttons = new ArrayList<>(15);
 		for (int i = 0; i < 15; i++)
 			buttons.add(LerpedFloat.linear()
 				.startWithValue(0));
-		axes = new Vector<>(6);
+		axis = new ArrayList<>(6);
 		for (int i = 0; i < 6; i++)
-			axes.add(LerpedFloat.linear()
+			axis.add(LerpedFloat.linear()
 				.startWithValue(i < 4 ? 0 : -1));
 	}
 
@@ -72,13 +73,13 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		for (int i = 0; i < buttons.size(); i++)
 		{
 			LerpedFloat lerpedFloat = buttons.get(i);
-			lerpedFloat.chase(TweakedLinkedControllerClientHandler.currentlyPressed.contains(i) ? 1 : 0, .4f, Chaser.EXP);
+			lerpedFloat.chase(GamepadInputs.buttons[i] ? 1 : 0, .4f, Chaser.EXP);
 			lerpedFloat.tickChaser();
 		}
-		for (int i = 0; i < axes.size(); i++)
+		for (int i = 0; i < axis.size(); i++)
 		{
-			LerpedFloat lerpedFloat = axes.get(i);
-			lerpedFloat.chase(TweakedLinkedControllerClientHandler.axes[i], 1.0f, Chaser.LINEAR);
+			LerpedFloat lerpedFloat = axis.get(i);
+			lerpedFloat.chase(GamepadInputs.axis[i], 1.0f, Chaser.LINEAR);
 			lerpedFloat.tickChaser();
 
 		}
@@ -90,9 +91,9 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		{
 			buttons.get(i).startWithValue(0);
 		}
-		for (int i = 0; i < axes.size(); i++)
+		for (int i = 0; i < axis.size(); i++)
 		{
-			axes.get(i).startWithValue(i < 4 ? 0.0f : -1.0f);
+			axis.get(i).startWithValue(i < 4 ? 0.0f : -1.0f);
 		}
 	}
 
@@ -273,7 +274,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			ms.pushPose();
 			final float delta = 1 / 16f * -0.75f;
 			Vec3 pos = positionList[isRight ? 12 : 11];
-			float value = axes.get(isRight ? 5 : 4).getValue(pt);
+			float value = axis.get(isRight ? 5 : 4).getValue(pt);
 			value = (value + 1) / 2 * delta;
 			ms.translate(pos.x - value, pos.y, pos.z);
 			renderer.renderSolid(trigger, light);
@@ -291,13 +292,13 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 			float x, y;
 			if (isRight)
 			{
-				x = axes.get(2).getValue(pt);
-				y = axes.get(3).getValue(pt);
+				x = axis.get(2).getValue(pt);
+				y = axis.get(3).getValue(pt);
 			}
 			else
 			{
-				x = axes.get(0).getValue(pt);
-				y = axes.get(1).getValue(pt);
+				x = axis.get(0).getValue(pt);
+				y = axis.get(1).getValue(pt);
 			}
 			Vector3f axis = new Vector3f(-x, 0, -y);
 			double angle = x * x + y * y;
