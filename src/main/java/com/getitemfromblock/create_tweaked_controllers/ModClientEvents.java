@@ -1,5 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
+import com.getitemfromblock.create_tweaked_controllers.config.ModConfigScreen;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
 
@@ -48,7 +49,7 @@ public class ModClientEvents
 				.orElseThrow(() -> new IllegalStateException("CreateTweakedControllers mod container missing on LoadComplete"));
 			container.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class,
 				() -> new ConfigGuiHandler.ConfigGuiFactory(
-					(mc, previousScreen) -> new BaseConfigScreen(previousScreen, CreateTweakedControllers.ID)));
+					(mc, previousScreen) -> new ModConfigScreen(previousScreen)));
 		}
 	}
 }
