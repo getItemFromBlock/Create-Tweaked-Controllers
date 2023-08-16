@@ -32,7 +32,10 @@
 	
 	"itemGroup.create_tweaked_controllers.base": "Create: Tweaked Controllers",
 	
-	"create_tweaked_controllers.menu.return": "",
+	"create_tweaked_controllers.menu.return": "Return to Menu",
+	"create_tweaked_controllers.menu.issues": "Report Issues",
+	"create_tweaked_controllers.menu.wiki": "Online Wiki",
+	"create_tweaked_controllers.menu.configure": "Configure...",
 	
 	"_": "EOF"
 }

@@ -39,7 +39,6 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 	protected static final PartialModel BUTTON_Y = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_yellow"));
 	protected static final PartialModel BUTTON_A = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_green"));
 	protected static final PartialModel BUTTON_B = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_red"));
-
 	static LerpedFloat equipProgress;
 	static ArrayList<LerpedFloat> buttons;
 	static ArrayList<LerpedFloat> axis;
@@ -170,8 +169,8 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 					{
 						// Number calculated based on the displacement in the model file and its scaling
 						final float modelDisplacementValue = 0.93106617f;
-						msr.translate(0.1f * equip, equip / 4, equip * handModifier * modelDisplacementValue);
-						msr.rotateZ(equip * -30);
+						msr.translate(0.1f * equip, equip / 3, equip * handModifier * modelDisplacementValue);
+						msr.rotateZ(equip * -10);
 					}
 					else
 					{

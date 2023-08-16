@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.config;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableObject;
 
-import com.getitemfromblock.create_tweaked_controllers.gui.ModIcons;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
+import com.getitemfromblock.create_tweaked_controllers.config.ModConfigScreen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Components;
