@@ -1,0 +1,42 @@
+{
+	"block.create_tweaked_controllers.tweaked_lectern_controller": "Pupitre avec contrôleur redstone avancé",
+	
+	"item.create_tweaked_controllers.tweaked_linked_controller": "Contrôleur redstone avancé",
+	
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip": "CONTRÔLEUR REDSTONE AVANCÉ",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.summary": "Permet un _contrôle à la main_ sur des fréquences de _liaisons redstone_ assignées à votre _Manette_.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition1": "Clic droit",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour1": "_Active_ ou _désactive_ le contrôleur. Les _contrôles_ de votre _Manette_ sont utilisés pendant qu'il est activé.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition2": "Clic droit en étant accroupi",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour2": "Ouvre l'_interface de configuraiton_ manuelle.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition3": "Clic droit sur un récepteur de liaison redstone",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour3": "Active le _mode_ de _liaison_, utilisez un bouton ou un axe de votre _Manette_ pour le lier à la _fréquence_ de la _liaison_.",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.condition4": "Clic droit sur un pupitre",
+	"item.create_tweaked_controllers.tweaked_linked_controller.tooltip.behaviour4": "Place le contrôleur sur le pupitre pour une activation facile. (Clic droit en étant accroupi pour le récupérer)",
+	
+	"create_tweaked_controllers.tweaked_linked_controller.bind_mode": "Mode liaison actif",
+	"create_tweaked_controllers.tweaked_linked_controller.press_keybind": "Appuyes sur un bouton de votre manette, ou bougez un axe pour lier la fréquence correspondante",
+	"create_tweaked_controllers.tweaked_linked_controller.key_bound": "Fréquence liée à %1$s",
+	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_1": "Touche : %1$s, Freq. #1",
+	"create_tweaked_controllers.tweaked_linked_controller.frequency_slot_2": "Touche : %1$s, Freq. #2",
+	
+	"create_tweaked_controllers.gui_tab_button": "Paramètres des boutons",
+	"create_tweaked_controllers.gui_tab_axis": "Paamètres des axes",
+	"create_tweaked_controllers.gui_button_refresh": "Rechercher les manettes",
+	"create_tweaked_controllers.gui_gamepad_unavailable": "Aucune manette trouvée",
+	"create_tweaked_controllers.gui_gamepad_selected": "Manette utilisée : %1$s",
+	
+	"create_tweaked_controllers.keybind.mouse_focus" : "Capturer les mouvements de la souris",
+	"create_tweaked_controllers.keybind.mouse_reset" : "Recentrer le curseur",
+	"create_tweaked_controllers.keybind.controller_exit" : "Ranger le contrôleur",
+	
+	"itemGroup.create_tweaked_controllers.base": "Create: Tweaked Controllers",
+	
+	"create_tweaked_controllers.menu.return": "Retour au menu",
+	"create_tweaked_controllers.menu.issues": "Signaler des bugs",
+	"create_tweaked_controllers.menu.wiki": "Manuel en ligne",
+	"create_tweaked_controllers.menu.config_general": "Configurations générales",
+	"create_tweaked_controllers.menu.config_controller": "Configurations du contrôleur",
+	
+	"_": "EOF"
+}

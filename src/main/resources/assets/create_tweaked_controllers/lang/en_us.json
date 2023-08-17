@@ -35,7 +35,8 @@
 	"create_tweaked_controllers.menu.return": "Return to Menu",
 	"create_tweaked_controllers.menu.issues": "Report Issues",
 	"create_tweaked_controllers.menu.wiki": "Online Wiki",
-	"create_tweaked_controllers.menu.configure": "Configure...",
+	"create_tweaked_controllers.menu.config_general": "General Configurations",
+	"create_tweaked_controllers.menu.config_controller": "Controller Configurations",
 	
 	"_": "EOF"
 }
