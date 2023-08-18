@@ -4,6 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.MouseAxisScreen;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
 public class MouseAxisInput implements GenericInput
 {
     private boolean useVelocity = false;
@@ -40,16 +47,18 @@ public class MouseAxisInput implements GenericInput
     }
 
     @Override
-    public String GetDisplayName()
+    public Component GetDisplayName()
     {
+        final String a = isYAxis ? "Y" : "X";
         if (useVelocity)
         {
-            return isYAxis ? "Mouse Y velocity" : "Mouse X velocity";
+            return CreateTweakedControllers.translateDirect("gui_input_cursor_vel", a);
         }
         else
         {
-            return isYAxis ? "Mouse Y position" : "Mouse X position";
+            return CreateTweakedControllers.translateDirect("gui_input_cursor_pos", a);
         }
+        
     }
 
     @Override
@@ -87,6 +96,12 @@ public class MouseAxisInput implements GenericInput
     public int GetValue()
     {
         return isYAxis ? 1 : 0;
+    }
+
+    @Override
+    public GenericInputScreen OpenConfigScreen(Screen previous)
+    {
+        return new MouseAxisScreen(previous, this);
     }
     
 }

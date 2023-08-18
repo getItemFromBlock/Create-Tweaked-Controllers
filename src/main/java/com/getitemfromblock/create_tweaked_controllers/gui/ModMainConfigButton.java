@@ -61,27 +61,33 @@ public class ModMainConfigButton extends Button
 
 	public static class MenuRows
     {
-		public static final MenuRows MAIN_MENU = new MenuRows(Arrays.asList(
-			new SingleMenuRow("menu.singleplayer"),
-			new SingleMenuRow("menu.multiplayer"),
-			new SingleMenuRow("fml.menu.mods", "menu.online"),
-			new SingleMenuRow("narrator.button.language", "narrator.button.accessibility")
-		));
-
-		public static final MenuRows INGAME_MENU = new MenuRows(Arrays.asList(
-			new SingleMenuRow("menu.returnToGame"),
-			new SingleMenuRow("gui.advancements", "gui.stats"),
-			new SingleMenuRow("menu.sendFeedback", "menu.reportBugs"),
-			new SingleMenuRow("menu.options", "menu.shareToLan"),
-			new SingleMenuRow("menu.returnToMenu")
-		));
-
 		protected final List<String> leftButtons, rightButtons;
 
 		public MenuRows(List<SingleMenuRow> variants)
         {
 			leftButtons = variants.stream().map(r -> r.left).collect(Collectors.toList());
 			rightButtons = variants.stream().map(r -> r.right).collect(Collectors.toList());
+		}
+
+		public static MenuRows CreateMainMenuRows()
+		{
+			return new MenuRows(Arrays.asList(
+			new SingleMenuRow("menu.singleplayer"),
+			new SingleMenuRow("menu.multiplayer"),
+			new SingleMenuRow("fml.menu.mods", "menu.online"),
+			new SingleMenuRow("narrator.button.language", "narrator.button.accessibility")
+			));
+		}
+
+		public static MenuRows CreateIngameMenuRows()
+		{
+			return new MenuRows(Arrays.asList(
+			new SingleMenuRow("menu.returnToGame"),
+			new SingleMenuRow("gui.advancements", "gui.stats"),
+			new SingleMenuRow("menu.sendFeedback", "menu.reportBugs"),
+			new SingleMenuRow("menu.options", "menu.shareToLan"),
+			new SingleMenuRow("menu.returnToMenu")
+		));
 		}
 	}
 
@@ -97,13 +103,13 @@ public class ModMainConfigButton extends Button
 			int rowIdx = 0, offsetX = 0;
 			if (gui instanceof TitleScreen)
             {
-				menu = MenuRows.MAIN_MENU;
+				menu = MenuRows.CreateMainMenuRows();
 				rowIdx = ModClientConfig.CONFIG_BUTTON_MAIN_MENU_ROW.get();
 				offsetX = ModClientConfig.CONFIG_BUTTON_MAIN_MENU_OFFSET.get();
 			}
             else if (gui instanceof PauseScreen)
             {
-				menu = MenuRows.INGAME_MENU;
+				menu = MenuRows.CreateIngameMenuRows();
 				rowIdx = ModClientConfig.CONFIG_BUTTON_INGAME_MENU_ROW.get();
 				offsetX = ModClientConfig.CONFIG_BUTTON_INGAME_MENU_OFFSET.get();
 			}

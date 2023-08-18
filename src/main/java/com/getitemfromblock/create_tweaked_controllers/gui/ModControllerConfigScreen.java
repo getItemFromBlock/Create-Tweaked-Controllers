@@ -3,6 +3,14 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
+import com.getitemfromblock.create_tweaked_controllers.input.InputList;
+import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
+import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
+import com.getitemfromblock.create_tweaked_controllers.input.JoystickInputs;
+import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
@@ -10,22 +18,24 @@ import com.simibubi.create.foundation.gui.ScreenOpener;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.phys.Vec2;
 
 public class ModControllerConfigScreen extends AbstractSimiScreen
 {
     protected final Screen parent;
-    protected boolean returnOnClose;
 	protected ModGuiTextures background;
 	private JoystickIcon lStick;
 	private JoystickIcon rStick;
 	private ControllerButton[] controllerButtons;
 	private PlainRect[] triggerAxis;
 
+    private int selectedInput = -1;
+    private InputList inputBindsList;
+
     public ModControllerConfigScreen(Screen parent)
     {
         this.parent = parent;
-        this.returnOnClose = true;
 		this.background = ModGuiTextures.CONTROLLER_BACKGROUND;
     }
 
@@ -33,16 +43,65 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
-        this.returnOnClose = true;
         this.Populate();
+    }
+
+	@Override
+	public void tick()
+	{
+		TweakedControlsUtil.GuiUpdate();
+		if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
+		{
+			selectedInput = -1;
+			TweakedControlsUtil.profile.UpdateProfileData();
+		}
+	}
+
+	@Override
+	public boolean mouseClicked(double x, double y, int button)
+	{
+        if (selectedInput != -1)
+		{
+			TweakedControlsUtil.profile.layout[selectedInput] = new MouseButtonInput(button);
+            selectedInput = -1;
+            TweakedControlsUtil.profile.UpdateProfileData();
+            return true;
+        }
+		else
+		{
+            return super.mouseClicked(x, y, button);
+        }
+    }
+
+	@Override
+    public boolean keyPressed(int key, int scan, int modif)
+	{
+        if (selectedInput != -1)
+	    {
+            if (key == 256)
+			{
+                TweakedControlsUtil.profile.layout[selectedInput] = null;
+            }
+			else
+			{
+				TweakedControlsUtil.profile.layout[selectedInput] = new KeyboardInput(key);
+            }
+			TweakedControlsUtil.profile.UpdateProfileData();
+            selectedInput = -1;
+            return true;
+        }
+		else
+		{
+            return super.keyPressed(key, scan, modif);
+        }
     }
 
     @Override
     protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks)
     {
+		inputBindsList.render(ms, mouseX, mouseY, partialTicks);
         int x = (width - background.width) / 2;
 		int y =  30;
-		TweakedControlsUtil.Update();
 		background.render(ms, x, y, this);
 		Vec2 v = new Vec2(GamepadInputs.axis[0], GamepadInputs.axis[1]);
 		if (v.lengthSquared() > 1)
@@ -69,14 +128,78 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
 		font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
     }
 
+	public void SetActiveInput(int index)
+	{
+		selectedInput = index;
+		MouseCursorHandler.ResetCenter();
+		JoystickInputs.StoreAxisValues();
+	}
+
+	public int GetActiveInput()
+	{
+		return selectedInput;
+	}
+
+	private boolean HandleMouseMovement()
+	{
+		float deltaM = MouseCursorHandler.GetX(false);
+		float deltaM2 = MouseCursorHandler.GetY(false);
+		boolean isY = false;
+		if (Math.abs(deltaM) < Math.abs(deltaM2))
+		{
+			deltaM = deltaM2;
+			isY = true;
+		}
+		if (Math.abs(deltaM) > 250)
+		{
+			TweakedControlsUtil.profile.layout[selectedInput] = new MouseAxisInput(isY, 0, Math.copySign(1000.0f, deltaM), false);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean HandleJoystickButtons()
+	{
+		if (!JoystickInputs.HasJoystick()) return false;
+		int val = JoystickInputs.GetFirstButton();
+		if (val < 0) return false;
+		TweakedControlsUtil.profile.layout[selectedInput] = new JoystickButtonInput(val);
+		return true;
+	}
+
+	private boolean HandleJoystickAxis()
+	{
+		if (!JoystickInputs.HasJoystick()) return false;
+		int val = JoystickInputs.GetFirstAxis();
+		if (val < 0) return false;
+		float start = JoystickInputs.GetStoredAxis(val);
+		float dest = JoystickInputs.GetAxis(val);
+		if (Math.abs(start) > 0.5f) // Probably a trigger
+		{
+			start = Math.copySign(1.0f, start);
+			dest = -start;
+		}
+		else // Probably a joystick
+		{
+			start = 0.0f;
+			dest = Math.copySign(1.0f, dest);
+		}
+		TweakedControlsUtil.profile.layout[selectedInput] = new JoystickAxisInput(val, start, dest);
+		return true;
+	}
+
     private void Populate()
     {
-        int yStart = this.height / 4 + 40;
-        int center = this.width / 2;
-        int bHeight = 20;
-        int bLongWidth = 200;
-        this.addRenderableWidget(new Button(center - 100, yStart + 92, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.return", new Object[0]), ($) -> {
-            this.linkTo(this.parent);
+		inputBindsList = new InputList(this, minecraft);
+		addWidget(inputBindsList);
+		addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, CreateTweakedControllers.translateDirect("gui_input_reset_all"), (p_193999_) -> {
+            for(int i = 0; i < 25; i++)
+			{
+                TweakedControlsUtil.profile.InitDefaultLayout();
+            }
+        }));
+		addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+            ScreenOpener.open(parent);
         }));
 		int x = (width - background.width) / 2;
 		int y = 30;
@@ -111,17 +234,11 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
 		{
 			addRenderableOnly(triggerAxis[i]);
 		}
-   }
+    }
 
-   private void linkTo(Screen screen)
-   {
-      this.returnOnClose = false;
-      ScreenOpener.open(screen);
-   }
-
-   public boolean isPauseScreen()
-   {
-      return true;
-   }
+    public boolean isPauseScreen()
+    {
+        return true;
+    }
         
 }

@@ -4,6 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.JoystickButtonScreen;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
 public class JoystickButtonInput implements GenericInput
 {
     private int buttonID = -1;
@@ -31,9 +38,9 @@ public class JoystickButtonInput implements GenericInput
     }
 
     @Override
-    public String GetDisplayName()
+    public Component GetDisplayName()
     {
-        return "Joystick button " + buttonID;
+        return CreateTweakedControllers.translateDirect("gui_input_joystick_button", ""+buttonID);
     }
 
     @Override
@@ -66,6 +73,12 @@ public class JoystickButtonInput implements GenericInput
     public int GetValue()
     {
         return buttonID;
+    }
+
+    @Override
+    public GenericInputScreen OpenConfigScreen(Screen previous)
+    {
+        return new JoystickButtonScreen(previous, this);
     }
     
 }

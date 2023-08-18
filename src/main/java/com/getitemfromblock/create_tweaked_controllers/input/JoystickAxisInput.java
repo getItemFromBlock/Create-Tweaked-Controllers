@@ -4,6 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.JoystickAxisScreen;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
 public class JoystickAxisInput implements GenericInput
 {
     private int axisID = -1;
@@ -42,9 +49,9 @@ public class JoystickAxisInput implements GenericInput
     }
 
     @Override
-    public String GetDisplayName()
+    public Component GetDisplayName()
     {
-        return "Joystick axis " + axisID;
+        return CreateTweakedControllers.translateDirect("gui_input_joystick_axis", ""+axisID);
     }
 
     @Override
@@ -79,6 +86,12 @@ public class JoystickAxisInput implements GenericInput
     public int GetValue()
     {
         return axisID;
+    }
+
+    @Override
+    public GenericInputScreen OpenConfigScreen(Screen previous)
+    {
+        return new JoystickAxisScreen(previous, this);
     }
     
 }

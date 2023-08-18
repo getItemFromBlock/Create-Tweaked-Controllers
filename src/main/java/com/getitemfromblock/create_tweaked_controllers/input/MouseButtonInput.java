@@ -4,7 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.MouseButtonScreen;
 import com.simibubi.create.AllKeys;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class MouseButtonInput implements GenericInput
 {
@@ -33,9 +39,9 @@ public class MouseButtonInput implements GenericInput
     }
 
     @Override
-    public String GetDisplayName()
+    public Component GetDisplayName()
     {
-        return "Mouse button " + buttonID;
+        return CreateTweakedControllers.translateDirect("gui_input_mouse", ""+buttonID);
     }
 
     @Override
@@ -68,6 +74,12 @@ public class MouseButtonInput implements GenericInput
     public int GetValue()
     {
         return buttonID;
+    }
+
+    @Override
+    public GenericInputScreen OpenConfigScreen(Screen previous)
+    {
+        return new MouseButtonScreen(previous, this);
     }
     
 }

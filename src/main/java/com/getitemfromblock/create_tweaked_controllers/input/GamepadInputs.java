@@ -3,6 +3,10 @@ package com.getitemfromblock.create_tweaked_controllers.input;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+
+import net.minecraft.network.chat.Component;
+
 public class GamepadInputs
 {
     static final public boolean buttons[] = new boolean[15];
@@ -10,39 +14,6 @@ public class GamepadInputs
 
     protected static GLFWGamepadState state = null;
     protected static int selectedGamepad = -1;
-
-    static final private String[] buttonNames =
-    {
-        "Gamepad A",
-        "Gamepad B",
-        "Gamepad X",
-        "Gamepad Y",
-        "Gamepad Left Shoulder",
-        "Gamepad Right Shoulder",
-        "Gamepad Back",
-        "Gamepad Start",
-        "Gamepad Guide",
-        "Gamepad Left joystick Click",
-        "Gamepad Right joystick Click",
-        "Gamepad DPad Up",
-        "Gamepad DPad Right",
-        "Gamepad DPad Down",
-        "Gamepad DPad Left"
-    };
-
-    static final private String[] axisNames =
-    {
-        "Gamepad Left +X Axis",
-        "Gamepad Left -X Axis",
-        "Gamepad Left +Y Axis",
-        "Gamepad Left -Y Axis",
-        "Gamepad Right +X Axis",
-        "Gamepad Right -X Axis",
-        "Gamepad Right +Y Axis",
-        "Gamepad Right -Y Axis",
-        "Gamepad Left Trigger Axis",
-        "Gamepad Right Trigger Axis"
-    };
 
     public static void GetControls()
     {
@@ -143,13 +114,13 @@ public class GamepadInputs
         }
     }
 
-    public static final String GetButtonName(int index)
+    public static final Component GetButtonName(int index)
     {
-        return buttonNames[index];
+        return CreateTweakedControllers.translateDirect("gui_gamepad_button_"+index);
     }
 
-    public static final String GetAxisName(int index)
+    public static final Component GetAxisName(int index)
     {
-        return axisNames[index];
+        return CreateTweakedControllers.translateDirect("gui_gamepad_axis_"+index);
     }
 }

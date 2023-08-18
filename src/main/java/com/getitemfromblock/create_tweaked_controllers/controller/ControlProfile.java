@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft;
 
 public class ControlProfile
 {
-    protected GenericInput[] layout = new GenericInput[25];
+    public GenericInput[] layout = new GenericInput[25];
     public boolean hasJoystickInput = false;
     public ArrayList<KeyMapping> duplicatedKeys = new ArrayList<KeyMapping>();
     
@@ -41,7 +41,7 @@ public class ControlProfile
         Save("profiles/gamepad_profile_" + id);
     }
 
-    protected void InitDefaultLayout()
+    public void InitDefaultLayout()
     {
         for (int i = 0; i < 15; i++)
         {
@@ -144,25 +144,28 @@ public class ControlProfile
             {
                 switch (InputType.GetType(buf.readByte()))
                 {
+                    case NONE:
+                        layout[i] = null;
+                        break;
                     case JOYSTICK_BUTTON:
-                    layout[i] = new JoystickButtonInput();
+                        layout[i] = new JoystickButtonInput();
                         break;
                     case JOYSTICK_AXIS:
-                    layout[i] = new JoystickAxisInput();
+                        layout[i] = new JoystickAxisInput();
                         break;
                     case MOUSE_BUTTON:
-                    layout[i] = new MouseButtonInput();
+                        layout[i] = new MouseButtonInput();
                         break;
                     case MOUSE_AXIS:
-                    layout[i] = new MouseAxisInput();
+                        layout[i] = new MouseAxisInput();
                         break;
                     case KEYBOARD_KEY:
-                    layout[i] = new KeyboardInput();
+                        layout[i] = new KeyboardInput();
                         break;
                     default:
                         throw new IOException("Corrupted Profile Data!");
                 }
-                layout[i].Deserialize(buf);
+                if (layout[i] != null) layout[i].Deserialize(buf);
             }
             file.close();
         }
@@ -188,8 +191,15 @@ public class ControlProfile
             DataOutputStream buf = new DataOutputStream(file);
             for (int i = 0; i < layout.length; i++)
             {
-                buf.writeByte(InputType.GetValue(layout[i].GetType()));
-                layout[i].Serialize(buf);
+                if (layout[i] != null)
+                {
+                    buf.writeByte(InputType.GetValue(layout[i].GetType()));
+                    layout[i].Serialize(buf);
+                }
+                else
+                {
+                    buf.writeByte(InputType.GetValue(InputType.NONE));
+                }
             }
             file.close();
         }
@@ -235,12 +245,13 @@ public class ControlProfile
         }
     }
 
-    protected void UpdateProfileData()
+    public void UpdateProfileData()
     {
         duplicatedKeys.clear();
         hasJoystickInput = false;
         for (int i = 0; i < 25; i++)
         {
+            if (layout[i] == null) continue;
             if (!layout[i].IsInputValid() || (layout[i].GetType() != InputType.JOYSTICK_AXIS && layout[i].GetType() != InputType.JOYSTICK_BUTTON)) continue;
             hasJoystickInput = true;
             break;
@@ -251,6 +262,7 @@ public class ControlProfile
             int id = GetUniqueKeyIndex(key.getKey());
             for (int i = 0; i < 25; i++)
             {
+                if (layout[i] == null) continue;
                 if (!layout[i].IsInputValid() || id != GetUniqueKeyIndex(layout[i])) continue;
                 duplicatedKeys.add(key);
             }
@@ -259,18 +271,19 @@ public class ControlProfile
 
     public boolean GetButton(int id)
     {
-        return layout[id].GetButtonValue();
+        return layout[id] != null ? layout[id].GetButtonValue() : false;
     }
 
     public float GetAxis(int id)
     {
         if (id < 4) // joystick axis
         {
-            return layout[15 + id * 2].GetAxisValue() - layout[16 + id * 2].GetAxisValue();
+            return (layout[15 + id * 2] != null ? layout[15 + id * 2].GetAxisValue() : 0)
+                - (layout[16 + id * 2] != null ? layout[16 + id * 2].GetAxisValue() : 0);
         }
         else // trigger axis
         {
-            return layout[id + 19].GetAxisValue() * 2 - 1;
+            return layout[id + 19] != null ? layout[id + 19].GetAxisValue() * 2 - 1 : -1;
         }
     }
 }

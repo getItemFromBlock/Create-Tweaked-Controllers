@@ -6,7 +6,13 @@ import java.io.IOException;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.KeyboardInputScreen;
 import com.simibubi.create.AllKeys;
+
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class KeyboardInput implements GenericInput
 {
@@ -35,9 +41,9 @@ public class KeyboardInput implements GenericInput
     }
 
     @Override
-    public String GetDisplayName()
+    public Component GetDisplayName()
     {
-        return "Keyboard key " + GLFW.glfwGetKeyName(key, 0);
+        return CreateTweakedControllers.translateDirect("gui_input_keyboard", GLFW.glfwGetKeyName(key, 0));
     }
 
     @Override
@@ -70,6 +76,12 @@ public class KeyboardInput implements GenericInput
     public int GetValue()
     {
         return key;
+    }
+
+    @Override
+    public GenericInputScreen OpenConfigScreen(Screen previous)
+    {
+        return new KeyboardInputScreen(previous, this);
     }
 
 }

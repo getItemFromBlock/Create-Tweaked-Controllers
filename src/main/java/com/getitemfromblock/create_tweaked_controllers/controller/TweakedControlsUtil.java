@@ -13,6 +13,29 @@ public class TweakedControlsUtil
     public static ControllerRedstoneOutput output = new ControllerRedstoneOutput();
     private static boolean lastMouseKeyState = false;
 
+    public static void GuiUpdate()
+    {
+        if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
+        {
+            MouseCursorHandler.Update();
+        }
+        if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_RESET))
+        {
+            ModKeyMappings.KEY_MOUSE_RESET.setDown(false);
+            MouseCursorHandler.ResetCenter();
+        }
+        JoystickInputs.GetControls();
+        if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
+        {
+            FillInputs();
+        }
+        else
+        {
+            GamepadInputs.GetControls();
+            FillGamepadInputs();
+        }
+    }
+
     public static void Update()
     {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
