@@ -14,7 +14,7 @@ public class ModClientConfig
     public static final ForgeConfigSpec.ConfigValue<Integer> CONFIG_BUTTON_INGAME_MENU_OFFSET;
 
     static {
-        BUILDER.push("Configs for Create: Tweaked Controllers - You might want to use the ingame menu instead");
+        BUILDER.push("Configs for Create: Tweaked Controllers");
 
         USE_CUSTOM_MAPPINGS = BUILDER.comment("Wether or not to use custom axis/button mappings, default is false")
             .define("use_custom_mappings", false);

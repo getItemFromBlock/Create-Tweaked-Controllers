@@ -1,5 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.input;
 
+import java.nio.DoubleBuffer;
+
+import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.Blaze3D;
 
 import net.minecraft.client.Minecraft;
@@ -18,11 +22,27 @@ public class MouseCursorHandler
     private static float deltaT = 0;
     private static double sensitivity = 0.5;
 
+    public static Vec2 GetMousePos()
+    {
+        if (m.isMouseGrabbed())
+        {
+            return new Vec2((float)m.xpos(), (float)m.ypos());
+        }
+        else
+        {
+            double[] x,y;
+            x = new double[1];
+            y = new double[1];
+            GLFW.glfwGetCursorPos(Minecraft.getInstance().getWindow().getWindow(), x, y);
+            return new Vec2((float)x[0], (float)y[0]);
+        }
+    }
+
     public static void ResetCenter()
     {
         delta = new Vec2(0, 0);
         vel = new Vec2(0, 0);
-        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastPos = GetMousePos();
     }
 
     public static void InitValues()
@@ -31,7 +51,7 @@ public class MouseCursorHandler
         vel = new Vec2(0, 0);
         m = Minecraft.getInstance().mouseHandler;
         o = Minecraft.getInstance().options;
-        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastPos = GetMousePos();
         lastMouseEventTime = Blaze3D.getTime();
     }
 
@@ -40,10 +60,11 @@ public class MouseCursorHandler
         double d0 = Blaze3D.getTime();
         deltaT = (float)(d0 - lastMouseEventTime);
         lastMouseEventTime = d0;
-        vel = new Vec2((float)(m.xpos() - lastPos.x), (float)(m.ypos() - lastPos.y));
+        Vec2 tmp = GetMousePos();
+        vel = new Vec2(tmp.x - lastPos.x, tmp.y - lastPos.y);
         delta = delta.add(vel);
         vel = vel.scale(1/deltaT);
-        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastPos = tmp;
     }
 
     public static float GetX(boolean useVelocity)
@@ -77,7 +98,7 @@ public class MouseCursorHandler
             sensitivity = o.sensitivity;
         }
         o.sensitivity = -1/3.0;
-        lastPos = new Vec2((float)m.xpos(), (float)m.ypos());
+        lastPos = GetMousePos();
         lastMouseEventTime = Blaze3D.getTime();
     }
 

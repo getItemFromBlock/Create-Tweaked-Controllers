@@ -10,17 +10,20 @@ import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 
 import net.minecraft.network.chat.Component;
 
-public class DigitIcon extends AbstractSimiWidget
+public class ControllerButton extends AbstractSimiWidget
 {
     protected ScreenElement icon;
     public Vector3f color;
+	public float colorFactor = 1.0f;
+	protected int deltaX = 0;
+    protected int deltaY = 0;
 
-	public DigitIcon(int x, int y, DigitIconRenderer digit, Vector3f color)
+	public ControllerButton(int x, int y, ControllerButtonRenderer button, Vector3f color)
     {
-		this(x, y, DigitIconRenderer.DIGIT_WIDTH, DigitIconRenderer.DIGIT_HEIGHT, digit, color);
+		this(x, y, ControllerButtonRenderer.BUTTON_WIDTH, ControllerButtonRenderer.BUTTON_HEIGHT, button, color);
 	}
 	
-	public DigitIcon(int x, int y, int w, int h, ScreenElement icon, Vector3f color)
+	public ControllerButton(int x, int y, int w, int h, ScreenElement icon, Vector3f color)
     {
 		super(x, y, w, h);
 		this.active = false;
@@ -28,13 +31,24 @@ public class DigitIcon extends AbstractSimiWidget
 		this.color = color;
 	}
 
+	public void move(int dx, int dy)
+    {
+        deltaX = dx;
+        deltaY = dy;
+    }
+
+	public void SetColorFactor(float value)
+	{
+		colorFactor = value;
+	}
+
 	@Override
 	public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
 		if (visible)
         {
-			RenderSystem.setShaderColor(color.x(), color.y(), color.z(), 1.0F);
-			icon.render(matrixStack, x, y);
+		    RenderSystem.setShaderColor(color.x() * colorFactor, color.y() * colorFactor, color.z() * colorFactor, 1.0F);
+			icon.render(matrixStack, x + deltaX, y + deltaY);
 		}
 	}
 
@@ -57,6 +71,6 @@ public class DigitIcon extends AbstractSimiWidget
 	@Override
 	public boolean mouseClicked(double p_93641_, double p_93642_, int p_93643_)
 	{
-    	return false;
+        return false;
 	}
 }

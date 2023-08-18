@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.config;
+package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -46,8 +46,11 @@ public class ModConfigScreen extends AbstractSimiScreen
         this.addRenderableWidget(new Button(center - 100, yStart + 92, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.return", new Object[0]), ($) -> {
             this.linkTo(this.parent);
         }));
-        this.addRenderableWidget(new Button(center - 100, yStart + 24 + -16, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.configure", new Object[0]), ($) -> {
-            this.linkTo((Screen)BaseConfigScreen.forCreate(this));
+        this.addRenderableWidget(new Button(center - 100, yStart + 8, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_general", new Object[0]), ($) -> {
+            this.linkTo((Screen)(new BaseConfigScreen(this, CreateTweakedControllers.ID)));
+        }));
+        this.addRenderableWidget(new Button(center - 100, yStart + 32, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_controller", new Object[0]), ($) -> {
+            this.linkTo((Screen)(new ModControllerConfigScreen(this)));
         }));
         this.addRenderableWidget(new Button(center + 2, yStart + 68, bShortWidth, bHeight, CreateTweakedControllers.translateDirect("menu.issues", new Object[0]), ($) -> {
             this.linkTo("https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues");

@@ -148,9 +148,9 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 
 		ms.pushPose();
 
-		if (renderType == RenderType.NORMAL)
+		Minecraft mc = Minecraft.getInstance();
+		if (renderType == RenderType.NORMAL && mc.player != null)
 		{
-			Minecraft mc = Minecraft.getInstance();
 			boolean rightHanded = mc.options.mainHand == HumanoidArm.RIGHT;
 			TransformType mainHand =
 					rightHanded ? TransformType.FIRST_PERSON_RIGHT_HAND : TransformType.FIRST_PERSON_LEFT_HAND;

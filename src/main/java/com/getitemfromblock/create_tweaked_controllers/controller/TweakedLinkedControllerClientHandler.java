@@ -124,8 +124,6 @@ public class TweakedLinkedControllerClientHandler
 
 	public static void tick()
 	{
-		TweakedLinkedControllerItemRenderer.tick();
-
 		if (MODE == Mode.IDLE)
 			return;
 		if (buttonPacketCooldown > 0)
@@ -179,6 +177,7 @@ public class TweakedLinkedControllerClientHandler
 			return;
 		}
 		TweakedControlsUtil.Update();
+		TweakedLinkedControllerItemRenderer.tick();
 		short pressedKeys = TweakedControlsUtil.output.EncodeButtons();
 		int axis = TweakedControlsUtil.output.EncodeAxis();
 

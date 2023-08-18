@@ -5,6 +5,7 @@ import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickInputs;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
+import com.simibubi.create.foundation.utility.ControlsUtil;
 
 public class TweakedControlsUtil
 {
@@ -16,7 +17,7 @@ public class TweakedControlsUtil
     {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
-            if (ModKeyMappings.KEY_MOUSE_FOCUS.isDown())
+            if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
             {
                 if (!lastMouseKeyState)
                 {
@@ -33,7 +34,7 @@ public class TweakedControlsUtil
                 MouseCursorHandler.DeactivateMouseLock();
                 lastMouseKeyState = false;
             }
-            if (ModKeyMappings.KEY_MOUSE_RESET.isDown())
+            if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_RESET))
             {
                 ModKeyMappings.KEY_MOUSE_RESET.setDown(false);
                 MouseCursorHandler.ResetCenter();

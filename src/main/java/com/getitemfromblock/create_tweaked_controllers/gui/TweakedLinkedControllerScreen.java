@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -131,7 +132,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 
 		int x = leftPos;
 		int y = topPos;
-		GamepadInputs.GetControls();
+		TweakedControlsUtil.Update();
 		if (isSecondPage)
 		{
 			background1.render(ms, x, y, this);

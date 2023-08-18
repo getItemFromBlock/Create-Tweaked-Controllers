@@ -1,8 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
-import com.getitemfromblock.create_tweaked_controllers.config.ModConfigScreen;
+import com.getitemfromblock.create_tweaked_controllers.gui.ModConfigScreen;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
-import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
@@ -26,7 +25,7 @@ public class ModClientEvents
 			return;
 
 		//Level world = Minecraft.getInstance().level;
-		if (event.phase == Phase.START)
+		if (event.phase == Phase.START || Minecraft.getInstance().screen != null)
         {
 			TweakedLinkedControllerClientHandler.tick();
 			return;

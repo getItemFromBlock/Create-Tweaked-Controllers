@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
-import com.getitemfromblock.create_tweaked_controllers.config.ModConfigScreen;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Components;
@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +28,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class ModMainConfigButton extends Button
 {
-    public static final ModIcons ICON = ModIcons.I_AXES; // TODO
+    public static final ItemStack ICON = ModItems.TWEAKED_LINKED_CONTROLLER.asStack(); // TODO
 
 	public ModMainConfigButton(int x, int y)
     {
@@ -37,7 +38,7 @@ public class ModMainConfigButton extends Button
 	@Override
 	public void renderBg(PoseStack ms, Minecraft mc, int mouseX, int mouseY)
     {
-		ICON.render(ms, x + 2, y + 2);
+		Minecraft.getInstance().getItemRenderer().renderGuiItem(ICON, x + 2, y + 2);
 	}
 
 	public static void click(Button b)
