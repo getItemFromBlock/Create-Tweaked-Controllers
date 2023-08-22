@@ -57,7 +57,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 				.startWithValue(i < 4 ? 0 : -1));
 	}
 
-	public static void tick()
+	public static void earlyTick()
 	{
 		if (Minecraft.getInstance().isPaused())
 			return;
@@ -65,8 +65,11 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 		boolean active = TweakedLinkedControllerClientHandler.MODE != Mode.IDLE;
 		equipProgress.chase(active ? 1 : 0, .2f, Chaser.EXP);
 		equipProgress.tickChaser();
+	}
 
-		if (!active)
+	public static void tick()
+	{
+		if (Minecraft.getInstance().isPaused() || TweakedLinkedControllerClientHandler.MODE == Mode.IDLE)
 			return;
 
 		for (int i = 0; i < buttons.size(); i++)

@@ -51,7 +51,18 @@ public class JoystickAxisInput implements GenericInput
     @Override
     public Component GetDisplayName()
     {
-        return CreateTweakedControllers.translateDirect("gui_input_joystick_axis", ""+axisID);
+        if (minBound >= 0 && maxBound >= 0)
+        {
+            return CreateTweakedControllers.translateDirect("gui_input_joystick_axis", "+"+axisID);
+        }
+        else if (minBound <= 0 && maxBound <= 0)
+        {
+            return CreateTweakedControllers.translateDirect("gui_input_joystick_axis", "-"+axisID);
+        }
+        else
+        {
+            return CreateTweakedControllers.translateDirect("gui_input_joystick_axis", ""+axisID);
+        }
     }
 
     @Override

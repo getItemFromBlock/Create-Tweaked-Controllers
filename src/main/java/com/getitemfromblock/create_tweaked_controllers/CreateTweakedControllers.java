@@ -5,6 +5,7 @@ import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
@@ -68,6 +69,11 @@ public class CreateTweakedControllers
         return Components.translatable(CreateTweakedControllers.ID + "." + key, Lang.resolveBuilders(args));
     }
 
+    public static MutableComponent translateDirectRaw(String key, Object... args)
+    {
+        return Components.translatable(key, Lang.resolveBuilders(args));
+    }
+
     public static LangBuilder builder()
     {
         return new LangBuilder(CreateTweakedControllers.ID);
@@ -76,5 +82,10 @@ public class CreateTweakedControllers
     public static LangBuilder translate(String langKey, Object... args)
     {
         return builder().translate(langKey, args);
+    }
+
+    public static void log(String message)
+    {
+        Create.LOGGER.info(message);
     }
 }

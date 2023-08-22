@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.KeyboardInputScreen;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllKeys;
 
 import net.minecraft.client.gui.screens.Screen;
@@ -43,7 +44,7 @@ public class KeyboardInput implements GenericInput
     @Override
     public Component GetDisplayName()
     {
-        return CreateTweakedControllers.translateDirect("gui_input_keyboard", GLFW.glfwGetKeyName(key, 0));
+        return key >= 0 ? InputConstants.getKey(key, 0).getDisplayName() : CreateTweakedControllers.translateDirectRaw("key.keyboard.unknown");
     }
 
     @Override

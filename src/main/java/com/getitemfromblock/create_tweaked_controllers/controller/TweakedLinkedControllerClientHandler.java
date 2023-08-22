@@ -124,6 +124,7 @@ public class TweakedLinkedControllerClientHandler
 
 	public static void tick()
 	{
+		TweakedLinkedControllerItemRenderer.earlyTick();
 		if (MODE == Mode.IDLE)
 			return;
 		if (buttonPacketCooldown > 0)

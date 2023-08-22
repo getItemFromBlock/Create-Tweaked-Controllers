@@ -25,6 +25,7 @@
 	"create_tweaked_controllers.gui_button_refresh": "Research gamepad",
 	"create_tweaked_controllers.gui_gamepad_unavailable": "No gamepad found",
 	"create_tweaked_controllers.gui_gamepad_selected": "Selected gamepad: %1$s",
+	"create_tweaked_controllers.gui_gamepad_custom": "Using virtual gamepad",
 	
 	"create_tweaked_controllers.gui_gamepad_buttons": "Virtual Gamepad Buttons",
 	"create_tweaked_controllers.gui_gamepad_axis": "Virtual Gamepad Axis",
@@ -63,9 +64,11 @@
     "create_tweaked_controllers.gui_input_cursor_pos": "Cursor %1$s Position",
     "create_tweaked_controllers.gui_input_mouse": "Mouse Button %1$s",
 	
-	"create_tweaked_controllers.gui_input_reset": "Reset.",
+	"create_tweaked_controllers.gui_input_reset": "Reset",
     "create_tweaked_controllers.gui_input_config": "Config",
     "create_tweaked_controllers.gui_input_reset_all": "Reset all",
+    "create_tweaked_controllers.gui_input_load": "Load",
+    "create_tweaked_controllers.gui_input_save": "Save",
 	"create_tweaked_controllers.gui_input_none": "Unbound",
 	
 	"create_tweaked_controllers.keybind.mouse_focus" : "Grab mouse movements (hold)",
@@ -79,6 +82,7 @@
 	"create_tweaked_controllers.menu.wiki": "Online Wiki",
 	"create_tweaked_controllers.menu.config_general": "General Configurations",
 	"create_tweaked_controllers.menu.config_controller": "Controller Configurations",
+	"create_tweaked_controllers.menu.config_disabled": "Please enable custom mappings in the general configurations",
 	
 	"_": "EOF"
 }

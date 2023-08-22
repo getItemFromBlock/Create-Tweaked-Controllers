@@ -25,6 +25,7 @@
 	"create_tweaked_controllers.gui_button_refresh": "Rechercher les manettes",
 	"create_tweaked_controllers.gui_gamepad_unavailable": "Aucune manette trouvée",
 	"create_tweaked_controllers.gui_gamepad_selected": "Manette utilisée : %1$s",
+	"create_tweaked_controllers.gui_gamepad_custom": "Manette virtuelle utilisée",
 	
 	"create_tweaked_controllers.gui_gamepad_buttons": "Boutons du contrôleur virtuel",
 	"create_tweaked_controllers.gui_gamepad_axis": "Axes du contrôleur virtuel",
@@ -66,6 +67,8 @@
     "create_tweaked_controllers.gui_input_reset": "Réinit.",
     "create_tweaked_controllers.gui_input_config": "Config.",
 	"create_tweaked_controllers.gui_input_reset_all": "Tout réinitialiser",
+	"create_tweaked_controllers.gui_input_load": "Charger",
+    "create_tweaked_controllers.gui_input_save": "Sauv.",
 	"create_tweaked_controllers.gui_input_none": "Non assigné",
 	
 	"create_tweaked_controllers.keybind.mouse_focus" : "Capturer les mouvements de la souris",
@@ -79,6 +82,7 @@
 	"create_tweaked_controllers.menu.wiki": "Manuel en ligne",
 	"create_tweaked_controllers.menu.config_general": "Configurations générales",
 	"create_tweaked_controllers.menu.config_controller": "Configurations du contrôleur",
+	"create_tweaked_controllers.menu.config_disabled": "Veuillez activer l'option \"custom mappings\" dans les configurations générales",
 	
 	"_": "EOF"
 }

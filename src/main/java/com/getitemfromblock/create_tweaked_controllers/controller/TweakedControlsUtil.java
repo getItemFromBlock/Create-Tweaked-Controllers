@@ -15,10 +15,7 @@ public class TweakedControlsUtil
 
     public static void GuiUpdate()
     {
-        if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
-        {
-            MouseCursorHandler.Update();
-        }
+        MouseCursorHandler.Update();
         if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_RESET))
         {
             ModKeyMappings.KEY_MOUSE_RESET.setDown(false);

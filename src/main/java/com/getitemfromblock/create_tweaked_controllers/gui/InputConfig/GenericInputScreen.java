@@ -20,7 +20,7 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
-        addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+        addRenderableWidget(new Button(this.width / 2 - 75, this.height - 29, 150, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
             ScreenOpener.open(parent);
         }));
         Populate();

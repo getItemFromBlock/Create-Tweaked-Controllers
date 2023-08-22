@@ -2,6 +2,7 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.ColoredButton;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.getitemfromblock.create_tweaked_controllers.input.InputList;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
@@ -33,28 +34,22 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     private int selectedInput = -1;
     private InputList inputBindsList;
 
-    public ModControllerConfigScreen(Screen parent)
+    public ModControllerConfigScreen(Screen p)
     {
-        this.parent = parent;
-		this.background = ModGuiTextures.CONTROLLER_BACKGROUND;
+        parent = p;
+		background = ModGuiTextures.CONTROLLER_BACKGROUND;
     }
 
     @Override
     protected void init()
     {
         super.init();
-        this.Populate();
+        Populate();
     }
 
 	@Override
 	public void tick()
 	{
-		TweakedControlsUtil.GuiUpdate();
-		if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
-		{
-			selectedInput = -1;
-			TweakedControlsUtil.profile.UpdateProfileData();
-		}
 	}
 
 	@Override
@@ -99,9 +94,15 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     @Override
     protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks)
     {
+		TweakedControlsUtil.GuiUpdate();
+		if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
+		{
+			selectedInput = -1;
+			TweakedControlsUtil.profile.UpdateProfileData();
+		}
 		inputBindsList.render(ms, mouseX, mouseY, partialTicks);
         int x = (width - background.width) / 2;
-		int y =  30;
+		int y =  10;
 		background.render(ms, x, y, this);
 		Vec2 v = new Vec2(GamepadInputs.axis[0], GamepadInputs.axis[1]);
 		if (v.lengthSquared() > 1)
@@ -125,7 +126,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
 		{
 			controllerButtons[i].SetColorFactor(GamepadInputs.buttons[i] ? 1.0f : 50/255.0f);
 		}
-		font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
+		//font.draw(ms, title, x + 15, y - 4, 0xFFFFFF);
     }
 
 	public void SetActiveInput(int index)
@@ -192,17 +193,21 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     {
 		inputBindsList = new InputList(this, minecraft);
 		addWidget(inputBindsList);
-		addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, CreateTweakedControllers.translateDirect("gui_input_reset_all"), (p_193999_) -> {
-            for(int i = 0; i < 25; i++)
-			{
-                TweakedControlsUtil.profile.InitDefaultLayout();
-            }
-        }));
-		addRenderableWidget(new Button(this.width / 2 - 155 + 160, this.height - 29, 150, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+		addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 90, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
             ScreenOpener.open(parent);
         }));
+		addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_input_reset_all"), (p_193999_) -> {
+            TweakedControlsUtil.profile.InitDefaultLayout();
+			TweakedControlsUtil.profile.UpdateProfileData();
+        }, new Vector3f(1.0f, 0.3f, 0.3f)));
+		addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 200, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_input_save"), (p_193996_) -> {
+			TweakedControlsUtil.profile.Save(0);
+        }, new Vector3f(0.5f, 0.5f, 1.0f)));
+		addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 250, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_input_load"), (p_193996_) -> {
+			TweakedControlsUtil.profile.Load(0);
+        }, new Vector3f(0.5f, 0.5f, 1.0f)));
 		int x = (width - background.width) / 2;
-		int y = 30;
+		int y = 10;
 		lStick = new JoystickIcon(x + 21, y + 34, ModIcons.I_LEFT_JOYSTICK);
 		rStick = new JoystickIcon(x + 86, y + 66, ModIcons.I_RIGHT_JOYSTICK);
 		addRenderableOnly(lStick);

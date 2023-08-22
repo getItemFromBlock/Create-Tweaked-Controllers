@@ -34,7 +34,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
 
     public InputList(ModControllerConfigScreen screen, Minecraft mc)
     {
-        super(mc, screen.width + 45, screen.height, 20, screen.height - 32, 20);
+        super(mc, screen.width + 45, screen.height, 120, screen.height - 32, 20);
         modControllerConfigScreen = screen;
         addEntry(new InputList.CategoryEntry(CreateTweakedControllers.translateDirect("gui_gamepad_buttons")));
         for (int i = 0; i < 15; i++)
@@ -62,7 +62,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
 
     protected int getScrollbarPosition()
     {
-        return super.getScrollbarPosition() + 15 + 20;
+        return super.getScrollbarPosition() + 15 + 120;
     }
 
     public int getRowWidth()
@@ -131,11 +131,11 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
         private final Button resetButton;
         private final Button configButton;
 
-        InputEntry(final int input, Component name, Screen parent)
+        InputEntry(final int input, Component text, Screen parent)
         {
-            this.key = input;
-            this.name = name;
-            this.changeButton = new Button(0, 0, 95, 20, name, (p_193939_) -> {
+            key = input;
+            name = text;
+            changeButton = new Button(0, 0, 95, 20, name, (b) -> {
                 InputList.this.modControllerConfigScreen.SetActiveInput(input);
             }) {
                 protected MutableComponent createNarrationMessage()
@@ -145,7 +145,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                                     super.createNarrationMessage());
                 }
             };
-            this.resetButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_reset"), (p_193935_) -> {
+            resetButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_reset"), (b) -> {
                 TweakedControlsUtil.profile.layout[key] = null;
                 TweakedControlsUtil.profile.UpdateProfileData();
             }) {
@@ -154,9 +154,8 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                     return new TranslatableComponent("narrator.controls.reset", name);
                 }
             };
-            this.configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_config"), (p_193935_) -> {
+            configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_config"), (b) -> {
                 ScreenOpener.open(TweakedControlsUtil.profile.layout[key].OpenConfigScreen(parent));
-                ;
             }) {
                 protected MutableComponent createNarrationMessage()
                 {
@@ -168,62 +167,64 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
         public void render(PoseStack p_193923_, int p_193924_, int p_193925_, int p_193926_, int p_193927_,
                 int p_193928_, int p_193929_, int p_193930_, boolean p_193931_, float p_193932_)
         {
-            float f = (float) (p_193926_ + 90 - InputList.this.maxNameWidth);
-            InputList.this.minecraft.font.draw(p_193923_, this.name, f, (float) (p_193925_ + p_193928_ / 2 - 9 / 2),
+            float f = (float) (p_193926_ + 40 - InputList.this.maxNameWidth);
+            InputList.this.minecraft.font.draw(p_193923_, name, f, (float) (p_193925_ + p_193928_ / 2 - 9 / 2),
                     16777215);
-            this.resetButton.x = p_193926_ + 190 + 10;
-            this.resetButton.y = p_193925_;
-            boolean active = TweakedControlsUtil.profile.layout[key] != null;
-            this.resetButton.active = active;
-            this.resetButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
-            this.configButton.x = p_193926_ + 190 + 70;
-            this.configButton.y = p_193925_;
-            this.configButton.active = active;
-            this.configButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
-            this.changeButton.x = p_193926_ + 105;
-            this.changeButton.y = p_193925_;
-            this.changeButton.setMessage(active ? TweakedControlsUtil.profile.layout[key].GetDisplayName() : CreateTweakedControllers.translateDirect("gui_input_none"));
-            if (InputList.this.modControllerConfigScreen.GetActiveInput() == this.key)
+                    boolean active = TweakedControlsUtil.profile.layout[key] != null;
+            resetButton.x = p_193926_ + 155;
+            resetButton.y = p_193925_;
+            resetButton.active = active;
+            resetButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
+            configButton.x = p_193926_ + 210;
+            configButton.y = p_193925_;
+            configButton.active = active;
+            configButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
+            changeButton.x = p_193926_ + 55;
+            changeButton.y = p_193925_;
+            changeButton.setMessage(active ? TweakedControlsUtil.profile.layout[key].GetDisplayName() : CreateTweakedControllers.translateDirect("gui_input_none"));
+            if (InputList.this.modControllerConfigScreen.GetActiveInput() == key)
             {
-                this.changeButton.setMessage((new TextComponent("> "))
-                        .append(this.changeButton.getMessage().copy().withStyle(ChatFormatting.YELLOW)).append(" <")
+                changeButton.setMessage((new TextComponent("> "))
+                        .append(changeButton.getMessage().copy().withStyle(ChatFormatting.YELLOW)).append(" <")
                         .withStyle(ChatFormatting.YELLOW));
             }
             else if (!active || !TweakedControlsUtil.profile.layout[key].IsInputValid())
             {
-                this.changeButton.setMessage(this.changeButton.getMessage().copy()
+                changeButton.setMessage(changeButton.getMessage().copy()
                         .withStyle(active ? ChatFormatting.RED : ChatFormatting.DARK_AQUA));
             }
 
-            this.changeButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
+            changeButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
         }
 
         public List<? extends GuiEventListener> children()
         {
-            return ImmutableList.of(this.changeButton, this.resetButton);
+            return ImmutableList.of(changeButton, resetButton, configButton);
         }
 
         public List<? extends NarratableEntry> narratables()
         {
-            return ImmutableList.of(this.changeButton, this.resetButton);
+            return ImmutableList.of(changeButton, resetButton, configButton);
         }
 
         public boolean mouseClicked(double p_193919_, double p_193920_, int p_193921_)
         {
-            if (this.changeButton.mouseClicked(p_193919_, p_193920_, p_193921_))
+            if (changeButton.mouseClicked(p_193919_, p_193920_, p_193921_))
             {
                 return true;
             }
             else
             {
-                return this.resetButton.mouseClicked(p_193919_, p_193920_, p_193921_);
+                return resetButton.mouseClicked(p_193919_, p_193920_, p_193921_)
+                    || configButton.mouseClicked(p_193919_, p_193920_, p_193921_);
             }
         }
 
         public boolean mouseReleased(double p_193941_, double p_193942_, int p_193943_)
         {
-            return this.changeButton.mouseReleased(p_193941_, p_193942_, p_193943_)
-                    || this.resetButton.mouseReleased(p_193941_, p_193942_, p_193943_);
+            return changeButton.mouseReleased(p_193941_, p_193942_, p_193943_)
+                    || resetButton.mouseReleased(p_193941_, p_193942_, p_193943_)
+                    || configButton.mouseReleased(p_193941_, p_193942_, p_193943_);
         }
     }
 }

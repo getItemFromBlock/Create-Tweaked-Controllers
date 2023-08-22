@@ -4,13 +4,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
@@ -36,38 +36,22 @@ public class ControlProfile
 
     public ControlProfile(int id)
     {
+        Load(0);
+        Save(0);
+    }
+
+    public void Load(int id)
+    {
         Load("profiles/gamepad_profile_" + id);
         UpdateProfileData();
+    }
+
+    public void Save(int id)
+    {
         Save("profiles/gamepad_profile_" + id);
     }
 
-    public void InitDefaultLayout()
-    {
-        for (int i = 0; i < 15; i++)
-        {
-            layout[i] = new JoystickButtonInput(i);
-        }
-        for (int i = 15; i < 25; i++)
-        {
-            if (i == 16 || i == 18 || i == 20 || i == 22)
-            {
-                layout[i] = new JoystickAxisInput(i, 0, -1);
-            }
-            else if (i > 22)
-            {
-                layout[i] = new JoystickAxisInput(i, -1, 1);
-            }
-            else
-            {
-                layout[i] = new JoystickAxisInput(i);
-            }
-        }
-    }
-
-    // TODO remove - marked this so I don't forgor 💀
-    protected void InitDebugLayout()
-    {
-        final int[] keys = 
+    static final int[] keys = 
         {
             GLFW.GLFW_KEY_SEMICOLON,
             GLFW.GLFW_KEY_P,
@@ -85,6 +69,9 @@ public class ControlProfile
             GLFW.GLFW_KEY_DOWN,
             GLFW.GLFW_KEY_LEFT
         };
+
+    public void InitDefaultLayout()
+    {
         for (int i = 0; i < 15; i++)
         {
             if (i == 9 || i == 10)
@@ -127,16 +114,15 @@ public class ControlProfile
         }
     }
 
-    protected void Load(String path)
+    public void Load(String path)
     {
         File f = new File(path);
         if(!f.exists() || f.isDirectory())
         {
-            InitDebugLayout();
-            //InitDefaultLayout();
+            InitDefaultLayout();
             return;
         }
-        try
+        else try
         {
             FileInputStream file = new FileInputStream(f);
             DataInputStream buf = new DataInputStream(file);
@@ -169,25 +155,29 @@ public class ControlProfile
             }
             file.close();
         }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            InitDefaultLayout();
-            return;
-        }
         catch (IOException e)
         {
-            e.printStackTrace();
-            InitDefaultLayout();
+            CreateTweakedControllers.log("Error loading controller profile \""+path+"\"!");
+            for (StackTraceElement line : e.getStackTrace())
+            {
+                CreateTweakedControllers.log(line.toString());
+            }
             return;
         }
     }
 
-    protected void Save(String path)
+    public void Save(String path)
     {
         try
         {
-            FileOutputStream file = new FileOutputStream(path);
+            File f = new File(path);
+            File p = f.getParentFile();
+            if (!p.exists())
+            {
+                p.mkdirs();
+            }
+            f.createNewFile();
+            FileOutputStream file = new FileOutputStream(f);
             DataOutputStream buf = new DataOutputStream(file);
             for (int i = 0; i < layout.length; i++)
             {
@@ -203,14 +193,13 @@ public class ControlProfile
             }
             file.close();
         }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            return;
-        }
         catch (IOException e)
         {
-            e.printStackTrace();
+            CreateTweakedControllers.log("Error loading controller profile \""+path+"\"!");
+            for (StackTraceElement line : e.getStackTrace())
+            {
+                CreateTweakedControllers.log(line.toString());
+            }
             return;
         }
     }

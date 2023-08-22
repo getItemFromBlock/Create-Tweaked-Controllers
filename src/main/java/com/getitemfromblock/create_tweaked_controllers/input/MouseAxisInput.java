@@ -49,7 +49,16 @@ public class MouseAxisInput implements GenericInput
     @Override
     public Component GetDisplayName()
     {
-        final String a = isYAxis ? "Y" : "X";
+        String a = "";
+        if (minBound >= 0 && maxBound >= 0)
+        {
+            a = "+";
+        }
+        else if (minBound <= 0 && maxBound <= 0)
+        {
+            a = "-";
+        }
+        a = a + (isYAxis ? 'Y' : 'X');
         if (useVelocity)
         {
             return CreateTweakedControllers.translateDirect("gui_input_cursor_vel", a);

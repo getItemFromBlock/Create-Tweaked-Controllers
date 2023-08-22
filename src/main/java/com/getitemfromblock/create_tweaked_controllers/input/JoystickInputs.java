@@ -130,7 +130,6 @@ public class JoystickInputs
             buttons.set(i, b.get(i) == GLFW.GLFW_PRESS);
         }
         FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
-        axis = new Vector<>(a.capacity());
         for (int i = 0; i < a.capacity(); i++)
         {
             axis.set(i, a.get(i));

@@ -1,8 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
+import com.simibubi.create.foundation.config.ui.SubMenuConfigScreen;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 
@@ -10,11 +11,14 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.fml.config.ModConfig.Type;
 
 public class ModConfigScreen extends AbstractSimiScreen
 {
     protected final Screen parent;
     protected boolean returnOnClose;
+    protected TooltipButton advancedConfigButton;
 
     public ModConfigScreen(Screen parent)
     {
@@ -33,54 +37,64 @@ public class ModConfigScreen extends AbstractSimiScreen
     @Override
     protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks)
     {
-        
+        if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
+        {
+            advancedConfigButton.active = true;
+            advancedConfigButton.SetToolTipText(Component.nullToEmpty(null));
+        }
+        else
+        {
+            advancedConfigButton.active = false;
+            advancedConfigButton.SetToolTipText(CreateTweakedControllers.translateDirect("menu.config_disabled").withStyle(s -> s.withColor(0xFC785C).withBold(true)));
+        }
     }
 
     private void Populate()
     {
-        int yStart = this.height / 4 + 40;
-        int center = this.width / 2;
+        int yStart = height / 4 + 40;
+        int center = width / 2;
         int bHeight = 20;
         int bShortWidth = 98;
         int bLongWidth = 200;
-        this.addRenderableWidget(new Button(center - 100, yStart + 92, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.return", new Object[0]), ($) -> {
-            this.linkTo(this.parent);
+        addRenderableWidget(new Button(center - 100, yStart + 92, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.return", new Object[0]), ($) -> {
+            this.linkTo(parent);
         }));
-        this.addRenderableWidget(new Button(center - 100, yStart + 8, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_general", new Object[0]), ($) -> {
-            this.linkTo((Screen)(new BaseConfigScreen(this, CreateTweakedControllers.ID)));
+        addRenderableWidget(new Button(center - 100, yStart + 8, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_general", new Object[0]), ($) -> {
+            this.linkTo((Screen)(new SubMenuConfigScreen(this, Type.CLIENT, ModClientConfig.SPEC)));
         }));
-        this.addRenderableWidget(new Button(center - 100, yStart + 32, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_controller", new Object[0]), ($) -> {
+        advancedConfigButton = new TooltipButton(this, center - 100, yStart + 32, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_controller", new Object[0]), ($) -> {
             this.linkTo((Screen)(new ModControllerConfigScreen(this)));
-        }));
-        this.addRenderableWidget(new Button(center + 2, yStart + 68, bShortWidth, bHeight, CreateTweakedControllers.translateDirect("menu.issues", new Object[0]), ($) -> {
+        });
+        addRenderableWidget(advancedConfigButton);
+        addRenderableWidget(new Button(center + 2, yStart + 68, bShortWidth, bHeight, CreateTweakedControllers.translateDirect("menu.issues", new Object[0]), ($) -> {
             this.linkTo("https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues");
         }));
-        this.addRenderableWidget(new Button(center - 100, yStart + 68, bShortWidth, bHeight, CreateTweakedControllers.translateDirect("menu.wiki", new Object[0]), ($) -> {
+        addRenderableWidget(new Button(center - 100, yStart + 68, bShortWidth, bHeight, CreateTweakedControllers.translateDirect("menu.wiki", new Object[0]), ($) -> {
             this.linkTo("https://github.com/getItemFromBlock/Create-Tweaked-Controllers/wiki");
         }));
-   }
+    }
 
-   private void linkTo(Screen screen)
-   {
-      this.returnOnClose = false;
-      ScreenOpener.open(screen);
-   }
+    private void linkTo(Screen screen)
+    {
+        returnOnClose = false;
+        ScreenOpener.open(screen);
+    }
 
    private void linkTo(String url)
    {
-      this.returnOnClose = false;
-      ScreenOpener.open(new ConfirmLinkScreen((p_213069_2_) -> {
-         if (p_213069_2_) {
-            Util.getPlatform().openUri(url);
-         }
+        returnOnClose = false;
+        ScreenOpener.open(new ConfirmLinkScreen((p) -> {
+            if (p)
+            {
+                Util.getPlatform().openUri(url);
+            }
+            this.minecraft.setScreen(this);
+        }, url, true));
+    }
 
-         this.minecraft.setScreen(this);
-      }, url, true));
-   }
-
-   public boolean isPauseScreen()
-   {
-      return true;
-   }
+    public boolean isPauseScreen()
+    {
+        return true;
+    }
         
 }

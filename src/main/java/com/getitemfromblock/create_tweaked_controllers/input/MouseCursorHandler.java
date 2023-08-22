@@ -1,7 +1,5 @@
 package com.getitemfromblock.create_tweaked_controllers.input;
 
-import java.nio.DoubleBuffer;
-
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.Blaze3D;

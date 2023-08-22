@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
@@ -180,7 +181,13 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 		}
 		MutableComponent text;
 		int index = GamepadInputs.GetGamepadIndex();
-		if (index < 0)
+		if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
+		{
+			text = CreateTweakedControllers.translateDirect("gui_gamepad_custom");
+			controllerDigits[0].setIcon(DigitIconRenderer.D_NUMBERS[0]);
+			controllerDigits[1].setIcon(DigitIconRenderer.D_NUMBERS[0]);
+		}
+		else if (index < 0)
 		{
 			text = CreateTweakedControllers.translateDirect("gui_gamepad_unavailable");
 			controllerDigits[0].setIcon(DigitIconRenderer.D_DASH);
