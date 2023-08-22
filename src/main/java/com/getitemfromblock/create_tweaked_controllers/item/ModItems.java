@@ -11,17 +11,17 @@ import com.getitemfromblock.create_tweaked_controllers.ModTab;
 public class ModItems
 {
     private static final
-	CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate().creativeModeTab(() -> ModTab.MOD_TAB);
+    CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate().creativeModeTab(() -> ModTab.MOD_TAB);
 
-	static {
-		REGISTRATE.startSection(CURIOSITIES);
-	}
+    static {
+        REGISTRATE.startSection(CURIOSITIES);
+    }
 
     public static final ItemEntry<TweakedLinkedControllerItem> TWEAKED_LINKED_CONTROLLER =
-		REGISTRATE.item("tweaked_linked_controller", TweakedLinkedControllerItem::new)
-			.properties(p -> p.stacksTo(1))
-			.model(AssetLookup.itemModelWithPartials())
-			.register();
+        REGISTRATE.item("tweaked_linked_controller", TweakedLinkedControllerItem::new)
+            .properties(p -> p.stacksTo(1))
+            .model(AssetLookup.itemModelWithPartials())
+            .register();
 
     public static void register() {}
 }

@@ -20,56 +20,56 @@ public enum ModGuiTextures implements ScreenElement
     ;
     public static final int FONT_COLOR = 0x575F7A;
 
-	public final ResourceLocation location;
-	public int width, height;
-	public int startX, startY;
+    public final ResourceLocation location;
+    public int width, height;
+    public int startX, startY;
 
-	private ModGuiTextures(String location, int width, int height)
+    private ModGuiTextures(String location, int width, int height)
     {
-		this(location, 0, 0, width, height);
-	}
+        this(location, 0, 0, width, height);
+    }
 
-	private ModGuiTextures(String location, int startX, int startY, int width, int height)
+    private ModGuiTextures(String location, int startX, int startY, int width, int height)
     {
-		this(CreateTweakedControllers.ID, location, startX, startY, width, height);
-	}
+        this(CreateTweakedControllers.ID, location, startX, startY, width, height);
+    }
 
-	private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height)
+    private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height)
     {
-		this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
-		this.width = width;
-		this.height = height;
-		this.startX = startX;
-		this.startY = startY;
-	}
+        this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
+        this.width = width;
+        this.height = height;
+        this.startX = startX;
+        this.startY = startY;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public void bind()
+    @OnlyIn(Dist.CLIENT)
+    public void bind()
     {
-		RenderSystem.setShaderTexture(0, location);
-	}
+        RenderSystem.setShaderTexture(0, location);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void render(PoseStack ms, int x, int y)
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void render(PoseStack ms, int x, int y)
     {
-		bind();
-		GuiComponent.blit(ms, x, y, 0, startX, startY, width, height, 256, 256);
-	}
+        bind();
+        GuiComponent.blit(ms, x, y, 0, startX, startY, width, height, 256, 256);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public void render(PoseStack ms, int x, int y, GuiComponent component)
+    @OnlyIn(Dist.CLIENT)
+    public void render(PoseStack ms, int x, int y, GuiComponent component)
     {
-		bind();
-		component.blit(ms, x, y, startX, startY, width, height);
-	}
+        bind();
+        component.blit(ms, x, y, startX, startY, width, height);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public void render(PoseStack ms, int x, int y, Color c)
+    @OnlyIn(Dist.CLIENT)
+    public void render(PoseStack ms, int x, int y, Color c)
     {
-		bind();
-		UIRenderHelper.drawColoredTexture(ms, c, x, y, startX, startY, width, height);
-	}
+        bind();
+        UIRenderHelper.drawColoredTexture(ms, c, x, y, startX, startY, width, height);
+    }
 
 
 }

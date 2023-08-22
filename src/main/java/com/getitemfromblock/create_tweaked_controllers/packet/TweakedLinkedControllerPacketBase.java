@@ -16,70 +16,70 @@ import net.minecraftforge.network.NetworkEvent.Context;
 public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
 {
 
-	private BlockPos lecternPos;
+    private BlockPos lecternPos;
 
-	public TweakedLinkedControllerPacketBase(BlockPos lecternPos)
-	{
-		this.lecternPos = lecternPos;
-	}
+    public TweakedLinkedControllerPacketBase(BlockPos lecternPos)
+    {
+        this.lecternPos = lecternPos;
+    }
 
-	public TweakedLinkedControllerPacketBase(FriendlyByteBuf buffer)
-	{
-		if (buffer.readBoolean())
-		{
-			lecternPos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-		}
-	}
+    public TweakedLinkedControllerPacketBase(FriendlyByteBuf buffer)
+    {
+        if (buffer.readBoolean())
+        {
+            lecternPos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
+        }
+    }
 
-	protected boolean inLectern()
-	{
-		return lecternPos != null;
-	}
+    protected boolean inLectern()
+    {
+        return lecternPos != null;
+    }
 
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBoolean(inLectern());
-		if (inLectern())
-		{
-			buffer.writeInt(lecternPos.getX());
-			buffer.writeInt(lecternPos.getY());
-			buffer.writeInt(lecternPos.getZ());
-		}
-	}
+    @Override
+    public void write(FriendlyByteBuf buffer)
+    {
+        buffer.writeBoolean(inLectern());
+        if (inLectern())
+        {
+            buffer.writeInt(lecternPos.getX());
+            buffer.writeInt(lecternPos.getY());
+            buffer.writeInt(lecternPos.getZ());
+        }
+    }
 
-	@Override
-	public void handle(Supplier<Context> context)
-	{
-		context.get().enqueueWork(() -> {
-			ServerPlayer player = context.get().getSender();
-			if (player == null)
-				return;
+    @Override
+    public void handle(Supplier<Context> context)
+    {
+        context.get().enqueueWork(() -> {
+            ServerPlayer player = context.get().getSender();
+            if (player == null)
+                return;
 
-			if (inLectern())
-			{
-				BlockEntity be = player.level.getBlockEntity(lecternPos);
-				if (!(be instanceof TweakedLecternControllerBlockEntity))
-					return;
-				handleLectern(player, (TweakedLecternControllerBlockEntity) be);
-			}
-			else
-			{
-				ItemStack controller = player.getMainHandItem();
-				if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
-				{
-					controller = player.getOffhandItem();
-					if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
-						return;
-				}
-				handleItem(player, controller);
-			}
-		});
+            if (inLectern())
+            {
+                BlockEntity be = player.level.getBlockEntity(lecternPos);
+                if (!(be instanceof TweakedLecternControllerBlockEntity))
+                    return;
+                handleLectern(player, (TweakedLecternControllerBlockEntity) be);
+            }
+            else
+            {
+                ItemStack controller = player.getMainHandItem();
+                if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
+                {
+                    controller = player.getOffhandItem();
+                    if (!ModItems.TWEAKED_LINKED_CONTROLLER.isIn(controller))
+                        return;
+                }
+                handleItem(player, controller);
+            }
+        });
 
-		context.get().setPacketHandled(true);
-	}
+        context.get().setPacketHandled(true);
+    }
 
-	protected abstract void handleItem(ServerPlayer player, ItemStack heldItem);
-	protected abstract void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern);
+    protected abstract void handleItem(ServerPlayer player, ItemStack heldItem);
+    protected abstract void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern);
 
 }

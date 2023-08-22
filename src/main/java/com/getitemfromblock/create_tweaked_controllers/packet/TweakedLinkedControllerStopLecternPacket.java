@@ -10,25 +10,25 @@ import net.minecraft.world.item.ItemStack;
 public class TweakedLinkedControllerStopLecternPacket extends TweakedLinkedControllerPacketBase
 {
 
-	public TweakedLinkedControllerStopLecternPacket(FriendlyByteBuf buffer)
-	{
-		super(buffer);
-	}
+    public TweakedLinkedControllerStopLecternPacket(FriendlyByteBuf buffer)
+    {
+        super(buffer);
+    }
 
-	public TweakedLinkedControllerStopLecternPacket(BlockPos lecternPos)
-	{
-		super(lecternPos);
-	}
+    public TweakedLinkedControllerStopLecternPacket(BlockPos lecternPos)
+    {
+        super(lecternPos);
+    }
 
-	@Override
-	protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
-	{
-		lectern.tryStopUsing(player);
-	}
+    @Override
+    protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
+    {
+        lectern.tryStopUsing(player);
+    }
 
-	@Override
-	protected void handleItem(ServerPlayer player, ItemStack heldItem)
-	{
-	}
+    @Override
+    protected void handleItem(ServerPlayer player, ItemStack heldItem)
+    {
+    }
 
 }

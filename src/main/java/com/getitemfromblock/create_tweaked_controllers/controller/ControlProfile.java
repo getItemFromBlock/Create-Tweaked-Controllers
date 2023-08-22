@@ -42,13 +42,13 @@ public class ControlProfile
 
     public void Load(int id)
     {
-        Load("profiles/gamepad_profile_" + id);
+        Load("config/gamepad_profiles/gamepad_profile_" + id);
         UpdateProfileData();
     }
 
     public void Save(int id)
     {
-        Save("profiles/gamepad_profile_" + id);
+        Save("config/gamepad_profiles/gamepad_profile_" + id);
     }
 
     static final int[] keys = 

@@ -11,10 +11,10 @@ public class ModBlockEntityTypes
     private static final CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
 
     public static final BlockEntityEntry<TweakedLecternControllerBlockEntity> TWEAKED_LECTERN_CONTROLLER = REGISTRATE
-		.tileEntity("tweaked_lectern_controller", TweakedLecternControllerBlockEntity::new)
-		.validBlocks(ModBlocks.TWEAKED_LECTERN_CONTROLLER)
-		.renderer(() -> TweakedLecternControllerRenderer::new)
-		.register();
+        .tileEntity("tweaked_lectern_controller", TweakedLecternControllerBlockEntity::new)
+        .validBlocks(ModBlocks.TWEAKED_LECTERN_CONTROLLER)
+        .renderer(() -> TweakedLecternControllerRenderer::new)
+        .register();
 
-	public static void register() {}
+    public static void register() {}
 }

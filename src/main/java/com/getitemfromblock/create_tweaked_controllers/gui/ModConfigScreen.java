@@ -11,7 +11,6 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
 public class ModConfigScreen extends AbstractSimiScreen
@@ -40,7 +39,7 @@ public class ModConfigScreen extends AbstractSimiScreen
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
             advancedConfigButton.active = true;
-            advancedConfigButton.SetToolTipText(Component.nullToEmpty(null));
+            advancedConfigButton.SetToolTipText(null);
         }
         else
         {

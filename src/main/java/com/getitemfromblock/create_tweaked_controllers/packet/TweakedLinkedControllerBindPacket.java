@@ -15,51 +15,51 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TweakedLinkedControllerBindPacket extends TweakedLinkedControllerPacketBase
 {
 
-	private int button;
-	private BlockPos linkLocation;
+    private int button;
+    private BlockPos linkLocation;
 
-	public TweakedLinkedControllerBindPacket(int button, BlockPos linkLocation)
-	{
-		super((BlockPos) null);
-		this.button = button;
-		this.linkLocation = linkLocation;
-	}
+    public TweakedLinkedControllerBindPacket(int button, BlockPos linkLocation)
+    {
+        super((BlockPos) null);
+        this.button = button;
+        this.linkLocation = linkLocation;
+    }
 
-	public TweakedLinkedControllerBindPacket(FriendlyByteBuf buffer)
-	{
-		super(buffer);
-		this.button = buffer.readVarInt();
-		this.linkLocation = buffer.readBlockPos();
-	}
+    public TweakedLinkedControllerBindPacket(FriendlyByteBuf buffer)
+    {
+        super(buffer);
+        this.button = buffer.readVarInt();
+        this.linkLocation = buffer.readBlockPos();
+    }
 
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		super.write(buffer);
-		buffer.writeVarInt(button);
-		buffer.writeBlockPos(linkLocation);
-	}
+    @Override
+    public void write(FriendlyByteBuf buffer)
+    {
+        super.write(buffer);
+        buffer.writeVarInt(button);
+        buffer.writeBlockPos(linkLocation);
+    }
 
-	@Override
-	protected void handleItem(ServerPlayer player, ItemStack heldItem)
-	{
-		if (player.isSpectator())
-			return;
+    @Override
+    protected void handleItem(ServerPlayer player, ItemStack heldItem)
+    {
+        if (player.isSpectator())
+            return;
 
-		ItemStackHandler frequencyItems = TweakedLinkedControllerItem.getFrequencyItems(heldItem);
-		LinkBehaviour linkBehaviour = TileEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
-		if (linkBehaviour == null)
-			return;
+        ItemStackHandler frequencyItems = TweakedLinkedControllerItem.getFrequencyItems(heldItem);
+        LinkBehaviour linkBehaviour = TileEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
+        if (linkBehaviour == null)
+            return;
 
-		linkBehaviour.getNetworkKey()
-			.forEachWithContext((f, first) -> frequencyItems.setStackInSlot(button * 2 + (first ? 0 : 1), f.getStack()
-				.copy()));
+        linkBehaviour.getNetworkKey()
+            .forEachWithContext((f, first) -> frequencyItems.setStackInSlot(button * 2 + (first ? 0 : 1), f.getStack()
+                .copy()));
 
-		heldItem.getTag()
-			.put("Items", frequencyItems.serializeNBT());
-	}
+        heldItem.getTag()
+            .put("Items", frequencyItems.serializeNBT());
+    }
 
-	@Override
-	protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern) {}
+    @Override
+    protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern) {}
 
 }

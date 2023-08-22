@@ -18,25 +18,25 @@ public class ModCommonEvents
 {
     
     @SubscribeEvent
-	public static void onServerWorldTick(WorldTickEvent event)
+    public static void onServerWorldTick(WorldTickEvent event)
     {
-		if (event.phase == Phase.START || event.side == LogicalSide.CLIENT)
-			return;
-		Level world = event.world;
-		TweakedLinkedControllerServerHandler.tick(world);
-	}
+        if (event.phase == Phase.START || event.side == LogicalSide.CLIENT)
+            return;
+        Level world = event.world;
+        TweakedLinkedControllerServerHandler.tick(world);
+    }
 
-	// Extra check in case of a crash when the player is using a lectern controller
-	@SubscribeEvent
+    // Extra check in case of a crash when the player is using a lectern controller
+    @SubscribeEvent
     public static void onEntityJoinWorld(@Nonnull EntityJoinWorldEvent event)
-	{
+    {
         if(event.getEntity() != null && event.getEntity() instanceof Player)
-		{
-			Player player = (Player)event.getEntity();
+        {
+            Player player = (Player)event.getEntity();
             if (player.getPersistentData().contains("IsUsingLecternController"))
-			{
-				player.getPersistentData().remove("IsUsingLecternController");
-			}
+            {
+                player.getPersistentData().remove("IsUsingLecternController");
+            }
         }
     }
 }

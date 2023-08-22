@@ -15,17 +15,17 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 public class ModMenuTypes
 {
     private static final
-	CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
+    CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
 
     public static final MenuEntry<TweakedLinkedControllerMenu> TWEAKED_LINKED_CONTROLLER =
-		register("tweaked_linked_controller", TweakedLinkedControllerMenu::new, () -> TweakedLinkedControllerScreen::new);
+        register("tweaked_linked_controller", TweakedLinkedControllerMenu::new, () -> TweakedLinkedControllerScreen::new);
 
         private static <C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> MenuEntry<C> register(
-		String name, ForgeMenuFactory<C> factory, NonNullSupplier<ScreenFactory<C, S>> screenFactory) {
-		return REGISTRATE
-			.menu(name, factory, screenFactory)
-			.register();
-	}
+        String name, ForgeMenuFactory<C> factory, NonNullSupplier<ScreenFactory<C, S>> screenFactory) {
+        return REGISTRATE
+            .menu(name, factory, screenFactory)
+            .register();
+    }
 
-	public static void register() {}
+    public static void register() {}
 }

@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.InputEvent.ClickInputEvent;
 public class ModInputEvents
 {
     @SubscribeEvent
-	public static void onClickInput(ClickInputEvent event)
+    public static void onClickInput(ClickInputEvent event)
     {
         TweakedLinkedControllerClientHandler.deactivateInLectern();
     }

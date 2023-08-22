@@ -55,7 +55,7 @@ public class GamepadInputs
             GLFW.glfwGetGamepadState(selectedGamepad, state);
             Fill();
         }
-	}
+    }
 
     public static int GetGamepadIndex()
     {
@@ -72,15 +72,15 @@ public class GamepadInputs
         selectedGamepad = -1;
     }
 
-	public static boolean GetButton(int button)
+    public static boolean GetButton(int button)
     {
-		return GamepadInputs.buttons[button];
-	}
+        return GamepadInputs.buttons[button];
+    }
 
     public static float GetAxis(int axis)
     {
-		return GamepadInputs.axis[axis];
-	}
+        return GamepadInputs.axis[axis];
+    }
 
     private static void CheckState()
     {

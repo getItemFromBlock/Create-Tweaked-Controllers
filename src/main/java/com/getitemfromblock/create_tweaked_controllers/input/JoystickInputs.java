@@ -100,15 +100,15 @@ public class JoystickInputs
         selectedJoystick = -1;
     }
 
-	public static boolean GetButton(int button)
+    public static boolean GetButton(int button)
     {
-		return button >= GetButtonCount() ? false : JoystickInputs.buttons.get(button);
-	}
+        return button >= GetButtonCount() ? false : JoystickInputs.buttons.get(button);
+    }
 
     public static float GetAxis(int axis)
     {
-		return axis >= GetAxisCount() ? 0.0f : JoystickInputs.axis.get(axis);
-	}
+        return axis >= GetAxisCount() ? 0.0f : JoystickInputs.axis.get(axis);
+    }
 
     public static void Empty()
     {
