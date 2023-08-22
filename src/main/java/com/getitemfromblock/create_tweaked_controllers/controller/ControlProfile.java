@@ -241,7 +241,7 @@ public class ControlProfile
         for (int i = 0; i < 25; i++)
         {
             if (layout[i] == null) continue;
-            if (!layout[i].IsInputValid() || (layout[i].GetType() != InputType.JOYSTICK_AXIS && layout[i].GetType() != InputType.JOYSTICK_BUTTON)) continue;
+            if (layout[i].GetType() != InputType.JOYSTICK_AXIS && layout[i].GetType() != InputType.JOYSTICK_BUTTON) continue;
             hasJoystickInput = true;
             break;
         }

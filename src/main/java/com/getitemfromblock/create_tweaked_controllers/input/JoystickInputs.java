@@ -43,16 +43,18 @@ public class JoystickInputs
                 SelectJoystick(uniqueJoystickID);
             }
         }
+        ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
+        FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
         if (selectedJoystick < 0 || !GLFW.glfwJoystickPresent(selectedJoystick)
-            || buttons.size() != GLFW.glfwGetJoystickButtons(selectedJoystick).capacity()
-            || axis.size() != GLFW.glfwGetJoystickAxes(selectedJoystick).capacity())
+            || b == null || buttons.size() != b.capacity()
+            || a == null || axis.size() != a.capacity())
         {
             Empty();
             selectedJoystick = -1;
         }
         else
         {
-            Fill();
+            Fill(b, a);
         }
     }
 
@@ -77,12 +79,12 @@ public class JoystickInputs
 
     public static int GetButtonCount()
     {
-        return buttons.size();
+        return HasJoystick() ? buttons.size() : 0;
     }
 
     public static int GetAxisCount()
     {
-        return axis.size();
+        return HasJoystick() ? axis.size() : 0;
     }
 
     public static int GetJoystickIndex()
@@ -122,14 +124,12 @@ public class JoystickInputs
         }
     }
 
-    public static void Fill()
+    public static void Fill(ByteBuffer b, FloatBuffer a)
     {
-        ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
         for (int i = 0; i < b.capacity(); i++)
         {
             buttons.set(i, b.get(i) == GLFW.GLFW_PRESS);
         }
-        FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
         for (int i = 0; i < a.capacity(); i++)
         {
             axis.set(i, a.get(i));

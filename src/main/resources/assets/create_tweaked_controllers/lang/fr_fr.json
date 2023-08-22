@@ -82,7 +82,7 @@
 	"create_tweaked_controllers.menu.wiki": "Manuel en ligne",
 	"create_tweaked_controllers.menu.config_general": "Configurations générales",
 	"create_tweaked_controllers.menu.config_controller": "Configurations du contrôleur",
-	"create_tweaked_controllers.menu.config_disabled": "Veuillez activer l'option \"custom mappings\" dans les configurations générales",
+	"create_tweaked_controllers.menu.config_disabled": "Activez l'option \"custom mappings\" dans les configurations générales",
 	
 	"_": "EOF"
 }

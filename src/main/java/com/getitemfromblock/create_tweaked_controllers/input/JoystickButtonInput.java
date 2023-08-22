@@ -9,7 +9,7 @@ import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericIn
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.JoystickButtonScreen;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class JoystickButtonInput implements GenericInput
 {
@@ -28,6 +28,7 @@ public class JoystickButtonInput implements GenericInput
     @Override
     public boolean GetButtonValue()
     {
+        if (!IsInputValid()) return invertValue;
         return invertValue ? !JoystickInputs.GetButton(buttonID) : JoystickInputs.GetButton(buttonID);
     }
 
@@ -38,7 +39,7 @@ public class JoystickButtonInput implements GenericInput
     }
 
     @Override
-    public Component GetDisplayName()
+    public MutableComponent GetDisplayName()
     {
         return CreateTweakedControllers.translateDirect("gui_input_joystick_button", ""+buttonID);
     }

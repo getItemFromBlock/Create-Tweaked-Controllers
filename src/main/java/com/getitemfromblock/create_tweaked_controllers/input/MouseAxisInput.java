@@ -9,7 +9,7 @@ import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericIn
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.MouseAxisScreen;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class MouseAxisInput implements GenericInput
 {
@@ -39,6 +39,7 @@ public class MouseAxisInput implements GenericInput
     @Override
     public float GetAxisValue()
     {
+        if (!IsInputValid()) return 0;
         float v = isYAxis ? MouseCursorHandler.GetY(useVelocity) : MouseCursorHandler.GetX(useVelocity);
         v = (v - minBound) / (maxBound - minBound);
         if (v < 0) v = 0;
@@ -47,7 +48,7 @@ public class MouseAxisInput implements GenericInput
     }
 
     @Override
-    public Component GetDisplayName()
+    public MutableComponent GetDisplayName()
     {
         String a = "";
         if (minBound >= 0 && maxBound >= 0)

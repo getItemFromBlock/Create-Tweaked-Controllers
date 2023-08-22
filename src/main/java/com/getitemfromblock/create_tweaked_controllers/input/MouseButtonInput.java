@@ -10,7 +10,7 @@ import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.MouseButt
 import com.simibubi.create.AllKeys;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class MouseButtonInput implements GenericInput
 {
@@ -29,6 +29,7 @@ public class MouseButtonInput implements GenericInput
     @Override
     public boolean GetButtonValue()
     {
+        if (!IsInputValid()) return invertValue;
         return invertValue ? !AllKeys.isMouseButtonDown(buttonID) : AllKeys.isMouseButtonDown(buttonID);
     }
 
@@ -39,7 +40,7 @@ public class MouseButtonInput implements GenericInput
     }
 
     @Override
-    public Component GetDisplayName()
+    public MutableComponent GetDisplayName()
     {
         return CreateTweakedControllers.translateDirect("gui_input_mouse", ""+buttonID);
     }

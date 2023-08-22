@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.input;
+package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModControllerConfigScreen;
+import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.ScreenOpener;
@@ -181,7 +182,11 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             configButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
             changeButton.x = p_193926_ + 55;
             changeButton.y = p_193925_;
-            changeButton.setMessage(active ? TweakedControlsUtil.profile.layout[key].GetDisplayName() : CreateTweakedControllers.translateDirect("gui_input_none"));
+            changeButton.setMessage((
+                active ?
+                TweakedControlsUtil.profile.layout[key].GetDisplayName() :
+                CreateTweakedControllers.translateDirect("gui_input_none")
+                ));
             if (InputList.this.modControllerConfigScreen.GetActiveInput() == key)
             {
                 changeButton.setMessage((new TextComponent("> "))

@@ -13,7 +13,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllKeys;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class KeyboardInput implements GenericInput
 {
@@ -32,6 +32,7 @@ public class KeyboardInput implements GenericInput
     @Override
     public boolean GetButtonValue()
     {
+        if (!IsInputValid()) return invertValue;
         return invertValue ? !AllKeys.isKeyDown(key): AllKeys.isKeyDown(key);
     }
 
@@ -42,9 +43,9 @@ public class KeyboardInput implements GenericInput
     }
 
     @Override
-    public Component GetDisplayName()
+    public MutableComponent GetDisplayName()
     {
-        return key >= 0 ? InputConstants.getKey(key, 0).getDisplayName() : CreateTweakedControllers.translateDirectRaw("key.keyboard.unknown");
+        return key >= 0 ? InputConstants.getKey(key, 0).getDisplayName().plainCopy() : CreateTweakedControllers.translateDirectRaw("key.keyboard.unknown");
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public interface GenericInput
 {
@@ -17,7 +17,7 @@ public interface GenericInput
     // Returns a float between 0 and 1
     float GetAxisValue();
 
-    Component GetDisplayName();
+    MutableComponent GetDisplayName();
 
     boolean IsInputValid();
 

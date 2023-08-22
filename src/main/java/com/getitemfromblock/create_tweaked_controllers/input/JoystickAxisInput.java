@@ -9,7 +9,7 @@ import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericIn
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.JoystickAxisScreen;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class JoystickAxisInput implements GenericInput
 {
@@ -42,6 +42,7 @@ public class JoystickAxisInput implements GenericInput
     @Override
     public float GetAxisValue()
     {
+        if (!IsInputValid()) return 0;
         float v = (JoystickInputs.GetAxis(axisID) - minBound) / (maxBound - minBound);
         if (v < 0) v = 0;
         if (v > 1) v = 1;
@@ -49,7 +50,7 @@ public class JoystickAxisInput implements GenericInput
     }
 
     @Override
-    public Component GetDisplayName()
+    public MutableComponent GetDisplayName()
     {
         if (minBound >= 0 && maxBound >= 0)
         {

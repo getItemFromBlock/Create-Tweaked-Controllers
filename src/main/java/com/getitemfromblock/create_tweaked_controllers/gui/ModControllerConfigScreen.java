@@ -3,8 +3,8 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.ColoredButton;
+import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.InputList;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
-import com.getitemfromblock.create_tweaked_controllers.input.InputList;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.JoystickInputs;
@@ -12,6 +12,7 @@ import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
+import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
@@ -20,6 +21,7 @@ import com.simibubi.create.foundation.gui.ScreenOpener;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 
 public class ModControllerConfigScreen extends AbstractSimiScreen
@@ -130,7 +132,60 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         {
             controllerButtons[i].SetColorFactor(GamepadInputs.buttons[i] ? 1.0f : 50/255.0f);
         }
-        //font.draw(ms, title, x + 15, y - 4, 0xFFFFFF);
+        if (selectedInput != -1)
+        {
+            float val = (Mth.sin((float)Blaze3D.getTime() * Mth.PI * 4) + 1) / 2;
+            if (selectedInput < 15)
+            {
+                controllerButtons[selectedInput].SetColorFactor(Mth.lerp(val, 50/255.0f, 1.0f));
+            }
+            else if (selectedInput < 23)
+            {
+                vx = 0;
+                vy = 0;
+                switch (selectedInput)
+                {
+                    case 15:
+                        vx = (int)(val * 10);
+                        break;
+                    case 16:
+                        vx = (int)(-val * 10);
+                        break;
+                    case 17:
+                        vy = (int)(val * 10);
+                        break;
+                    case 18:
+                        vy = (int)(-val * 10);
+                        break;
+                    case 19:
+                        vx = (int)(val * 10);
+                        break;
+                    case 20:
+                        vx = (int)(-val * 10);
+                        break;
+                    case 21:
+                        vy = (int)(val * 10);
+                        break;
+                    default:
+                    vy = (int)(-val * 10);
+                        break;
+                }
+                if (selectedInput < 19)
+                {
+                    lStick.move(vx, vy);
+                    controllerButtons[9].move(vx, vy);
+                }
+                else
+                {
+                    rStick.move(vx, vy);
+                    controllerButtons[10].move(vx, vy);
+                }
+            }
+            else
+            {
+                triggerAxis[selectedInput-23].SetValue(val);
+            }
+        }
     }
 
     public void SetActiveInput(int index)
