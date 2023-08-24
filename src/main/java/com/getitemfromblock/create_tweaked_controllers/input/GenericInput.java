@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericInputScreen;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public interface GenericInput
@@ -25,7 +26,7 @@ public interface GenericInput
 
     void Deserialize(DataInputStream buf) throws IOException;
 
-    GenericInputScreen OpenConfigScreen(Screen previous);
+    GenericInputScreen OpenConfigScreen(Screen previous, Component name);
 
     InputType GetType();
 

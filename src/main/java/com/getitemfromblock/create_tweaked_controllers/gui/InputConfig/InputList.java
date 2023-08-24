@@ -146,7 +146,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                                     super.createNarrationMessage());
                 }
             };
-            resetButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_reset"), (b) -> {
+            resetButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_config_reset"), (b) -> {
                 TweakedControlsUtil.profile.layout[key] = null;
                 TweakedControlsUtil.profile.UpdateProfileData();
             }) {
@@ -155,8 +155,8 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                     return new TranslatableComponent("narrator.controls.reset", name);
                 }
             };
-            configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_input_config"), (b) -> {
-                ScreenOpener.open(TweakedControlsUtil.profile.layout[key].OpenConfigScreen(parent));
+            configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_config_config"), (b) -> {
+                ScreenOpener.open(TweakedControlsUtil.profile.layout[key].OpenConfigScreen(parent, name));
             }) {
                 protected MutableComponent createNarrationMessage()
                 {
@@ -185,7 +185,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             changeButton.setMessage((
                 active ?
                 TweakedControlsUtil.profile.layout[key].GetDisplayName() :
-                CreateTweakedControllers.translateDirect("gui_input_none")
+                CreateTweakedControllers.translateDirect("gui_config_none")
                 ));
             if (InputList.this.modControllerConfigScreen.GetActiveInput() == key)
             {

@@ -13,12 +13,13 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllKeys;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class KeyboardInput implements GenericInput
 {
-    private int key = GLFW.GLFW_KEY_UNKNOWN;
-    private boolean invertValue = false;
+    public int key = GLFW.GLFW_KEY_UNKNOWN;
+    public boolean invertValue = false;
 
     public KeyboardInput(int key)
     {
@@ -81,9 +82,9 @@ public class KeyboardInput implements GenericInput
     }
 
     @Override
-    public GenericInputScreen OpenConfigScreen(Screen previous)
+    public GenericInputScreen OpenConfigScreen(Screen previous, Component comp)
     {
-        return new KeyboardInputScreen(previous, this);
+        return new KeyboardInputScreen(previous, comp, this);
     }
 
 }

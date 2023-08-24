@@ -255,14 +255,14 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 90, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
             ScreenOpener.open(parent);
         }));
-        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_input_reset_all"), (p_193999_) -> {
+        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_config_reset_all"), (p_193999_) -> {
             TweakedControlsUtil.profile.InitDefaultLayout();
             TweakedControlsUtil.profile.UpdateProfileData();
         }, new Vector3f(1.0f, 0.3f, 0.3f)));
-        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 200, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_input_save"), (p_193996_) -> {
+        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 200, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_save"), (p_193996_) -> {
             TweakedControlsUtil.profile.Save(0);
         }, new Vector3f(0.5f, 0.5f, 1.0f)));
-        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 250, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_input_load"), (p_193996_) -> {
+        addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 250, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_load"), (p_193996_) -> {
             TweakedControlsUtil.profile.Load(0);
         }, new Vector3f(0.5f, 0.5f, 1.0f)));
         int x = (width - background.width) / 2;

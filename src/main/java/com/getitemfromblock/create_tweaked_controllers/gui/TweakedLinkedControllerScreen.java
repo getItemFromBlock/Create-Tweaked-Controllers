@@ -152,7 +152,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
                 float value = i < 4 ? Math.abs(GamepadInputs.axis[i]) : (GamepadInputs.axis[i] + 1) / 2;
                 if (value < 0) value = 0;
                 if (value > 1) value = 1;
-                int index = (int)(value * 15); 
+                int index = Math.round(value * 15);
                 if (i < 4 && GamepadInputs.axis[i] < 0 && index != 0)
                 {
                     axisDigits[i*3].setIcon(DigitIconRenderer.D_DASH);

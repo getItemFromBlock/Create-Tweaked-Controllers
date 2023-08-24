@@ -9,12 +9,13 @@ import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.GenericIn
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.JoystickButtonScreen;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class JoystickButtonInput implements GenericInput
 {
-    private int buttonID = -1;
-    private boolean invertValue = false;
+    public int buttonID = -1;
+    public boolean invertValue = false;
 
     public JoystickButtonInput(int buttonID)
     {
@@ -77,9 +78,9 @@ public class JoystickButtonInput implements GenericInput
     }
 
     @Override
-    public GenericInputScreen OpenConfigScreen(Screen previous)
+    public GenericInputScreen OpenConfigScreen(Screen previous, Component comp)
     {
-        return new JoystickButtonScreen(previous, this);
+        return new JoystickButtonScreen(previous, comp, this);
     }
     
 }

@@ -3,6 +3,7 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.foundation.config.ui.ConfigScreen;
 import com.simibubi.create.foundation.config.ui.SubMenuConfigScreen;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
@@ -59,6 +60,7 @@ public class ModConfigScreen extends AbstractSimiScreen
             this.linkTo(parent);
         }));
         addRenderableWidget(new Button(center - 100, yStart + 8, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_general", new Object[0]), ($) -> {
+            ConfigScreen.modID = CreateTweakedControllers.ID;
             this.linkTo((Screen)(new SubMenuConfigScreen(this, Type.CLIENT, ModClientConfig.SPEC)));
         }));
         advancedConfigButton = new TooltipButton(this, center - 100, yStart + 32, bLongWidth, bHeight, CreateTweakedControllers.translateDirect("menu.config_controller", new Object[0]), ($) -> {
