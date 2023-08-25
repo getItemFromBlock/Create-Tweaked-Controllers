@@ -34,6 +34,9 @@ Any joystick/gamepad can work with the mod, as long as it is detected by GLFW.
 However, you will need to enable advanced input mode for that. Please check [the wiki](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/wiki) for more infos.  
 
 Here is a list of supported devices:  
+- Keyboard  
+- Mouse buttons  
+- Mouse cursor movements  
 - Official gamepads such as Xbox controllers or Playstation DualShock are supported  
 - Knockoff/alternate gamepads (like a Logitech controller) should work  
 - Joysticks/hotas/racing wheels and other devices are supported, unless they requires some funky drivers in which case I can't do anything for you  
