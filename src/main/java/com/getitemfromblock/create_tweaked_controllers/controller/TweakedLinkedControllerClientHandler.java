@@ -24,6 +24,7 @@ import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.ControlsUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -49,6 +50,7 @@ public class TweakedLinkedControllerClientHandler
     private static BlockPos selectedLocation = BlockPos.ZERO;
     private static int buttonPacketCooldown = 0;
     private static int axisPacketCooldown = 0;
+    private static boolean useLock = false;
 
     public static void toggleBindMode(BlockPos location)
     {
@@ -56,6 +58,7 @@ public class TweakedLinkedControllerClientHandler
         {
             MODE = Mode.BIND;
             selectedLocation = location;
+            useLock = true;
         }
         else
         {
@@ -226,6 +229,8 @@ public class TweakedLinkedControllerClientHandler
                     .move(selectedLocation))
                     .colored(0x0104FF)
                     .lineWidth(1 / 16f);
+            if (!ControlsUtil.isActuallyPressed(Minecraft.getInstance().options.keyUse)) useLock = false;
+            if (useLock) return;
             for (int i = 0; i < 15; i++)
             {
                 if (!GamepadInputs.buttons[i]) continue;
