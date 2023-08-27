@@ -11,7 +11,9 @@ public class TweakedControlsUtil
 {
     public static ControlProfile profile = new ControlProfile();
     public static ControllerRedstoneOutput output = new ControllerRedstoneOutput();
-    private static boolean lastMouseKeyState = false;
+    private static boolean lastFocusKeyState = false;
+    private static boolean isFocusActive = false;
+    private static boolean wasFocusActive = false;
 
     public static void GuiUpdate()
     {
@@ -33,32 +35,56 @@ public class TweakedControlsUtil
         }
     }
 
+    private static void HandleMouseKeyBinds()
+    {
+        if (ModClientConfig.TOGGLE_MOUSE_FOCUS.get())
+        {
+            if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
+            {
+                if (!lastFocusKeyState)
+                {
+                    lastFocusKeyState = true;
+                    isFocusActive = !isFocusActive;
+                }
+            }
+            else
+            {
+                lastFocusKeyState = false;
+            }
+        }
+        else
+        {
+            isFocusActive = ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS);
+        }
+        if (isFocusActive)
+        {
+            if (!wasFocusActive)
+            {
+                MouseCursorHandler.ActivateMouseLock();
+            }
+            else
+            {
+                MouseCursorHandler.Update();
+            }
+            wasFocusActive = true;
+        }
+        else if (wasFocusActive)
+        {
+            MouseCursorHandler.DeactivateMouseLock();
+            wasFocusActive = false;
+        }
+        if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_RESET))
+        {
+            ModKeyMappings.KEY_MOUSE_RESET.setDown(false);
+            MouseCursorHandler.ResetCenter();
+        }
+    }
+
     public static void Update()
     {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
-            if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
-            {
-                if (!lastMouseKeyState)
-                {
-                    MouseCursorHandler.ActivateMouseLock();
-                }
-                else
-                {
-                    MouseCursorHandler.Update();
-                }
-                lastMouseKeyState = true;
-            }
-            else if (lastMouseKeyState)
-            {
-                MouseCursorHandler.DeactivateMouseLock();
-                lastMouseKeyState = false;
-            }
-            if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_RESET))
-            {
-                ModKeyMappings.KEY_MOUSE_RESET.setDown(false);
-                MouseCursorHandler.ResetCenter();
-            }
+            HandleMouseKeyBinds();
             if (profile.hasJoystickInput)
             {
                 JoystickInputs.GetControls();
