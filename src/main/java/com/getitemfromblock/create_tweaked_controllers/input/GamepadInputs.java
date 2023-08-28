@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 
 import net.minecraft.network.chat.Component;
 
@@ -116,6 +117,20 @@ public class GamepadInputs
 
     public static final Component GetButtonName(int index)
     {
+        if (index < 4)
+        {
+            switch (ModClientConfig.CONTROLLER_LAYOUT_TYPE.get())
+            {
+                case NINTENDO:
+                    return CreateTweakedControllers.translateDirect("gui_gamepad_button_" + (index ^ 0x1)); // Swap X/Y and A/B butons for Nintendo controllers
+
+                case PLAYSTATION:
+                    return CreateTweakedControllers.translateDirect("gui_gamepad_button_playstation_" + index); // Use PlayStation controller symbols
+        
+                default:
+                    return CreateTweakedControllers.translateDirect("gui_gamepad_button_" + index);
+            }
+        }
         return CreateTweakedControllers.translateDirect("gui_gamepad_button_"+index);
     }
 

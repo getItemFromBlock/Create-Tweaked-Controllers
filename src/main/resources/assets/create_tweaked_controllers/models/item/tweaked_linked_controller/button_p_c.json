@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "create_tweaked_controllers:item/tweaked_linked_controller/powered",
+	"textures": {
+		"particle": "create_tweaked_controllers:item/tweaked_linked_controller",
+		"redstone_bridge": "create_tweaked_controllers:item/tweaked_linked_controller"
+	},
+	"elements": [
+		{
+			"from": [6, 1, 2.5],
+			"to": [7, 3, 3.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
+			"faces": {
+				"north": {"uv": [11, 14, 12, 16], "texture": "#redstone_bridge"},
+				"east": {"uv": [12, 14, 13, 16], "texture": "#redstone_bridge"},
+				"south": {"uv": [11, 14, 12, 16], "texture": "#redstone_bridge"},
+				"west": {"uv": [12, 14, 13, 16], "texture": "#redstone_bridge"},
+				"up": {"uv": [12, 15, 13, 16], "texture": "#redstone_bridge"}
+			}
+		}
+	]
+}

@@ -2,16 +2,17 @@ package com.getitemfromblock.create_tweaked_controllers.item;
 
 import java.util.ArrayList;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerModel;
+import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerModel;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
-import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -32,13 +33,40 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 {
 
     protected static final PartialModel BASE = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
+    protected static final PartialModel CONTROLLERS[] =
+    {
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_x")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_n")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_p"))
+
+    };
     protected static final PartialModel BUTTON = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button"));
     protected static final PartialModel JOYSTICK = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/joystick"));
     protected static final PartialModel TRIGGER = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/trigger"));
-    protected static final PartialModel BUTTON_X = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_blue"));
-    protected static final PartialModel BUTTON_Y = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_yellow"));
-    protected static final PartialModel BUTTON_A = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_green"));
-    protected static final PartialModel BUTTON_B = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_red"));
+    protected static final PartialModel BUTTONS_LEFT[] =
+    {
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_x")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_y")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_s"))
+    };
+    protected static final PartialModel BUTTONS_UP[] =
+    {
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_y")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_x")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_t"))
+    };
+    protected static final PartialModel BUTTONS_DOWN[] =
+    {
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_a")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_b")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_x"))
+    };
+    protected static final PartialModel BUTTONS_RIGHT[] =
+    {
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_b")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_a")),
+        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_c"))
+    };
     static LerpedFloat equipProgress;
     static ArrayList<LerpedFloat> buttons;
     static ArrayList<LerpedFloat> axis;
@@ -197,10 +225,14 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
             renderDepression = true;
         }
 
-        renderer.render(active ? BASE.get() : model.getOriginalModel(), light);
-
-        if (!active)
+        int c = ModClientConfig.CONTROLLER_LAYOUT_TYPE.get().ordinal();
+        if (active)
         {
+            renderer.render(BASE.get(), light);
+        }
+        else
+        {
+            renderer.render(CONTROLLERS[c].get(), light);
             ms.popPose();
             return;
         }
@@ -215,13 +247,13 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
         }
 
         ms.pushPose();
-        BakedModel button = BUTTON_A.get();
+        BakedModel button = BUTTONS_DOWN[c].get();
         renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
-        button = BUTTON_B.get();
+        button = BUTTONS_RIGHT[c].get();
         renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
-        button = BUTTON_X.get();
+        button = BUTTONS_LEFT[c].get();
         renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
-        button = BUTTON_Y.get();
+        button = BUTTONS_UP[c].get();
         renderButton(renderer, ms, light, pt, button, b, index++, renderDepression, false);
         button = TRIGGER.get();
         for (; index < 6; index++)

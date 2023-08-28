@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ControllerButtonRenderer implements ScreenElement
 {
     public static final ResourceLocation BUTTON_ATLAS = CreateTweakedControllers.asResource("textures/gui/controller_buttons.png");
-    public static final int BUTTON_ATLAS_SIZE = 32;
+    public static final int BUTTON_ATLAS_SIZE = 64;
     public static final int BUTTON_WIDTH = 8;
     public static final int BUTTON_HEIGHT = 8;
 
@@ -37,6 +37,10 @@ public class ControllerButtonRenderer implements ScreenElement
         B_B = next(),
         B_X = next(),
         B_Y = next(),
+        B_SQUARE = next(),
+        B_TRIANGLE = next(),
+        B_CIRCLE = next(),
+        B_CROSS = next(),
         B_START = newRow(),
         B_SELECT = next(),
         B_MIDDLE = next(),

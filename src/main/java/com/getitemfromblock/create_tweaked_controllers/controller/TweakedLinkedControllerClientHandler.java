@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
@@ -69,6 +70,10 @@ public class TweakedLinkedControllerClientHandler
 
     public static void toggle()
     {
+        if (ModClientConfig.AUTO_RESET_MOUSE_FOCUS.get())
+        {
+            MouseCursorHandler.ResetCenter();
+        }
         if (MODE == Mode.IDLE)
         {
             MODE = Mode.ACTIVE;
@@ -83,6 +88,10 @@ public class TweakedLinkedControllerClientHandler
 
     public static void activateInLectern(BlockPos lecternAt)
     {
+        if (ModClientConfig.AUTO_RESET_MOUSE_FOCUS.get())
+        {
+            MouseCursorHandler.ResetCenter();
+        }
         if (MODE == Mode.IDLE)
         {
             MODE = Mode.ACTIVE;
@@ -92,6 +101,10 @@ public class TweakedLinkedControllerClientHandler
 
     public static void deactivateInLectern()
     {
+        if (ModClientConfig.AUTO_RESET_MOUSE_FOCUS.get())
+        {
+            MouseCursorHandler.ResetCenter();
+        }
         if (MODE == Mode.ACTIVE && inLectern())
         {
             MODE = Mode.IDLE;
@@ -107,7 +120,6 @@ public class TweakedLinkedControllerClientHandler
     protected static void onReset()
     {
         MouseCursorHandler.DeactivateMouseLock(); // Make sure to free the camera when exiting the controller
-        MouseCursorHandler.ResetCenter();
         selectedLocation = BlockPos.ZERO;
         buttonPacketCooldown = 0;
         axisPacketCooldown = 0;

@@ -45,6 +45,10 @@
 	"create_tweaked_controllers.gui_gamepad_button_12": "D-Pad Right",
 	"create_tweaked_controllers.gui_gamepad_button_13": "D-Pad Down",
 	"create_tweaked_controllers.gui_gamepad_button_14": "D-Pad Left",
+	"create_tweaked_controllers.gui_gamepad_button_playstation_0": "Cross × Button",
+	"create_tweaked_controllers.gui_gamepad_button_playstation_1": "Circle ○ Button",
+	"create_tweaked_controllers.gui_gamepad_button_playstation_2": "Square □ Button",
+	"create_tweaked_controllers.gui_gamepad_button_playstation_3": "Triangle △ Button",
 	
 	"create_tweaked_controllers.gui_gamepad_axis_0": "Left +X Axis",
     "create_tweaked_controllers.gui_gamepad_axis_1": "Left -X Axis",

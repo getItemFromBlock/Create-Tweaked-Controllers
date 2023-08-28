@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class PlainRectRenderer implements ScreenElement
 {
     public static final ResourceLocation BUTTON_ATLAS = CreateTweakedControllers.asResource("textures/gui/controller_buttons.png");
-    public static final int BUTTON_ATLAS_SIZE = 32;
+    public static final int BUTTON_ATLAS_SIZE = 64;
 
     public PlainRectRenderer()
     {

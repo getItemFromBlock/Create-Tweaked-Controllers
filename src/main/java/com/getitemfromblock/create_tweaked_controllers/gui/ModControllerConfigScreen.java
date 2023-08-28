@@ -1,6 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
+import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.ColoredButton;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.InputList;
@@ -272,10 +273,29 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         addRenderableOnly(lStick);
         addRenderableOnly(rStick);
         controllerButtons = new ControllerButton[15];
-        controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_A, new Vector3f(0,1,0));
-        controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_B, new Vector3f(1,0,0));
-        controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_X, new Vector3f(0,0,1));
-        controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_Y, new Vector3f(1,1,0));
+        switch (ModClientConfig.CONTROLLER_LAYOUT_TYPE.get())
+        {
+            case NINTENDO:
+                controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_B, new Vector3f(1,0,0));
+                controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_A, new Vector3f(0,1,0.8f));
+                controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_Y, new Vector3f(0.8f,0.8f,0.8f));
+                controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_X, new Vector3f(0.8f,0.8f,0.8f));
+                break;
+            
+            case PLAYSTATION:
+                controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_CROSS, new Vector3f(0.49f,0.706f,0.914f));
+                controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_CIRCLE, new Vector3f(1.0f,0.4f,0.4f));
+                controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_SQUARE, new Vector3f(1.0f,0.412f,0.973f));
+                controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_TRIANGLE, new Vector3f(0.243f,0.89f,0.631f));
+                break;
+        
+            default:
+                controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_A, new Vector3f(0,1,0));
+                controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_B, new Vector3f(1,0,0));
+                controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_X, new Vector3f(0,0,1));
+                controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_Y, new Vector3f(1,1,0));
+                break;
+        }
         controllerButtons[4] = new ControllerButton(x + 38, y + 1, ControllerButtonRenderer.B_L, new Vector3f(1,0,0));
         controllerButtons[5] = new ControllerButton(x + 100, y + 1, ControllerButtonRenderer.B_R, new Vector3f(1,0,0));
         controllerButtons[6] = new ControllerButton(x + 58, y + 38, ControllerButtonRenderer.B_SELECT, new Vector3f(1,0,0));
