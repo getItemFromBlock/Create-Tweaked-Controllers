@@ -276,10 +276,10 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         switch (ModClientConfig.CONTROLLER_LAYOUT_TYPE.get())
         {
             case NINTENDO:
-                controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_B, new Vector3f(1,0,0));
-                controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_A, new Vector3f(0,1,0.8f));
-                controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_Y, new Vector3f(0.8f,0.8f,0.8f));
-                controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_X, new Vector3f(0.8f,0.8f,0.8f));
+                controllerButtons[0] = new ControllerButton(x + 113, y + 49, ControllerButtonRenderer.B_B, new Vector3f(1.0f,1.0f,0));
+                controllerButtons[1] = new ControllerButton(x + 124, y + 38, ControllerButtonRenderer.B_A, new Vector3f(1.0f,0,0));
+                controllerButtons[2] = new ControllerButton(x + 102, y + 38, ControllerButtonRenderer.B_Y, new Vector3f(0,1.0f,0));
+                controllerButtons[3] = new ControllerButton(x + 113, y + 27, ControllerButtonRenderer.B_X, new Vector3f(0,0.25f,1.0f));
                 break;
             
             case PLAYSTATION:

@@ -11,11 +11,11 @@
 			"to": [8, 3, 4.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
-				"north": {"uv": [11, 14, 12, 16], "texture": "#redstone_bridge"},
-				"east": {"uv": [12, 14, 13, 16], "texture": "#redstone_bridge"},
-				"south": {"uv": [11, 14, 12, 16], "texture": "#redstone_bridge"},
-				"west": {"uv": [12, 14, 13, 16], "texture": "#redstone_bridge"},
-				"up": {"uv": [12, 15, 13, 16], "texture": "#redstone_bridge"}
+				"north": {"uv": [14, 11, 15, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [15, 11, 16, 13], "texture": "#redstone_bridge"},
+				"south": {"uv": [14, 11, 15, 13], "texture": "#redstone_bridge"},
+				"west": {"uv": [15, 11, 16, 13], "texture": "#redstone_bridge"},
+				"up": {"uv": [15, 12, 16, 13], "texture": "#redstone_bridge"}
 			}
 		}
 	]
