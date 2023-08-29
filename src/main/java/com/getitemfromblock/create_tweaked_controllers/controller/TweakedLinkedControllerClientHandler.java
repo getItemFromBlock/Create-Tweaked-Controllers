@@ -22,8 +22,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.content.redstone.link.LinkBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.ControlsUtil;
 
@@ -119,6 +119,7 @@ public class TweakedLinkedControllerClientHandler
 
     protected static void onReset()
     {
+        TweakedControlsUtil.FreeFocus();
         MouseCursorHandler.DeactivateMouseLock(); // Make sure to free the camera when exiting the controller
         selectedLocation = BlockPos.ZERO;
         buttonPacketCooldown = 0;
@@ -170,7 +171,7 @@ public class TweakedLinkedControllerClientHandler
         }
 
         if (inLectern() && ModBlocks.TWEAKED_LECTERN_CONTROLLER.get()
-            .getTileEntityOptional(mc.level, lecternPos)
+            .getBlockEntityOptional(mc.level, lecternPos)
             .map(be -> !be.isUsedBy(mc.player))
             .orElse(true))
         {
@@ -246,7 +247,7 @@ public class TweakedLinkedControllerClientHandler
             for (int i = 0; i < 15; i++)
             {
                 if (!GamepadInputs.buttons[i]) continue;
-                LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
+                LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
                 if (linkBehaviour != null)
                 {
                     ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(i, selectedLocation));
@@ -260,7 +261,7 @@ public class TweakedLinkedControllerClientHandler
             {
                 if ((i < 4 && Math.abs(GamepadInputs.axis[i]) > 0.8f) || (i >= 4 && GamepadInputs.axis[i] > 0))
                 {
-                    LinkBehaviour linkBehaviour = TileEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
+                    LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
                     if (linkBehaviour != null)
                     {
                         int a = i >= 4 ? i + 4 : i * 2 + (GamepadInputs.axis[i] < 0 ? 1 : 0);

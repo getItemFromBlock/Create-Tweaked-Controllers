@@ -15,6 +15,13 @@ public class TweakedControlsUtil
     private static boolean isFocusActive = false;
     private static boolean wasFocusActive = false;
 
+    public static void FreeFocus()
+    {
+        isFocusActive = false;
+        lastFocusKeyState = false;
+        wasFocusActive = false;
+    }
+
     public static void GuiUpdate()
     {
         MouseCursorHandler.Update();

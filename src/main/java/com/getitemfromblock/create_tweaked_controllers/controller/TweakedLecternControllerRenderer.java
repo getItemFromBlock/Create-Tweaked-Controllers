@@ -6,7 +6,8 @@ import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternContr
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItemRenderer;
-import com.simibubi.create.foundation.tileEntity.renderer.SafeTileEntityRenderer;
+import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AngleHelper;
 
@@ -17,7 +18,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 
-public class TweakedLecternControllerRenderer extends SafeTileEntityRenderer<TweakedLecternControllerBlockEntity>
+public class TweakedLecternControllerRenderer extends SafeBlockEntityRenderer<TweakedLecternControllerBlockEntity>
 {
 
     public TweakedLecternControllerRenderer(BlockEntityRendererProvider.Context context)
@@ -31,7 +32,7 @@ public class TweakedLecternControllerRenderer extends SafeTileEntityRenderer<Twe
 
         ItemStack stack = ModItems.TWEAKED_LINKED_CONTROLLER.asStack();
         TransformType transformType = TransformType.NONE;
-        TweakedLinkedControllerModel mainModel = (TweakedLinkedControllerModel) Minecraft.getInstance()
+        CustomRenderedItemModel mainModel = (CustomRenderedItemModel)Minecraft.getInstance()
             .getItemRenderer()
             .getModel(stack, be.getLevel(), null, 0);
         PartialItemModelRenderer renderer = PartialItemModelRenderer.of(stack, transformType, ms, buffer, overlay);

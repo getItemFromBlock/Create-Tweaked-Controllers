@@ -6,13 +6,13 @@ import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerModel;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
@@ -29,9 +29,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer<TweakedLinkedControllerModel>
+public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer
 {
-
     protected static final PartialModel BASE = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
     protected static final PartialModel CONTROLLERS[] =
     {
@@ -128,21 +127,21 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
     }
 
     @Override
-    protected void render(ItemStack stack, TweakedLinkedControllerModel model, PartialItemModelRenderer renderer,
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer,
         ItemTransforms.TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light,
         int overlay)
     {
         renderNormal(stack, model, renderer, transformType, ms, light);
     }
 
-    protected static void renderNormal(ItemStack stack, TweakedLinkedControllerModel model,
+    protected static void renderNormal(ItemStack stack, CustomRenderedItemModel model,
           PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
           int light)
     {
         render(stack, model, renderer, transformType, ms, light, RenderType.NORMAL, false, false);
     }
 
-    public static void renderInLectern(ItemStack stack, TweakedLinkedControllerModel model,
+    public static void renderInLectern(ItemStack stack, CustomRenderedItemModel model,
           PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
           int light, boolean active, boolean renderDepression)
     {
@@ -170,7 +169,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
         new Vec3(3, -0.1, 2.5).multiply(1/16.0, 1/16.0, 1/16.0),
     };
 
-    protected static void render(ItemStack stack, TweakedLinkedControllerModel model,
+    protected static void render(ItemStack stack, CustomRenderedItemModel model,
           PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
           int light, RenderType renderType, boolean active, boolean renderDepression)
     {
@@ -347,12 +346,6 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
             renderer.renderSolid(joystick, light);
             ms.popPose();
             ms.popPose();
-    }
-
-    @Override
-    public TweakedLinkedControllerModel createModel(BakedModel originalModel)
-    {
-        return new TweakedLinkedControllerModel(originalModel);
     }
 
     protected enum RenderType

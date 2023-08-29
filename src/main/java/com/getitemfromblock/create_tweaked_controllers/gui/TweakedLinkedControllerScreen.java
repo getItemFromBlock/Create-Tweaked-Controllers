@@ -16,7 +16,7 @@ import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedC
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;
+import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
 import net.minecraft.ChatFormatting;

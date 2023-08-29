@@ -3,7 +3,7 @@ package com.getitemfromblock.create_tweaked_controllers.controller;
 import com.getitemfromblock.create_tweaked_controllers.gui.ControllerItemSlot;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
-import com.simibubi.create.foundation.gui.container.GhostItemContainer;
+import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TweakedLinkedControllerMenu extends GhostItemContainer<ItemStack>
+public class TweakedLinkedControllerMenu extends GhostItemMenu<ItemStack>
 {
     private boolean isSecondPage = false;
 

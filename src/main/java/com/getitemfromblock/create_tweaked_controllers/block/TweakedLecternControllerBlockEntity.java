@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.DistExecutor;
 
-public class TweakedLecternControllerBlockEntity extends SmartTileEntity
+public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 {
 
     private ItemStack controller;
@@ -41,7 +41,7 @@ public class TweakedLecternControllerBlockEntity extends SmartTileEntity
     }
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours)
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours)
     {
     }
 

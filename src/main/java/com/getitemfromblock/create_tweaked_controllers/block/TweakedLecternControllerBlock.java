@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.getitemfromblock.create_tweaked_controllers.ModBlockEntityTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.schematics.ISpecialBlockItemRequirement;
-import com.simibubi.create.content.schematics.ItemRequirement;
-import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
+import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class TweakedLecternControllerBlock extends LecternBlock
-    implements ITE<TweakedLecternControllerBlockEntity>, ISpecialBlockItemRequirement
+    implements IBE<TweakedLecternControllerBlockEntity>, ISpecialBlockItemRequirement
     {
 
     public TweakedLecternControllerBlock(Properties properties)
@@ -35,13 +35,13 @@ public class TweakedLecternControllerBlock extends LecternBlock
     }
 
     @Override
-    public Class<TweakedLecternControllerBlockEntity> getTileEntityClass()
+    public Class<TweakedLecternControllerBlockEntity> getBlockEntityClass()
     {
         return TweakedLecternControllerBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends TweakedLecternControllerBlockEntity> getTileEntityType()
+    public BlockEntityType<? extends TweakedLecternControllerBlockEntity> getBlockEntityType()
     {
         return ModBlockEntityTypes.TWEAKED_LECTERN_CONTROLLER.get();
     }
@@ -49,7 +49,7 @@ public class TweakedLecternControllerBlock extends LecternBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos p_153573_, BlockState p_153574_)
     {
-        return ITE.super.newBlockEntity(p_153573_, p_153574_);
+        return IBE.super.newBlockEntity(p_153573_, p_153574_);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class TweakedLecternControllerBlock extends LecternBlock
         if (!player.isShiftKeyDown() && TweakedLecternControllerBlockEntity.playerInRange(player, world, pos))
         {
             if (!world.isClientSide)
-                withTileEntityDo(world, pos, be -> be.tryStartUsing(player));
+                withBlockEntityDo(world, pos, be -> be.tryStartUsing(player));
             return InteractionResult.SUCCESS;
         }
 
@@ -79,7 +79,7 @@ public class TweakedLecternControllerBlock extends LecternBlock
         if (!state.is(newState.getBlock()))
         {
             if (!world.isClientSide)
-                withTileEntityDo(world, pos, be -> be.dropController(state));
+                withBlockEntityDo(world, pos, be -> be.dropController(state));
 
             super.onRemove(state, world, pos, newState, isMoving);
         }
@@ -95,7 +95,7 @@ public class TweakedLecternControllerBlock extends LecternBlock
     {
         world.setBlockAndUpdate(pos, defaultBlockState().setValue(FACING, lecternState.getValue(FACING))
             .setValue(POWERED, lecternState.getValue(POWERED)));
-        withTileEntityDo(world, pos, be -> be.setController(controller));
+        withBlockEntityDo(world, pos, be -> be.setController(controller));
     }
 
     public void replaceWithLectern(BlockState state, Level world, BlockPos pos)

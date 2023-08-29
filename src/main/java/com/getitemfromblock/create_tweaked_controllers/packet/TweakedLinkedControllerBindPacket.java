@@ -3,8 +3,8 @@ package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
+import com.simibubi.create.content.redstone.link.LinkBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,7 +47,7 @@ public class TweakedLinkedControllerBindPacket extends TweakedLinkedControllerPa
             return;
 
         ItemStackHandler frequencyItems = TweakedLinkedControllerItem.getFrequencyItems(heldItem);
-        LinkBehaviour linkBehaviour = TileEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
+        LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
         if (linkBehaviour == null)
             return;
 

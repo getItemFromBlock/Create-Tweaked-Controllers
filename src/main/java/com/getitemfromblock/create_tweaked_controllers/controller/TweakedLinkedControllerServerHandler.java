@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.logistics.IRedstoneLinkable;
-import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
+import com.simibubi.create.content.redstone.link.IRedstoneLinkable;
+import com.simibubi.create.content.redstone.link.LinkBehaviour;
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.tileEntity.behaviour.linked.LinkBehaviour;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.IntAttached;
 import com.simibubi.create.foundation.utility.WorldAttached;

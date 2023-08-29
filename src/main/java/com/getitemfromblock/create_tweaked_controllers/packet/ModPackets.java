@@ -35,12 +35,12 @@ public enum ModPackets
     public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
     public static SimpleChannel channel;
 
-    private LoadedPacket<?> packet;
+    private PacketType<?> packet;
 
     <T extends SimplePacketBase> ModPackets(Class<T> type, Function<FriendlyByteBuf, T> factory,
         NetworkDirection direction)
     {
-        packet = new LoadedPacket<>(type, factory, direction);
+        packet = new PacketType<>(type, factory, direction);
     }
 
     public static void registerPackets()
@@ -61,7 +61,7 @@ public enum ModPackets
             message);
     }
 
-    private static class LoadedPacket<T extends SimplePacketBase>
+    private static class PacketType<T extends SimplePacketBase>
     {
         private static int index = 0;
 
@@ -71,10 +71,16 @@ public enum ModPackets
         private Class<T> type;
         private NetworkDirection direction;
 
-        private LoadedPacket(Class<T> type, Function<FriendlyByteBuf, T> factory, NetworkDirection direction) {
+        private PacketType(Class<T> type, Function<FriendlyByteBuf, T> factory, NetworkDirection direction) {
             encoder = T::write;
             decoder = factory;
-            handler = T::handle;
+            handler = (packet, contextSupplier) -> {
+                Context context = contextSupplier.get();
+                if (packet.handle(context))
+                {
+                    context.setPacketHandled(true);
+                }
+            };
             this.type = type;
             this.direction = direction;
         }

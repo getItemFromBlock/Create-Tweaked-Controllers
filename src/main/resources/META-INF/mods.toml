@@ -12,7 +12,7 @@ logoFile = "logo.png"
 authors = "getItemFromBlock"
 description = '''
 A Create Addon that adds a way of controlling contraptions using an advanced controller.
-Compatible with Create 0.5.0.i
+Compatible with Create 0.5.1+
 '''
 
 [[dependencies.create_tweaked_controllers]]

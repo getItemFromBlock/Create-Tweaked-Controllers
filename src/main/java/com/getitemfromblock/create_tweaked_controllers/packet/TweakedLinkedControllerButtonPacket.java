@@ -7,7 +7,7 @@ import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternContr
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
-import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.utility.Couple;
 
 import net.minecraft.core.BlockPos;

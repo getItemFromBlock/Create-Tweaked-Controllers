@@ -49,10 +49,10 @@ public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
     }
 
     @Override
-    public void handle(Supplier<Context> context)
+    public boolean handle(Context context)
     {
-        context.get().enqueueWork(() -> {
-            ServerPlayer player = context.get().getSender();
+        context.enqueueWork(() -> {
+            ServerPlayer player = context.getSender();
             if (player == null)
                 return;
 
@@ -75,8 +75,7 @@ public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
                 handleItem(player, controller);
             }
         });
-
-        context.get().setPacketHandled(true);
+        return true;
     }
 
     protected abstract void handleItem(ServerPlayer player, ItemStack heldItem);

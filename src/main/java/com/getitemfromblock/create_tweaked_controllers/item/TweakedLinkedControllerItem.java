@@ -5,11 +5,10 @@ import java.util.function.Consumer;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
-import com.simibubi.create.content.logistics.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.AllBlocks;
-
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -60,7 +59,7 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
                 if (ModBlocks.TWEAKED_LECTERN_CONTROLLER.has(hitState))
                 {
                     if (!world.isClientSide)
-                        ModBlocks.TWEAKED_LECTERN_CONTROLLER.get().withTileEntityDo(world, pos, be ->
+                        ModBlocks.TWEAKED_LECTERN_CONTROLLER.get().withBlockEntityDo(world, pos, be ->
                                 be.swapControllers(stack, player, ctx.getHand(), hitState));
                     return InteractionResult.SUCCESS;
                 }
