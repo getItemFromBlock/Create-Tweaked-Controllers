@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '1.18.2-1.1.0'
+version = '1.18.2-1.2.0'
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
 
@@ -145,8 +145,8 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-	
-	maven {
+    
+    maven {
         //CURSE
         name "Cursemaven"
         url "https://cursemaven.com"
@@ -173,17 +173,17 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-	
-	//CREATE
+    
+    //CREATE
     implementation fg.deobf("curse.maven:create-${create_version}") { transitive = false }
     implementation fg.deobf("curse.maven:flywheel-${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-	
-	//JEI
+    
+    //JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-	
-	//MIXINS
+    
+    //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
     }

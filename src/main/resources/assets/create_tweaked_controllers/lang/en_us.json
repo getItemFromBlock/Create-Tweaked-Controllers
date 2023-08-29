@@ -84,7 +84,7 @@
 	"create_tweaked_controllers.gui_output_axis": "Output value as axis :",
 	"create_tweaked_controllers.gui_input_axis": "Raw axis input value :",
 	
-	"create_tweaked_controllers.keybind.mouse_focus" : "Grab mouse movements (hold)",
+	"create_tweaked_controllers.keybind.mouse_focus" : "Grab mouse movements",
 	"create_tweaked_controllers.keybind.mouse_reset" : "Center mouse cursor",
 	"create_tweaked_controllers.keybind.controller_exit" : "Exit controller",
 	
