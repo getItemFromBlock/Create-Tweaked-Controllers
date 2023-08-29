@@ -28,7 +28,7 @@ Please check [the wiki](https://github.com/getItemFromBlock/Create-Tweaked-Contr
 This mod relies on GLFW (the input/output library used by Minecraft) to handle joystick inputs.  
 GLFW handle joystick as follows:  
 - If it is detected by GLFW, it will be labelled as a joystick; it will have all of its axis and buttons stored in an unorganised way (the way the driver reads the values)  
-- If it has a known mapping, GLFW will also register it as a gamepad. In this situation there will always be 6 axis ant 15 buttons which should be roughly the same on all gamepads (note that on some gamepads the A/B-X/Y buttons are inverted, and the two back trigger axis can just be shoulder buttons)  
+- If it has a known mapping, GLFW will also register it as a gamepad. In this situation there will always be 6 axis and 15 buttons which should be roughly the same on all gamepads (note that on some gamepads the A/B-X/Y buttons are inverted, and the two back trigger axis can just be shoulder buttons)  
   
 Any joystick/gamepad can work with the mod, as long as it is detected by GLFW.
 However, you will need to enable advanced input mode for that. Please check [the wiki](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/wiki) for more infos.  
