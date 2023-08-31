@@ -47,3 +47,5 @@ Here is a list of supported devices:
 Due to a Create limitation, if a network is updated too many times it will break. This can happen if you connect an axis output to an Adjustable Chain Gearshift, for example. I might do something for this in the future.  
 
 The joystick axis are directly read from GLFW. With most if not all gamepads, the +X axis points to the right, and the +Y axis points down.
+
+IF YOU USE A NINTENDO CONTROLLER, YOU MIGHT WANNA TAKE A LOOK [AT THIS](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1).
