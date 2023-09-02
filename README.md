@@ -21,7 +21,7 @@ The output is located here :
 
 ## Using the mod
 
-Please check [the wiki](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/wiki) for more informations.
+Please check [the wiki](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/wiki) for more information.
 
 ## Supported input method
 
