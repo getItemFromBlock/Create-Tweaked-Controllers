@@ -22,8 +22,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -141,8 +139,8 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             }) {
                 protected MutableComponent createNarrationMessage()
                 {
-                    return (TweakedControlsUtil.profile.layout[key] != null) ? new TranslatableComponent("narrator.controls.unbound", name)
-                            : new TranslatableComponent("narrator.controls.bound", name,
+                    return (TweakedControlsUtil.profile.layout[key] != null) ? Component.translatable("narrator.controls.unbound", name)
+                            : Component.translatable("narrator.controls.bound", name,
                                     super.createNarrationMessage());
                 }
             };
@@ -152,7 +150,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             }) {
                 protected MutableComponent createNarrationMessage()
                 {
-                    return new TranslatableComponent("narrator.controls.reset", name);
+                    return Component.translatable("narrator.controls.reset", name);
                 }
             };
             configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_config_config"), (b) -> {
@@ -160,7 +158,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             }) {
                 protected MutableComponent createNarrationMessage()
                 {
-                    return new TranslatableComponent("narrator.controls.reset", name);
+                    return Component.translatable("narrator.controls.reset", name);
                 }
             };
         }
@@ -189,7 +187,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                 ));
             if (InputList.this.modControllerConfigScreen.GetActiveInput() == key)
             {
-                changeButton.setMessage((new TextComponent("> "))
+                changeButton.setMessage((Component.literal("> "))
                         .append(changeButton.getMessage().copy().withStyle(ChatFormatting.YELLOW)).append(" <")
                         .withStyle(ChatFormatting.YELLOW));
             }

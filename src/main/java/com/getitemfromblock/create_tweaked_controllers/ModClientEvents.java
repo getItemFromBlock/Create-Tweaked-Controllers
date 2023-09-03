@@ -13,7 +13,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class ModClientEvents
@@ -46,8 +46,8 @@ public class ModClientEvents
 			ModContainer container = ModList.get()
 				.getModContainerById(CreateTweakedControllers.ID)
 				.orElseThrow(() -> new IllegalStateException("CreateTweakedControllers mod container missing on LoadComplete"));
-			container.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class,
-				() -> new ConfigGuiHandler.ConfigGuiFactory(
+			container.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+				() -> new ConfigScreenHandler.ConfigScreenFactory(
 					(mc, previousScreen) -> new ModConfigScreen(previousScreen)));
 		}
 	}

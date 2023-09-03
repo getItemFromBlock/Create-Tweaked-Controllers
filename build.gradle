@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '1.18.2-1.2.1'
+version = '1.19.2-1.2.1'
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
 
@@ -38,7 +38,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -183,8 +183,9 @@ dependencies {
     compileOnly fg.deobf('curse.maven:controllable-317269:4376751')
     
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
     
     //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {

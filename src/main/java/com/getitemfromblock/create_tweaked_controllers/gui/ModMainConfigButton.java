@@ -96,7 +96,7 @@ public class ModMainConfigButton extends Button
     {
 
         @SubscribeEvent
-        public static void onGuiInit(ScreenEvent.InitScreenEvent event) {
+        public static void onGuiInit(ScreenEvent.Init event) {
             Screen gui = event.getScreen();
 
             MenuRows menu = null;

@@ -47,8 +47,9 @@ public class MouseCursorHandler
     {
         delta = new Vec2(0, 0);
         vel = new Vec2(0, 0);
-        m = Minecraft.getInstance().mouseHandler;
-        o = Minecraft.getInstance().options;
+        Minecraft mc = Minecraft.getInstance();
+        m = mc.mouseHandler;
+        o = mc.options;
         lastPos = GetMousePos();
         lastMouseEventTime = Blaze3D.getTime();
     }
@@ -91,17 +92,17 @@ public class MouseCursorHandler
 
     public static void ActivateMouseLock()
     {
-        if (o.sensitivity != -1/3.0)
+        if (o.sensitivity().get() != -1/3.0)
         {
-            sensitivity = o.sensitivity;
+            sensitivity = o.sensitivity().get();
         }
-        o.sensitivity = -1/3.0;
+        o.sensitivity().set(1/3.0);
         lastPos = GetMousePos();
         lastMouseEventTime = Blaze3D.getTime();
     }
 
     public static void DeactivateMouseLock()
     {
-        o.sensitivity = sensitivity;
+        o.sensitivity().set(sensitivity);
     }
 }

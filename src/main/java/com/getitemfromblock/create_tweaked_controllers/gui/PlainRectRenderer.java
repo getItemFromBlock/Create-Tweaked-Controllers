@@ -58,7 +58,7 @@ public class PlainRectRenderer implements ScreenElement
         innerBlit(ms.last().pose(), x, dx, y, dy, z, (tx + 0.0F) / (float)tex_w, (tx + (float)tw) / (float)tex_w, (ty + 0.0F) / (float)tex_h, (ty + (float)th) / (float)tex_h);
     }
 
-    // Took from net.minecraft.client.gui
+    // Took from net.minecraft.client.gui.GuiComponent#193
     private static void innerBlit(Matrix4f p_93113_, int p_93114_, int p_93115_, int p_93116_, int p_93117_, int p_93118_, float p_93119_, float p_93120_, float p_93121_, float p_93122_)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -68,8 +68,7 @@ public class PlainRectRenderer implements ScreenElement
         bufferbuilder.vertex(p_93113_, (float)p_93115_, (float)p_93117_, (float)p_93118_).uv(p_93120_, p_93122_).endVertex();
         bufferbuilder.vertex(p_93113_, (float)p_93115_, (float)p_93116_, (float)p_93118_).uv(p_93120_, p_93121_).endVertex();
         bufferbuilder.vertex(p_93113_, (float)p_93114_, (float)p_93116_, (float)p_93118_).uv(p_93119_, p_93121_).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @OnlyIn(Dist.CLIENT)
