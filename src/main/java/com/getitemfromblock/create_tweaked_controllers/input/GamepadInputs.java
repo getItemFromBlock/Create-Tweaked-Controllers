@@ -36,7 +36,7 @@ public class GamepadInputs
                 GLFW.glfwGetGamepadState(i, state); // Check for gamepad activity
                 for (int b = 0; b < 15; b++)
                 {
-                    if (state.buttons(i) == 0) continue;
+                    if (state.buttons(b) == 0) continue;
                     selectedGamepad = i;
                     break;
                 }
