@@ -21,10 +21,7 @@ apply plugin: 'org.spongepowered.mixin'
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
 
-    config "${modid}.mixins.json"
-}
-
-version = '1.18.2-1.2.2'
+version = '1.19.2-1.2.1'
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
 
@@ -191,11 +188,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:controllable-${controllable_version}")
     
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-
-    // CC TWEAKED COMPAT
-    compileOnly fg.deobf("curse.maven:cc-tweaked-${cc_tweaked_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
     
     //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {
