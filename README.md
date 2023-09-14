@@ -4,8 +4,8 @@
 
 A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you control your contraptions using an advanced controller, that you can use with your mouse, keyboard or even your gamepad !
 
-CurseForge link [here](https://www.curseforge.com/minecraft/mc-mods/create-tweaked-controllers)
-Modrinth link [here](https://modrinth.com/mod/create-tweaked-controllers)
+CurseForge link [here](https://www.curseforge.com/minecraft/mc-mods/create-tweaked-controllers)  
+Modrinth link [here](https://modrinth.com/mod/create-tweaked-controllers)  
 
 ## Building
 
