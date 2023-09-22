@@ -15,7 +15,7 @@ out
 
 # VSCode
 create-tweaked-controllers.code-workspace
-
+.vscode
 
 # gradle
 build
