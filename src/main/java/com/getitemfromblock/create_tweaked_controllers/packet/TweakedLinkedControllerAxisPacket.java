@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPacketBase
 {
     private int axis = 0;
+    private float fullAxis[];
 
     public TweakedLinkedControllerAxisPacket(int axisIn)
     {
@@ -28,12 +29,32 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
     public TweakedLinkedControllerAxisPacket(int axisIn, BlockPos lecternPos)
     {
         super(lecternPos);
-        this.axis = axisIn;
+        axis = axisIn;
+    }
+
+    public TweakedLinkedControllerAxisPacket(float[] axisIn, int axisL, BlockPos lecternPos)
+    {
+        super(lecternPos);
+        useFullPrecision = true;
+        fullAxis = new float[6];
+        axis = axisL;
+        for (byte i = 0; i < 6; i++)
+        {
+            fullAxis[i] = axisIn[i];
+        }
     }
 
     public TweakedLinkedControllerAxisPacket(FriendlyByteBuf buffer)
     {
         super(buffer);
+        if (useFullPrecision)
+        {
+            fullAxis = new float[6];
+            for (byte i = 0; i < 6; i++)
+            {
+                fullAxis[i] = buffer.readFloat();
+            }
+        }
         axis = buffer.readInt();
     }
 
@@ -41,6 +62,13 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
     public void write(FriendlyByteBuf buffer)
     {
         super.write(buffer);
+        if (useFullPrecision)
+        {
+            for (byte i = 0; i < 6; i++)
+            {
+                buffer.writeFloat(fullAxis[i]);
+            }
+        }
         buffer.writeInt(axis);
     }
 
@@ -48,7 +76,17 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
     protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
     {
         if (lectern.isUsedBy(player))
+        {
             handleItem(player, lectern.getController());
+            if (useFullPrecision)
+            {
+                lectern.ReceiveFullStates(fullAxis);
+            }
+            else
+            {
+                lectern.ReceiveAxisStates(axis);
+            }
+        }
     }
 
     @Override
@@ -65,7 +103,7 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
         output.DecodeAxis(axis);
         ArrayList<Couple<Frequency>> axisCouples = new ArrayList<>(10);
         ArrayList<Byte> axisValues = new ArrayList<>(10);
-        for (int i = 0; i < 10; ++i)
+        for (byte i = 0; i < 10; ++i)
         {
             axisCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i + 15));
             byte dt = 0;

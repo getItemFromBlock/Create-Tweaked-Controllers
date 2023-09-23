@@ -33,12 +33,12 @@ public class TweakedControlsUtil
         JoystickInputs.GetControls();
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
-            FillInputs();
+            FillInputs(false);
         }
         else
         {
             GamepadInputs.GetControls();
-            FillGamepadInputs();
+            FillGamepadInputs(false);
         }
     }
 
@@ -89,6 +89,11 @@ public class TweakedControlsUtil
 
     public static void Update()
     {
+        Update(false);
+    }
+
+    public static void Update(boolean useFullPrec)
+    {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
             HandleMouseKeyBinds();
@@ -96,17 +101,17 @@ public class TweakedControlsUtil
             {
                 JoystickInputs.GetControls();
             }
-            FillInputs();
+            FillInputs(useFullPrec);
         }
         else
         {
             GamepadInputs.GetControls();
-            FillGamepadInputs();
+            FillGamepadInputs(useFullPrec);
         }
         
     }
 
-    public static void FillInputs()
+    public static void FillInputs(boolean useFullPrec)
     {
         profile.duplicatedKeys.forEach(key ->
         {
@@ -121,10 +126,10 @@ public class TweakedControlsUtil
         {
             GamepadInputs.axis[i] = profile.GetAxis(i);
         }
-        FillGamepadInputs();
+        FillGamepadInputs(useFullPrec);
     }
 
-    public static void FillGamepadInputs()
+    public static void FillGamepadInputs(boolean useFullPrec)
     {
         for (int i = 0; i < output.buttons.length; i++)
         {
@@ -137,6 +142,10 @@ public class TweakedControlsUtil
                 float v = (GamepadInputs.GetAxis(i) + 1) / 2;
                 if (v < 0) v = 0;
                 if (v > 1) v = 1;
+                if (useFullPrec)
+                {
+                    output.fullAxis[i] = v;
+                }
                 output.axis[i] = (byte)(Math.round(v * 15));
             }
             else // joystick axis
@@ -146,6 +155,10 @@ public class TweakedControlsUtil
                 if (negative) v = -v;
                 if (v < 0) v = 0;
                 if (v > 1) v = 1;
+                if (useFullPrec)
+                {
+                    output.fullAxis[i] = negative ? -v : v;
+                }
                 output.axis[i] = (byte)Math.round(v * 15);
                 if (negative && output.axis[i] > 0) output.axis[i] = (byte)(output.axis[i] + 16);
             }

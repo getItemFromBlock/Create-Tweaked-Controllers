@@ -4,6 +4,7 @@ public class ControllerRedstoneOutput
 {
     public Boolean[] buttons = new Boolean[15];
     public Byte[] axis = new Byte[6];
+    public float[] fullAxis = new float[6];
 
     public void Clear()
     {
@@ -14,6 +15,7 @@ public class ControllerRedstoneOutput
         for (int i = 0; i < axis.length; i++)
         {
             axis[i] = 0;
+            fullAxis[i] = 0;
         }
     }
 

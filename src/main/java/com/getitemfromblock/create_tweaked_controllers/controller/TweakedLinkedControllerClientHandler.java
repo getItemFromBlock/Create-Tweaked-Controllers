@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
@@ -193,13 +194,13 @@ public class TweakedLinkedControllerClientHandler
             onReset();
             return;
         }
-        TweakedControlsUtil.Update();
+        boolean useFullPrec = lecternPos != null && ((TweakedLecternControllerBlockEntity)Minecraft.getInstance().level.getBlockEntity(lecternPos)).shouldUseFullPrecision();
+        TweakedControlsUtil.Update(useFullPrec);
         TweakedLinkedControllerItemRenderer.tick();
-        short pressedKeys = TweakedControlsUtil.output.EncodeButtons();
-        int axis = TweakedControlsUtil.output.EncodeAxis();
 
         if (MODE == Mode.ACTIVE)
         {
+            short pressedKeys = TweakedControlsUtil.output.EncodeButtons();
             if (pressedKeys != buttonStates)
             {
                 if ((pressedKeys & ~buttonStates) != 0)
@@ -213,24 +214,31 @@ public class TweakedLinkedControllerClientHandler
                 ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
                 buttonPacketCooldown = PACKET_RATE;
             }
-            if (axis != axisStates)
-            {
-                ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
-                axisPacketCooldown = PACKET_RATE;
-            }
-            // Keepalive Keys
             if (buttonPacketCooldown == 0 && pressedKeys != 0)
             {
                 ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
                 buttonPacketCooldown = PACKET_RATE;
             }
-            if (axisPacketCooldown == 0 && axis != 0)
-            {
-                ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
-                axisPacketCooldown = PACKET_RATE;
-            }
             buttonStates = pressedKeys;
-            axisStates = axis;
+            int axis = TweakedControlsUtil.output.EncodeAxis();
+            if (useFullPrec)
+            {
+                ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(TweakedControlsUtil.output.fullAxis, axis, lecternPos));
+            }
+            else
+            {
+                if (axis != axisStates)
+                {
+                    ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+                    axisPacketCooldown = PACKET_RATE;
+                }
+                if (axisPacketCooldown == 0 && axis != 0)
+                {
+                    ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+                    axisPacketCooldown = PACKET_RATE;
+                }
+                axisStates = axis;
+            }
         }
 
         if (MODE == Mode.BIND)

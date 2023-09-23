@@ -49,7 +49,10 @@ public class TweakedLinkedControllerButtonPacket extends TweakedLinkedController
     protected void handleLectern(ServerPlayer player, TweakedLecternControllerBlockEntity lectern)
     {
         if (lectern.isUsedBy(player))
+        {
             handleItem(player, lectern.getController());
+            lectern.ReceiveButtonStates(buttonStates);
+        }
     }
 
     @Override
