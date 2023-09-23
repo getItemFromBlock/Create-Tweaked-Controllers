@@ -1,6 +1,8 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.compat.Controllable.ControllerHandler;
+import com.getitemfromblock.create_tweaked_controllers.config.ModKeyMappings;
+import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 
 import net.minecraftforge.common.MinecraftForge;

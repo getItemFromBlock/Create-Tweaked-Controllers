@@ -30,7 +30,7 @@ public class ModComputerBehavior extends AbstractComputerBehaviour
             return () -> new TweakedLecternPeripheral(tlcbe);
 
         throw new IllegalArgumentException("No peripheral available for " + be.getType()
-            .getClass().getName());
+            .getRegistryName());
     }
 
     @Override
