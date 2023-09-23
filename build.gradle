@@ -189,7 +189,6 @@ dependencies {
 
     // CC TWEAKED COMPAT
     compileOnly fg.deobf("curse.maven:cc-tweaked-${cc_tweaked_version}")
-
     //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
