@@ -1,7 +1,5 @@
 package com.getitemfromblock.create_tweaked_controllers.packet;
 
-import java.util.function.Supplier;
-
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
@@ -15,8 +13,8 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
 {
-
     private BlockPos lecternPos;
+    protected boolean useFullPrecision = false;
 
     public TweakedLinkedControllerPacketBase(BlockPos lecternPos)
     {
@@ -25,10 +23,12 @@ public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
 
     public TweakedLinkedControllerPacketBase(FriendlyByteBuf buffer)
     {
-        if (buffer.readBoolean())
+        byte val = buffer.readByte();
+        if ((val & 0x1) != 0)
         {
             lecternPos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
         }
+        useFullPrecision = (val & 0x2) != 0;
     }
 
     protected boolean inLectern()
@@ -39,7 +39,8 @@ public abstract class TweakedLinkedControllerPacketBase extends SimplePacketBase
     @Override
     public void write(FriendlyByteBuf buffer)
     {
-        buffer.writeBoolean(inLectern());
+        byte mask = (byte) ((inLectern() ? 1 : 0) | (useFullPrecision ? 2 : 0));
+        buffer.writeByte(mask);
         if (inLectern())
         {
             buffer.writeInt(lecternPos.getX());

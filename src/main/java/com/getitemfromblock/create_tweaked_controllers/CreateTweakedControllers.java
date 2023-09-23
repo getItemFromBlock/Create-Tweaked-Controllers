@@ -1,6 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
+import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
@@ -47,6 +48,7 @@ public class CreateTweakedControllers
         ModMenuTypes.register();
         ModConfigs.register(modLoadingContext);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ModClientStuff.onConstructor(eventBus, forgeEventBus));
+        ModComputerCraftProxy.register();
     }
 
     public static void init(final FMLCommonSetupEvent event)

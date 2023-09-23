@@ -1,4 +1,4 @@
-package com.getitemfromblock.create_tweaked_controllers.compat;
+package com.getitemfromblock.create_tweaked_controllers.compat.Controllable;
 
 import java.util.Map;
 

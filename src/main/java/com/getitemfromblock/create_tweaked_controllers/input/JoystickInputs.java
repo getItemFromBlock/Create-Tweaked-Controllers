@@ -44,18 +44,25 @@ public class JoystickInputs
                 SelectJoystick(uniqueJoystickID);
             }
         }
-        ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
-        FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
-        if (selectedJoystick < 0 || !GLFW.glfwJoystickPresent(selectedJoystick)
-            || b == null || buttons.size() != b.limit()
-            || a == null || axis.size() != a.limit())
+        if (selectedJoystick >= 0 && GLFW.glfwJoystickPresent(selectedJoystick))
         {
-            Empty();
-            selectedJoystick = -1;
+            ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
+            FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
+            if (b == null || buttons.size() != b.limit()
+                || a == null || axis.size() != a.limit())
+            {
+                Empty();
+                selectedJoystick = -1;
+            }
+            else
+            {
+                Fill(b, a);
+            }
         }
         else
         {
-            Fill(b, a);
+            Empty();
+            selectedJoystick = -1;
         }
     }
 

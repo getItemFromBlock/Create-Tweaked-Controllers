@@ -27,8 +27,8 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 minecraft {
     // The mappings can be changed at any time and must be in the following format.
     // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
+    // official   {minecraft_version}             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-{minecraft_version}  Open community-sourced parameter names and javadocs layered on top of official
     //
     // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
     // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
@@ -185,6 +185,9 @@ dependencies {
     //JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+
+    // CC TWEAKED COMPAT
+    compileOnly fg.deobf("curse.maven:cc-tweaked-${cc_tweaked_version}")
     
     //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {
