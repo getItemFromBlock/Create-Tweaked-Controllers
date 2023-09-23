@@ -187,7 +187,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
 
-    / CC TWEAKED COMPAT
+    // CC TWEAKED COMPAT
     compileOnly fg.deobf("curse.maven:cc-tweaked-${cc_tweaked_version}")
 
     //MIXINS
