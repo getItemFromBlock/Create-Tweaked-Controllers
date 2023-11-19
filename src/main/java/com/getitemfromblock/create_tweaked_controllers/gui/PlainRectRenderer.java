@@ -1,5 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import org.joml.Matrix4f;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -9,11 +11,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.gui.element.DelegatedStencilElement;
 import com.simibubi.create.foundation.gui.element.ScreenElement;
 import com.simibubi.create.foundation.utility.Color;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -40,22 +42,22 @@ public class PlainRectRenderer implements ScreenElement
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void render(PoseStack matrixStack, int x, int y)
+    public void render(GuiGraphics graphics, int x, int y)
     {
         bind();
-        innerBlit(matrixStack, x, x + 1, y, y + 1, 0, 1, 1, 27, 27, BUTTON_ATLAS_SIZE, BUTTON_ATLAS_SIZE);
+        innerBlit(graphics, x, x + 1, y, y + 1, 0, 1, 1, 27, 27, BUTTON_ATLAS_SIZE, BUTTON_ATLAS_SIZE);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void render(PoseStack matrixStack, int x, int y, int width, int height)
+    public static void render(GuiGraphics matrixStack, int x, int y, int width, int height)
     {
         bind();
         innerBlit(matrixStack, x, x + width, y, y + height, 0, 1, 1, 27, 27, BUTTON_ATLAS_SIZE, BUTTON_ATLAS_SIZE);
     }
 
-    private static void innerBlit(PoseStack ms, int x, int dx, int y, int dy, int z, int tw, int th, float tx, float ty, int tex_w, int tex_h)
+    private static void innerBlit(GuiGraphics ms, int x, int dx, int y, int dy, int z, int tw, int th, float tx, float ty, int tex_w, int tex_h)
     {
-        innerBlit(ms.last().pose(), x, dx, y, dy, z, (tx + 0.0F) / (float)tex_w, (tx + (float)tw) / (float)tex_w, (ty + 0.0F) / (float)tex_h, (ty + (float)th) / (float)tex_h);
+        innerBlit(ms.pose().last().pose(), x, dx, y, dy, z, (tx + 0.0F) / (float)tex_w, (tx + (float)tw) / (float)tex_w, (ty + 0.0F) / (float)tex_h, (ty + (float)th) / (float)tex_h);
     }
 
     // Took from net.minecraft.client.gui.GuiComponent#193

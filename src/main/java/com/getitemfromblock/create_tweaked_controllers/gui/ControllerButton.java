@@ -2,12 +2,13 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.element.ScreenElement;
 import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class ControllerButton extends AbstractSimiWidget
@@ -43,12 +44,13 @@ public class ControllerButton extends AbstractSimiWidget
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
         if (visible)
         {
             RenderSystem.setShaderColor(color.x() * colorFactor, color.y() * colorFactor, color.z() * colorFactor, 1.0F);
-            icon.render(matrixStack, x + deltaX, y + deltaY);
+            icon.render(graphics, getX() + deltaX, getY() + deltaY);
+            RenderSystem.setShaderColor(1, 1, 1, 1.0F);
         }
     }
 

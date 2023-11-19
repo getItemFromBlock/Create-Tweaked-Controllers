@@ -2,8 +2,8 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
-import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -20,9 +20,9 @@ public class MouseButtonScreen extends GenericInputScreen
     }
 
     @Override
-    protected void renderWindow(PoseStack ms, int x, int y, float partialTicks)
+    protected void renderWindow(GuiGraphics graphics, int x, int y, float partialTicks)
     {
-        super.renderWindow(ms, x, y, partialTicks);
+        super.renderWindow(graphics, x, y, partialTicks);
         source.invertValue = box.selected();
     }
 

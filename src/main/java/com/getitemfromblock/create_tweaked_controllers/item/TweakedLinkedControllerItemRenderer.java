@@ -2,6 +2,10 @@ package com.getitemfromblock.create_tweaked_controllers.item;
 
 import java.util.ArrayList;
 
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
@@ -10,8 +14,6 @@ import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
@@ -21,11 +23,10 @@ import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -128,21 +129,21 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
 
     @Override
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer,
-        ItemTransforms.TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light,
+        ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light,
         int overlay)
     {
         renderNormal(stack, model, renderer, transformType, ms, light);
     }
 
     protected static void renderNormal(ItemStack stack, CustomRenderedItemModel model,
-          PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
+          PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms,
           int light)
     {
         render(stack, model, renderer, transformType, ms, light, RenderType.NORMAL, false, false);
     }
 
     public static void renderInLectern(ItemStack stack, CustomRenderedItemModel model,
-          PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
+          PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms,
           int light, boolean active, boolean renderDepression)
     {
         render(stack, model, renderer, transformType, ms, light, RenderType.LECTERN, active, renderDepression);
@@ -170,7 +171,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
     };
 
     protected static void render(ItemStack stack, CustomRenderedItemModel model,
-          PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms,
+          PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms,
           int light, RenderType renderType, boolean active, boolean renderDepression)
     {
         float pt = AnimationTickHolder.getPartialTicks();
@@ -182,10 +183,10 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
         if (renderType == RenderType.NORMAL && mc.player != null)
         {
             boolean rightHanded = mc.options.mainHand().get() == HumanoidArm.RIGHT;
-            TransformType mainHand =
-                    rightHanded ? TransformType.FIRST_PERSON_RIGHT_HAND : TransformType.FIRST_PERSON_LEFT_HAND;
-            TransformType offHand =
-                    rightHanded ? TransformType.FIRST_PERSON_LEFT_HAND : TransformType.FIRST_PERSON_RIGHT_HAND;
+            ItemDisplayContext mainHand =
+                    rightHanded ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
+            ItemDisplayContext offHand =
+                    rightHanded ? ItemDisplayContext.FIRST_PERSON_LEFT_HAND : ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
 
             active = false;
             boolean noControllerInMain = !ModItems.TWEAKED_LINKED_CONTROLLER.isIn(mc.player.getMainHandItem());
@@ -193,7 +194,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
             if (transformType == mainHand || (transformType == offHand && noControllerInMain))
             {
                 float equip = equipProgress.getValue(pt);
-                int handModifier = transformType == TransformType.FIRST_PERSON_LEFT_HAND ? -1 : 1;
+                int handModifier = transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ? -1 : 1;
                 if ((transformType == mainHand && mc.player.getOffhandItem().isEmpty())
                     || (transformType == offHand && mc.player.getMainHandItem().isEmpty()))
                     {
@@ -211,7 +212,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
                 active = true;
             }
 
-            if (transformType == TransformType.GUI)
+            if (transformType == ItemDisplayContext.GUI)
             {
                 if (stack == mc.player.getMainHandItem())
                     active = true;
@@ -333,11 +334,19 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
                 x = axis.get(0).getValue(pt);
                 y = axis.get(1).getValue(pt);
             }
-            Vector3f axis = new Vector3f(-x, 0, -y);
+            Vector3f ax = new Vector3f(-x, 0, -y);
             double angle = x * x + y * y;
             angle = Math.min(Math.sqrt(angle), 1.0) * 0.6f;
-            axis.normalize();
-            ms.mulPose(new Quaternion(axis, (float)angle, false));
+            if (ax.lengthSquared() < 0.1f)
+            {
+                ax = new Vector3f(-1,0,-1).normalize();
+                angle = 0;
+            }
+            else
+            {
+                ax.normalize();
+            }
+            ms.mulPose(new Quaternionf(new AxisAngle4f((float)angle, ax)));
             if (renderDepression)
             {
                 float depression = b * buttons.get(isRight ? 10 : 9).getValue(pt);

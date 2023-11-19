@@ -1,15 +1,15 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import org.joml.Matrix4f;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.gui.element.DelegatedStencilElement;
 import com.simibubi.create.foundation.gui.element.ScreenElement;
 import com.simibubi.create.foundation.utility.Color;
 
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -64,24 +64,10 @@ public class DigitIconRenderer implements ScreenElement
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void bind()
-    {
-        RenderSystem.setShaderTexture(0, DIGIT_ATLAS);
-    }
-
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public void render(PoseStack matrixStack, int x, int y)
+    public void render(GuiGraphics graphics, int x, int y)
     {
-        bind();
-        GuiComponent.blit(matrixStack, x, y, 0, digitX, digitY, DIGIT_WIDTH, DIGIT_HEIGHT, DIGIT_ATLAS_SIZE, DIGIT_ATLAS_SIZE);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void render(PoseStack matrixStack, int x, int y, GuiComponent component)
-    {
-        bind();
-        component.blit(matrixStack, x, y, digitX, digitY, DIGIT_WIDTH, DIGIT_HEIGHT);
+        graphics.blit(DIGIT_ATLAS, x, y, 0, digitX, digitY, DIGIT_WIDTH, DIGIT_HEIGHT, DIGIT_ATLAS_SIZE, DIGIT_ATLAS_SIZE);
     }
 
     @OnlyIn(Dist.CLIENT)

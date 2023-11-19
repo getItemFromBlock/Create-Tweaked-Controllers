@@ -2,17 +2,18 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModControllerConfigScreen;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -81,12 +82,12 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             width = InputList.this.minecraft.font.width(name);
         }
 
-        public void render(PoseStack ms, int p_193889_, int p_193890_, int p_193891_, int p_193892_,
+        public void render(GuiGraphics graphics, int p_193889_, int p_193890_, int p_193891_, int p_193892_,
             int p_193893_, int p_193894_, int p_193895_, boolean p_193896_, float p_193897_)
         {
-            InputList.this.minecraft.font.draw(ms, name,
-                    (float) (InputList.this.minecraft.screen.width / 2 - width / 2),
-                    (float) (p_193890_ + p_193893_ - 9 - 1), 16777215);
+            graphics.drawString(InputList.this.minecraft.font, name,
+                    (int) (InputList.this.minecraft.screen.width / 2 - width / 2),
+                    (int) (p_193890_ + p_193893_ - 9 - 1), 16777215);
         }
 
         public boolean changeFocus(boolean value)
@@ -134,52 +135,50 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
         {
             key = input;
             name = text;
-            changeButton = new Button(0, 0, 95, 20, name, (b) -> {
+            changeButton = Button.builder(name, (b) -> {
                 InputList.this.modControllerConfigScreen.SetActiveInput(input);
-            }) {
-                protected MutableComponent createNarrationMessage()
-                {
+            }).bounds(0, 0, 95, 20).createNarration(new Button.CreateNarration() {
+                @Override
+                public MutableComponent createNarrationMessage(Supplier<MutableComponent> p_253695_) {
                     return (TweakedControlsUtil.profile.layout[key] != null) ? Component.translatable("narrator.controls.unbound", name)
-                            : Component.translatable("narrator.controls.bound", name,
-                                    super.createNarrationMessage());
+                            : Component.translatable("narrator.controls.bound", name);
                 }
-            };
-            resetButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_config_reset"), (b) -> {
+            }).build();
+            resetButton = Button.builder(CreateTweakedControllers.translateDirect("gui_config_reset"), (b) -> {
                 TweakedControlsUtil.profile.layout[key] = null;
                 TweakedControlsUtil.profile.UpdateProfileData();
-            }) {
-                protected MutableComponent createNarrationMessage()
-                {
+            }).bounds(0, 0, 50, 20).createNarration(new Button.CreateNarration() {
+                @Override
+                public MutableComponent createNarrationMessage(Supplier<MutableComponent> p_253695_) {
                     return Component.translatable("narrator.controls.reset", name);
                 }
-            };
-            configButton = new Button(0, 0, 50, 20, CreateTweakedControllers.translateDirect("gui_config_config"), (b) -> {
+            }).build();
+            configButton = Button.builder(CreateTweakedControllers.translateDirect("gui_config_config"), (b) -> {
                 ScreenOpener.open(TweakedControlsUtil.profile.layout[key].OpenConfigScreen(parent, name));
-            }) {
-                protected MutableComponent createNarrationMessage()
-                {
+            }).bounds(0, 0, 50, 20).createNarration(new Button.CreateNarration() {
+                @Override
+                public MutableComponent createNarrationMessage(Supplier<MutableComponent> p_253695_) {
                     return Component.translatable("narrator.controls.reset", name);
                 }
-            };
+            }).build();
         }
 
-        public void render(PoseStack p_193923_, int p_193924_, int p_193925_, int p_193926_, int p_193927_,
+        public void render(GuiGraphics p_193923_, int p_193924_, int p_193925_, int p_193926_, int p_193927_,
                 int p_193928_, int p_193929_, int p_193930_, boolean p_193931_, float p_193932_)
         {
             float f = (float) (p_193926_ + 40 - InputList.this.maxNameWidth);
-            InputList.this.minecraft.font.draw(p_193923_, name, f, (float) (p_193925_ + p_193928_ / 2 - 9 / 2),
-                    16777215);
+            p_193923_.drawString(InputList.this.minecraft.font, name, (int)f, (int)(p_193925_ + p_193928_ / 2 - 9 / 2), 16777215);
                     boolean active = TweakedControlsUtil.profile.layout[key] != null;
-            resetButton.x = p_193926_ + 155;
-            resetButton.y = p_193925_;
+            resetButton.setX(p_193926_ + 155);
+            resetButton.setY(p_193925_);
             resetButton.active = active;
             resetButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
-            configButton.x = p_193926_ + 210;
-            configButton.y = p_193925_;
+            configButton.setX(p_193926_ + 210);
+            configButton.setY(p_193925_);
             configButton.active = active;
             configButton.render(p_193923_, p_193929_, p_193930_, p_193932_);
-            changeButton.x = p_193926_ + 55;
-            changeButton.y = p_193925_;
+            changeButton.setX(p_193926_ + 55);
+            changeButton.setY(p_193925_);
             changeButton.setMessage((
                 active ?
                 TweakedControlsUtil.profile.layout[key].GetDisplayName() :

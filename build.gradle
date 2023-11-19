@@ -3,8 +3,11 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        jcenter()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
     }
     dependencies {
+
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
@@ -15,8 +18,9 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
+jarJar.enable()
 
-version = '1.19.2-1.2.2'
+version = '1.20.1-1.2.2'
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
 
@@ -38,7 +42,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: '1.20.1'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -160,11 +164,23 @@ repositories {
         name = 'tterrag maven'
         url = 'https://maven.tterrag.com/'
     }
-
+/*
     maven {
         // JEI
         name 'Progwm16 maven'
         url 'https://dvs1.progwml6.com/files/maven'
+    }
+    */
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        // location of the maven for Vazkii's mods
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of maven for CC: Tweaked
+        name = "squiddev"
+        url = "https://squiddev.cc/maven/"
     }
 }
 
@@ -180,15 +196,17 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
     //CONTROLLABLE COMPAT
-    compileOnly fg.deobf("curse.maven:controllable-${controllable_version}")
+    compileOnly(fg.deobf("curse.maven:controllable-${controllable_version}"))
     
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
+    compileOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}"))
 
     // CC TWEAKED COMPAT
-    compileOnly fg.deobf("curse.maven:cc-tweaked-${cc_tweaked_version}")
+    compileOnly("cc.tweaked:cc-tweaked-${cc_tweaked_mc_version}-core-api:${cc_tweaked_version}")
+    compileOnly fg.deobf("cc.tweaked:cc-tweaked-${cc_tweaked_mc_version}-forge-api:${cc_tweaked_version}")
+    runtimeOnly fg.deobf("cc.tweaked:cc-tweaked-${cc_tweaked_mc_version}-forge:${cc_tweaked_version}")
 
     //MIXINS
     if (System.getProperty('idea.sync.active') != 'true') {

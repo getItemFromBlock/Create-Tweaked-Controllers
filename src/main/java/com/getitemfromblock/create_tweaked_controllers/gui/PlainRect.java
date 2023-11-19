@@ -2,11 +2,12 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class PlainRect extends AbstractSimiWidget
@@ -40,12 +41,12 @@ public class PlainRect extends AbstractSimiWidget
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
         if (visible)
         {
-            int ix = Lerp(x, endX, extendValue);
-            int iy = Lerp(y, endY, extendValue);
+            int ix = Lerp(getX(), endX, extendValue);
+            int iy = Lerp(getY(), endY, extendValue);
             int iw = Lerp(width, endW, extendValue);
             int ih = Lerp(height, endH, extendValue);
             if (iw == 0 || ih == 0) return;
@@ -55,16 +56,16 @@ public class PlainRect extends AbstractSimiWidget
             {
                 if (iw < 0)
                 {
-                    PlainRectRenderer.render(matrixStack, ix + iw, iy, -iw, ih);
+                    PlainRectRenderer.render(graphics, ix + iw, iy, -iw, ih);
                 }
                 else
                 {
-                    PlainRectRenderer.render(matrixStack, ix, iy + ih, iw, -ih);
+                    PlainRectRenderer.render(graphics, ix, iy + ih, iw, -ih);
                 }
             }
             else
             {
-                PlainRectRenderer.render(matrixStack, ix, iy, iw, ih);
+                PlainRectRenderer.render(graphics, ix, iy, iw, ih);
             }
         }
     }

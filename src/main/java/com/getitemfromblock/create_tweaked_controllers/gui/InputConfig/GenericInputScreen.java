@@ -3,11 +3,11 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -33,9 +33,9 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
-        addRenderableWidget(new Button(width / 2 - 75, height - 29, 150, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (p_193996_) -> {
             ScreenOpener.open(parent);
-        }));
+        }).bounds(width / 2 - 75, height - 29, 150, 20).build());
         outputs = new EditBox[2];
         outputs[0] = new EditBox(font, width / 2, height - 85, 50, 20, CreateTweakedControllers.translateDirect("gui_output_button"));
         outputs[0].setEditable(false);
@@ -62,12 +62,12 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     }
 
     @Override
-    protected void renderWindow(PoseStack ms, int x, int y, float partialTicks)
+    protected void renderWindow(GuiGraphics graphics, int x, int y, float partialTicks)
     {
         TweakedControlsUtil.GuiUpdate();
         for (int i = 0; i < 2; i++)
         {
-            outputs[i].setFocus(false);
+            outputs[i].setFocused(false);
         }
         if (input.GetButtonValue())
         {
@@ -84,12 +84,12 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
         int col = Math.round(val * 0xbb);
         col = ((0xff - col) << 16) | ((0x44 + col) << 8) | 0x44;
         outputs[1].setTextColorUneditable(col);
-        font.draw(ms, CreateTweakedControllers.translateDirect("gui_output_button"), width / 2 - textwidth, height - 80, 0xaaaaaa);
-        font.draw(ms, CreateTweakedControllers.translateDirect("gui_output_axis"), width / 2 - textwidth, height - 55, 0xaaaaaa);
+        graphics.drawString(font, CreateTweakedControllers.translateDirect("gui_output_button"), width / 2 - textwidth, height - 80, 0xaaaaaa);
+        graphics.drawString(font, CreateTweakedControllers.translateDirect("gui_output_axis"), width / 2 - textwidth, height - 55, 0xaaaaaa);
         Component comp = input.GetDisplayName();
         String name = inputName.getString() + " : " + comp.getString();
         int w = font.width(name);
-        font.draw(ms, name, (width - w) / 2, 10, 0xffffff);
+        graphics.drawString(font, name, (width - w) / 2, 10, 0xffffff);
     }
 
     protected abstract void Populate();

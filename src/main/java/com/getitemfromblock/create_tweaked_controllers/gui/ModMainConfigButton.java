@@ -9,10 +9,13 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -28,17 +31,17 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class ModMainConfigButton extends Button
 {
-    public static final ItemStack ICON = ModItems.TWEAKED_LINKED_CONTROLLER.asStack(); // TODO
+    public static final ItemStack ICON = ModItems.TWEAKED_LINKED_CONTROLLER.asStack(); // TODO maybe put an icon
 
     public ModMainConfigButton(int x, int y)
     {
-        super(x, y, 20, 20, Components.immutableEmpty(), ModMainConfigButton::click);
+        super(x, y, 20, 20, Components.immutableEmpty(), ModMainConfigButton::click, DEFAULT_NARRATION);
     }
 
     @Override
-    public void renderBg(PoseStack ms, Minecraft mc, int mouseX, int mouseY)
+    public void renderString(GuiGraphics graphics, Font pFont, int pColor)
     {
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(ICON, x + 2, y + 2);
+        graphics.renderItem(ICON, getX() + 2, getY() + 2);
     }
 
     public static void click(Button b)
@@ -130,7 +133,7 @@ public class ModMainConfigButton extends Button
                         .equals(target))
                     .findFirst()
                     .ifPresent(w -> toAdd
-                        .setValue(new ModMainConfigButton(w.x + offsetX_ + (onLeft ? -20 : w.getWidth()), w.y)));
+                        .setValue(new ModMainConfigButton(w.getX() + offsetX_ + (onLeft ? -20 : w.getWidth()), w.getY())));
                 if (toAdd.getValue() != null)
                     event.addListener(toAdd.getValue());
             }

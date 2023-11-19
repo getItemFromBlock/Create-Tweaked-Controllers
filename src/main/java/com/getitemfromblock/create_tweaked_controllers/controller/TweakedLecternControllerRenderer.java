@@ -13,9 +13,9 @@ import com.simibubi.create.foundation.utility.AngleHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class TweakedLecternControllerRenderer extends SafeBlockEntityRenderer<TweakedLecternControllerBlockEntity>
@@ -31,7 +31,7 @@ public class TweakedLecternControllerRenderer extends SafeBlockEntityRenderer<Tw
         {
 
         ItemStack stack = ModItems.TWEAKED_LINKED_CONTROLLER.asStack();
-        TransformType transformType = TransformType.NONE;
+        ItemDisplayContext transformType = ItemDisplayContext.NONE;
         CustomRenderedItemModel mainModel = (CustomRenderedItemModel)Minecraft.getInstance()
             .getItemRenderer()
             .getModel(stack, be.getLevel(), null, 0);

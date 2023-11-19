@@ -41,7 +41,7 @@ public class CreateTweakedControllers
         forgeEventBus.register(this);
         eventBus.addListener(CreateTweakedControllers::init);
         REGISTRATE.registerEventListeners(eventBus);
-        ModTab.register();
+        ModTab.register(eventBus);
         ModItems.register();
         ModBlocks.register();
         ModBlockEntityTypes.register();

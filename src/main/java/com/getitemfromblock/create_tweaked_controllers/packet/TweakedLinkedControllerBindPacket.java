@@ -47,7 +47,7 @@ public class TweakedLinkedControllerBindPacket extends TweakedLinkedControllerPa
             return;
 
         ItemStackHandler frequencyItems = TweakedLinkedControllerItem.getFrequencyItems(heldItem);
-        LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(player.level, linkLocation, LinkBehaviour.TYPE);
+        LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(player.level(), linkLocation, LinkBehaviour.TYPE);
         if (linkBehaviour == null)
             return;
 

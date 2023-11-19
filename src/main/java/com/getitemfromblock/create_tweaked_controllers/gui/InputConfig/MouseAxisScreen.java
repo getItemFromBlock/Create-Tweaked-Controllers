@@ -2,9 +2,9 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,17 +26,17 @@ public class MouseAxisScreen extends GenericInputScreen
     }
 
     @Override
-    protected void renderWindow(PoseStack ms, int x, int y, float partialTicks)
+    protected void renderWindow(GuiGraphics graphics, int x, int y, float partialTicks)
     {
-        super.renderWindow(ms, x, y, partialTicks);
+        super.renderWindow(graphics, x, y, partialTicks);
         source.minBound = ParseFloatAndCorrectValue(bounds[0]);
         source.maxBound = ParseFloatAndCorrectValue(bounds[1]);
-        if (bounds[0].isFocused()) bounds[1].setFocus(false);
+        if (bounds[0].isFocused()) bounds[1].setFocused(false);
         valueRender.setValue(String.format("%.01f", source.GetRawInput()));
-        valueRender.setFocus(false);
-        font.draw(ms, CreateTweakedControllers.translateDirect("gui_config_lower"), width / 2 - boundsTextWidth, height / 2 - 40, 0xaaaaaa);
-        font.draw(ms, CreateTweakedControllers.translateDirect("gui_config_upper"),width / 2 - boundsTextWidth, height / 2 - 15, 0xaaaaaa);
-        font.draw(ms, CreateTweakedControllers.translateDirect("gui_input_axis"), width / 2 - textwidth, height - 105, 0xaaaaaa);
+        valueRender.setFocused(false);
+        graphics.drawString(font, CreateTweakedControllers.translateDirect("gui_config_lower"), width / 2 - boundsTextWidth, height / 2 - 40, 0xaaaaaa);
+        graphics.drawString(font, CreateTweakedControllers.translateDirect("gui_config_upper"),width / 2 - boundsTextWidth, height / 2 - 15, 0xaaaaaa);
+        graphics.drawString(font, CreateTweakedControllers.translateDirect("gui_input_axis"), width / 2 - textwidth, height - 105, 0xaaaaaa);
         source.isYAxis = isYBox.selected();
         source.useVelocity = useVelBox.selected();
     }

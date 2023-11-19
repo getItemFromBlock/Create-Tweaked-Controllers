@@ -1,25 +1,36 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+
+@EventBusSubscriber(bus = Bus.MOD)
 public class ModTab
 {
-    public static final CreativeModeTab MOD_TAB = new CreativeModeTab(CreateTweakedControllers.ID + ".base")
-    {
-        @Override
-        public ItemStack makeIcon()
+    private static final DeferredRegister<CreativeModeTab> REGISTER =
+        DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateTweakedControllers.ID);
+
+    public static final RegistryObject<CreativeModeTab> MOD_TAB = REGISTER.register("base",
+    () -> CreativeModeTab.builder()
+        .title(Component.translatable("itemGroup." + CreateTweakedControllers.ID + ".base"))
+        .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+        .icon(ModItems.TWEAKED_LINKED_CONTROLLER::asStack)
+        .displayItems((displayParams, output) ->
         {
-            return ModItems.TWEAKED_LINKED_CONTROLLER.asStack();
-        }
-    };
-    private static final CreateRegistrate REGISTRATE = CreateTweakedControllers.registrate();
+            output.accept(ModItems.TWEAKED_LINKED_CONTROLLER.get());
+        })
+        .build());
 
-    static {
-        REGISTRATE.creativeModeTab(() -> MOD_TAB, "Create: Tweaked Controllers");
+    public static void register(IEventBus modEventBus)
+    {
+        REGISTER.register(modEventBus);
     }
-
-    public static void register() {}
 }

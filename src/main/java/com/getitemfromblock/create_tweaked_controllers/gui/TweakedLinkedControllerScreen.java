@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.joml.Vector3f;
+
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
@@ -20,11 +20,11 @@ import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 
 public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<TweakedLinkedControllerMenu>
@@ -98,6 +98,11 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
             menu.SetPage(this.isSecondPage);
         });
         secondTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_axis"));
+        addRenderableWidget(resetButton);
+        addRenderableWidget(confirmButton);
+        addRenderableWidget(refreshButton);
+        addRenderableWidget(firstTabButton);
+        addRenderableWidget(secondTabButton);
         lStick = new JoystickIcon(x + 16, y + 26, ModIcons.I_LEFT_JOYSTICK);
         rStick = new JoystickIcon(x + 16, y + 89, ModIcons.I_RIGHT_JOYSTICK);
         controllerDigits = new DigitIcon[2];
@@ -112,12 +117,6 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
             axisDigits[i] = new DigitIcon(x + axisDigitPositions[i/3*2] + (i % 3) * 6, y + axisDigitPositions[i/3*2 + 1], DigitIconRenderer.D_DASH, new Vector3f(1, 0, 0));
             addRenderableOnly(axisDigits[i]);
         }
-
-        addRenderableWidget(resetButton);
-        addRenderableWidget(confirmButton);
-        addRenderableWidget(refreshButton);
-        addRenderableWidget(firstTabButton);
-        addRenderableWidget(secondTabButton);
         addRenderableOnly(lStick);
         addRenderableOnly(rStick);
 
@@ -125,18 +124,18 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     }
 
     @Override
-    protected void renderBg(PoseStack ms, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
     {
         int invX = getLeftOfCentered(PLAYER_INVENTORY.width);
         int invY = topPos + background0.height + 4;
-        renderPlayerInventory(ms, invX, invY);
+        renderPlayerInventory(graphics, invX, invY);
 
         int x = leftPos;
         int y = topPos;
         TweakedControlsUtil.Update();
         if (isSecondPage)
         {
-            background1.render(ms, x, y, this);
+            background1.render(graphics, x, y);
             Vec2 v = new Vec2(GamepadInputs.axis[0], GamepadInputs.axis[1]);
             if (v.lengthSquared() > 1)
                 v = v.normalized();
@@ -171,7 +170,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
         }
         else
         {
-            background0.render(ms, x, y, this);
+            background0.render(graphics, x, y);
             lStick.visible = false;
             rStick.visible = false;
             for (int i = 0; i < axisDigits.length; i++)
@@ -201,12 +200,12 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
         }
         controllerDigits[0].setToolTip(text);
         controllerDigits[1].setToolTip(text);
-        font.draw(ms, title, x + 15, y + 4, 0xFFFFFF);
+        graphics.drawString(font, title, x + 15, y + 4, 0xFFFFFF, false);
 
         GuiGameElement.of(menu.contentHolder).<GuiGameElement
             .GuiRenderBuilder>at(x + background0.width - 4, y + background0.height - 56, -200)
             .scale(5)
-            .render(ms);
+            .render(graphics);
     }
 
     @Override
@@ -220,25 +219,16 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     }
 
     @Override
-    protected void renderTooltip(PoseStack ms, int x, int y)
+    protected void renderTooltip(GuiGraphics graphics, int x, int y)
     {
         if (!menu.getCarried()
             .isEmpty() || this.hoveredSlot == null || this.hoveredSlot.hasItem()
             || hoveredSlot.container == menu.playerInventory)
         {
-            super.renderTooltip(ms, x, y);
+            super.renderTooltip(graphics, x, y);
             return;
         }
-        renderComponentTooltip(ms, addToTooltip(new LinkedList<>(), hoveredSlot.getSlotIndex()), x, y, font);
-    }
-
-    @Override
-    public List<Component> getTooltipFromItem(ItemStack stack)
-    {
-        List<Component> list = super.getTooltipFromItem(stack);
-        if (hoveredSlot.container == menu.playerInventory)
-            return list;
-        return hoveredSlot != null ? addToTooltip(list, hoveredSlot.getSlotIndex()) : list;
+        graphics.renderComponentTooltip(font, addToTooltip(new LinkedList<>(), hoveredSlot.getSlotIndex()), x, y);
     }
 
     private List<Component> addToTooltip(List<Component> list, int slot)

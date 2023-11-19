@@ -1,5 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import org.joml.Vector3f;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
@@ -14,11 +16,10 @@ import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import com.mojang.blaze3d.Blaze3D;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -95,7 +96,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     }
 
     @Override
-    protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks)
+    protected void renderWindow(GuiGraphics ms, int mouseX, int mouseY, float partialTicks)
     {
         TweakedControlsUtil.GuiUpdate();
         if (selectedInput != -1)
@@ -110,7 +111,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         inputBindsList.render(ms, mouseX, mouseY, partialTicks);
         int x = (width - background.width) / 2;
         int y =  10;
-        background.render(ms, x, y, this);
+        background.render(ms, x, y);
         Vec2 v = new Vec2(GamepadInputs.axis[0], GamepadInputs.axis[1]);
         if (v.lengthSquared() > 1)
             v = v.normalized();
@@ -253,9 +254,9 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     {
         inputBindsList = new InputList(this, minecraft);
         addWidget(inputBindsList);
-        addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 90, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (p_193996_) -> {
             ScreenOpener.open(parent);
-        }));
+        }).bounds(this.width / 2 - 155, this.height - 29, 90, 20).build());
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_config_reset_all"), (p_193999_) -> {
             TweakedControlsUtil.profile.InitDefaultLayout();
             TweakedControlsUtil.profile.UpdateProfileData();

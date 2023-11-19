@@ -2,12 +2,13 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.element.ScreenElement;
 import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class DigitIcon extends AbstractSimiWidget
@@ -29,13 +30,20 @@ public class DigitIcon extends AbstractSimiWidget
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void renderButton(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
         if (visible)
         {
             RenderSystem.setShaderColor(color.x(), color.y(), color.z(), 1.0F);
-            icon.render(matrixStack, x, y);
+            icon.render(graphics, getX(), getY());
+            RenderSystem.setShaderColor(1, 1, 1, 1.0F);
         }
+    }
+
+    @Override
+    public boolean isMouseOver(double mx, double my)
+    {
+        return this.visible && mx >= (double)this.getX() && my >= (double)this.getY() && mx < (double)(this.getX() + this.width) && my < (double)(this.getY() + this.height);
     }
 
     public void setToolTip(Component text)

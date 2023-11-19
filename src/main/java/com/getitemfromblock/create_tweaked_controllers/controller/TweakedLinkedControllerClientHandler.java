@@ -20,7 +20,6 @@ import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedContr
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerButtonPacket;
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerStopLecternPacket;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
@@ -30,6 +29,7 @@ import com.simibubi.create.foundation.utility.ControlsUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -42,7 +42,7 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 public class TweakedLinkedControllerClientHandler
 {
 
-    public static final IGuiOverlay  OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
+    public static final IGuiOverlay OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
 
     public static Mode MODE = Mode.IDLE;
     public static int PACKET_RATE = 5;
@@ -205,11 +205,11 @@ public class TweakedLinkedControllerClientHandler
             {
                 if ((pressedKeys & ~buttonStates) != 0)
                 {
-                    AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .75f, true);
+                    AllSoundEvents.CONTROLLER_CLICK.playAt(player.level(), player.blockPosition(), 1f, .75f, true);
                 }
                 if ((buttonStates & ~pressedKeys) != 0)
                 {
-                    AllSoundEvents.CONTROLLER_CLICK.playAt(player.level, player.blockPosition(), 1f, .5f, true);
+                    AllSoundEvents.CONTROLLER_CLICK.playAt(player.level(), player.blockPosition(), 1f, .5f, true);
                 }
                 ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
                 buttonPacketCooldown = PACKET_RATE;
@@ -284,7 +284,7 @@ public class TweakedLinkedControllerClientHandler
         }
     }
 
-    public static void renderOverlay(ForgeGui gui, PoseStack poseStack, float partialTicks, int width1,
+    public static void renderOverlay(ForgeGui gui, GuiGraphics graphics, float partialTicks, int width1,
         int height1) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui)
@@ -293,7 +293,7 @@ public class TweakedLinkedControllerClientHandler
         if (MODE != Mode.BIND)
             return;
 
-        poseStack.pushPose();
+        graphics.pose().pushPose();
         Screen tooltipScreen = new Screen(Components.immutableEmpty()) {};
         tooltipScreen.init(mc, width1, height1);
 
@@ -312,9 +312,9 @@ public class TweakedLinkedControllerClientHandler
         int y = height1 - height - 24;
 
         // TODO
-        tooltipScreen.renderComponentTooltip(poseStack, list, x, y);
+        graphics.renderComponentTooltip(Minecraft.getInstance().font, list, x, y);
 
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
     public enum Mode
