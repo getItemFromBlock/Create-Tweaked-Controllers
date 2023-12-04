@@ -6,55 +6,65 @@ import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import com.mrcrayfish.controllable.event.Value;
+import com.mrcrayfish.controllable.event.ControllerEvents.GatherActions;
+import com.mrcrayfish.controllable.event.ControllerEvents.Input;
+import com.mrcrayfish.controllable.event.ControllerEvents.UpdateCamera;
+import com.mrcrayfish.controllable.event.ControllerEvents.UpdateMovement;
 import com.mrcrayfish.controllable.event.ControllerEvents;
 import com.mrcrayfish.controllable.client.Action;
+import com.mrcrayfish.controllable.client.ActionVisibility;
 import com.mrcrayfish.controllable.client.binding.ButtonBinding;
 import com.mrcrayfish.controllable.client.binding.ButtonBindings;
+import com.mrcrayfish.controllable.client.input.Controller;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-@OnlyIn(Dist.CLIENT)
 public class ControllerHandler
 {
-    /*
-    @SubscribeEvent
-    public void onButtonInput(ControllerEvents.Button event)
+    private static Input ButtonEvent = new Input()
     {
-        if(event.getState() && event.getButton() != ButtonBindings.USE_ITEM.getButton() && TweakedLinkedControllerClientHandler.MODE != TweakedLinkedControllerClientHandler.Mode.IDLE)
+        @Override
+        public boolean handle(Controller arg0, Value<Integer> arg1, int arg2, boolean arg3)
         {
-            event.setCanceled(true);
+            return (TweakedLinkedControllerClientHandler.MODE != TweakedLinkedControllerClientHandler.Mode.IDLE && arg2 != ButtonBindings.USE_ITEM.getButton());
         }
-    }
+    };
 
-    @SubscribeEvent
-    public void onMoveEvent(ControllerEvents.UpdateMovement event)
+    private static UpdateMovement MoveEvent = new UpdateMovement()
     {
-        if(TweakedLinkedControllerClientHandler.MODE == TweakedLinkedControllerClientHandler.Mode.IDLE)
-            return;
-        event.setCanceled(true);
-    }
+        @Override
+        public boolean handle()
+        {
+            return (TweakedLinkedControllerClientHandler.MODE != TweakedLinkedControllerClientHandler.Mode.IDLE);
+        }
+    };
 
-    @SubscribeEvent
-    public void onTurnEvent(ControllerEvents.UpdateCamera event)
+    private static UpdateCamera CameraEvent = new UpdateCamera()
     {
-        if(TweakedLinkedControllerClientHandler.MODE == TweakedLinkedControllerClientHandler.Mode.IDLE)
-            return;
-            
-        event.setCanceled(true);
-    }
+        @Override
+        public boolean handle(Value<Float> arg0, Value<Float> arg1)
+        {
+            return (TweakedLinkedControllerClientHandler.MODE != TweakedLinkedControllerClientHandler.Mode.IDLE);
+        }
+    };
 
-    @SubscribeEvent
-    public void onAvailableActions(ControllerEvents.GatherActions event)
+    private static GatherActions GatherEvent = new GatherActions()
     {
-        if(TweakedLinkedControllerClientHandler.MODE == TweakedLinkedControllerClientHandler.Mode.IDLE)
-            return;
+        @Override
+        public void handle(Map<ButtonBinding, Action> actionMap, ActionVisibility arg1)
+        {
+            if(TweakedLinkedControllerClientHandler.MODE == TweakedLinkedControllerClientHandler.Mode.IDLE || arg1 == ActionVisibility.NONE)
+                return;
+            actionMap.clear();
+            actionMap.put(ButtonBindings.USE_ITEM, new Action(CreateTweakedControllers.translateDirect("keybind.controller_exit"), Action.Side.LEFT));
+            CreateTweakedControllers.log("Amogus");
+        }
+    };
 
-        Map<ButtonBinding, Action> actionMap = event.getActions();
-        actionMap.remove(ButtonBindings.ATTACK);
-        actionMap.remove(ButtonBindings.OPEN_INVENTORY);
-        actionMap.put(ButtonBindings.USE_ITEM, new Action(CreateTweakedControllers.translateDirect("keybind.controller_exit"), Action.Side.LEFT));
+    public static void Register()
+    {
+        ControllerEvents.INPUT.register(ButtonEvent);
+        ControllerEvents.UPDATE_MOVEMENT.register(MoveEvent);
+        ControllerEvents.UPDATE_CAMERA.register(CameraEvent);
+        ControllerEvents.GATHER_ACTIONS.register(GatherEvent);
     }
-    */
+    
 }

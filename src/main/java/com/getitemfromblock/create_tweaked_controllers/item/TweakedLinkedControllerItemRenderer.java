@@ -337,7 +337,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
             Vector3f ax = new Vector3f(-x, 0, -y);
             double angle = x * x + y * y;
             angle = Math.min(Math.sqrt(angle), 1.0) * 0.6f;
-            if (ax.lengthSquared() < 0.1f)
+            if (ax.lengthSquared() < 0.001f)
             {
                 ax = new Vector3f(-1,0,-1).normalize();
                 angle = 0;

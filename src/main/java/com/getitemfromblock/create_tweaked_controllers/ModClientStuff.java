@@ -3,7 +3,6 @@ package com.getitemfromblock.create_tweaked_controllers;
 import com.getitemfromblock.create_tweaked_controllers.compat.Controllable.ControllerHandler;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -27,7 +26,7 @@ public class ModClientStuff
         if(ModList.get().isLoaded("controllable"))
         {
             controllableLoaded = true;
-            MinecraftForge.EVENT_BUS.register(new ControllerHandler());
+            ControllerHandler.Register();
         }
         MouseCursorHandler.InitValues();
         //OverlayRegistry.registerOverlayAbove(ForgeIngameGui.HOTBAR_ELEMENT, "Create: Tweaked Controller's Tweaked Linked Controller", TweakedLinkedControllerClientHandler.OVERLAY);

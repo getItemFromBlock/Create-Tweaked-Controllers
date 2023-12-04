@@ -197,6 +197,7 @@ dependencies {
 
     //CONTROLLABLE COMPAT
     compileOnly(fg.deobf("curse.maven:controllable-${controllable_version}"))
+    implementation fg.deobf("curse.maven:framework-${framework_version}")
     
     //JEI
     compileOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"))
