@@ -55,7 +55,6 @@ public class ControllerHandler
                 return;
             actionMap.clear();
             actionMap.put(ButtonBindings.USE_ITEM, new Action(CreateTweakedControllers.translateDirect("keybind.controller_exit"), Action.Side.LEFT));
-            CreateTweakedControllers.log("Amogus");
         }
     };
 

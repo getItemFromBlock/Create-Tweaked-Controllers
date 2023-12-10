@@ -90,4 +90,9 @@ public class CreateTweakedControllers
     {
         Create.LOGGER.info(message);
     }
+
+    public static void error(String message)
+    {
+        Create.LOGGER.error(message);
+    }
 }
