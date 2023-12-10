@@ -15,7 +15,6 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-
 version = '1.19.2-1.2.2'
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
