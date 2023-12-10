@@ -157,10 +157,10 @@ public class ControlProfile
         }
         catch (IOException e)
         {
-            CreateTweakedControllers.log("Error loading controller profile \""+path+"\"!");
+            CreateTweakedControllers.error("Error loading controller profile \""+path+"\"!");
             for (StackTraceElement line : e.getStackTrace())
             {
-                CreateTweakedControllers.log(line.toString());
+                CreateTweakedControllers.error(line.toString());
             }
             return;
         }
@@ -195,10 +195,10 @@ public class ControlProfile
         }
         catch (IOException e)
         {
-            CreateTweakedControllers.log("Error loading controller profile \""+path+"\"!");
+            CreateTweakedControllers.error("Error loading controller profile \""+path+"\"!");
             for (StackTraceElement line : e.getStackTrace())
             {
-                CreateTweakedControllers.log(line.toString());
+                CreateTweakedControllers.error(line.toString());
             }
             return;
         }
