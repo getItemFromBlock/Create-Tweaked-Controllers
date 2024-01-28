@@ -41,9 +41,9 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     private PlainRect[] triggerAxis;
 
     private int selectedInput = -1;
-    private ControlType selectedProfile = ControlType.KEYBOARD_MOUSE;
-    private boolean saved = true;
     private InputList inputBindsList;
+    //private ControlType selectedProfile = ControlType.KEYBOARD_MOUSE;
+    private boolean saved = true;
 
     public ModControllerConfigScreen(Screen p)
     {
@@ -55,8 +55,8 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
-        selectedProfile = TweakedControlsUtil.GetActiveProfileType();
-        saved = true;
+        //selectedProfile = TweakedControlsUtil.GetActiveProfileType();
+        //saved = true;
         Populate();
     }
 
@@ -291,18 +291,19 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         inputBindsList = new InputList(this, minecraft);
         addWidget(inputBindsList);
         addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 90, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
-            attemptBackstep();
+            //attemptBackstep();
+            ScreenOpener.open(parent);
         }));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_config_reset_all"), (p_193999_) -> {
-            TweakedControlsUtil.profile.InitDefaultLayout(selectedProfile);
+            TweakedControlsUtil.profile.InitDefaultLayout(ControlType.KEYBOARD_MOUSE);
             TweakedControlsUtil.profile.UpdateProfileData();
         }, new Vector3f(1.0f, 0.3f, 0.3f)));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 200, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_save"), (p_193996_) -> {
-            TweakedControlsUtil.profile.Save(selectedProfile);
+            TweakedControlsUtil.profile.Save(0);
             saved = true;
         }, new Vector3f(0.5f, 0.5f, 1.0f)));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 250, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_load"), (p_193996_) -> {
-            TweakedControlsUtil.profile.Load(selectedProfile);
+            TweakedControlsUtil.profile.Load(0);
         }, new Vector3f(0.5f, 0.5f, 1.0f)));
         int x = (width - background.width) / 2;
         int y = 10;

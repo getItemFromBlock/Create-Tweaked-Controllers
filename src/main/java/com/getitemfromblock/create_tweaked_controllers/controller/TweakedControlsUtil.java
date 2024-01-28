@@ -36,7 +36,7 @@ public class TweakedControlsUtil
 
     private static void BackgroundUpdate()
     {
-        if (!ModClientConfig.AUTO_DETECT_INPUT_TYPE.get() || controlType.IsAdapted()) return;
+        //if (!ModClientConfig.AUTO_DETECT_INPUT_TYPE.get() || controlType.IsAdapted()) return;
         if (JoystickInputs.HasJoystick())
         {
             controlType = ControlType.JOYSTICK;
@@ -122,7 +122,7 @@ public class TweakedControlsUtil
     {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
-            BackgroundUpdate();
+            //BackgroundUpdate();
             HandleMouseKeyBinds();
             if (profile.hasJoystickInput)
             {
