@@ -40,13 +40,13 @@ Here is a list of supported devices:
 - Mouse cursor movements  
 - Official gamepads such as Xbox controllers or Playstation DualShock are supported  
 - Knockoff/alternate gamepads (like a Logitech controller) should work  
-- Joysticks/hotas/racing wheels and other devices are supported, unless they requires some funky drivers in which case I can't do anything for you  
+- Joysticks/hotas/racing wheels and other devices should be supported, but I have been proven wrong multiple times already, so if it does not you can still try a gamepad/xbox controller emulator.  
 - WiiMotes are (sadly) not supported  
 
 ## Remarks
 
-Due to a Create limitation, if a network is updated too many times it will break. This can happen if you connect an axis output to an Adjustable Chain Gearshift, for example. I might do something for this in the future.  
+Due to a Create limitation, if a network is updated too many times it will break. This can happen if you connect an axis output to an Adjustable Chain Gearshift, for example. This behavior has been disabled since version 1.2.3 of the mod.  
 
 The joystick axis are directly read from GLFW. With most if not all gamepads, the +X axis points to the right, and the +Y axis points down.
 
-IF YOU USE A NINTENDO CONTROLLER, YOU MIGHT WANNA TAKE A LOOK [AT THIS](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1).
+IF YOU USE A NINTENDO CONTROLLER, YOU MIGHT WANT TO TAKE A LOOK AT THIS: [https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1).
