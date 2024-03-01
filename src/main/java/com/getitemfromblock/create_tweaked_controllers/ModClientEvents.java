@@ -1,11 +1,13 @@
 package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.gui.ModConfigScreen;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
@@ -19,36 +21,44 @@ import net.minecraftforge.client.ConfigGuiHandler;
 public class ModClientEvents
 {
     @SubscribeEvent(priority = EventPriority.HIGHEST) // We need to catch the inputs as early as possible to cancel them
-	public static void onTick(ClientTickEvent event)
+    public static void onTick(ClientTickEvent event)
     {
-		if (!isGameActive())
-			return;
+        if (!isGameActive())
+            return;
 
-		//Level world = Minecraft.getInstance().level;
-		if (event.phase == Phase.START || Minecraft.getInstance().screen != null)
+        //Level world = Minecraft.getInstance().level;
+        if (event.phase == Phase.START || Minecraft.getInstance().screen != null)
         {
-			TweakedLinkedControllerClientHandler.tick();
-			return;
-		}
+            TweakedLinkedControllerClientHandler.tick();
+            return;
+        }
     }
 
-	protected static boolean isGameActive()
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void renderTick(RenderTickEvent event) // Cancel player/camera rotation just before rendering
     {
-		return !(Minecraft.getInstance().level == null || Minecraft.getInstance().player == null);
-	}
+        if (!isGameActive())
+            return;
+        MouseCursorHandler.CancelPlayerTurn();
+    }
 
-	@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-	public static class ModBusEvents
-	{
-		@SubscribeEvent
-		public static void onLoadComplete(FMLLoadCompleteEvent event)
-		{
-			ModContainer container = ModList.get()
-				.getModContainerById(CreateTweakedControllers.ID)
-				.orElseThrow(() -> new IllegalStateException("CreateTweakedControllers mod container missing on LoadComplete"));
-			container.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class,
-				() -> new ConfigGuiHandler.ConfigGuiFactory(
-					(mc, previousScreen) -> new ModConfigScreen(previousScreen)));
-		}
-	}
+    protected static boolean isGameActive()
+    {
+        return !(Minecraft.getInstance().level == null || Minecraft.getInstance().player == null);
+    }
+
+    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    public static class ModBusEvents
+    {
+        @SubscribeEvent
+        public static void onLoadComplete(FMLLoadCompleteEvent event)
+        {
+            ModContainer container = ModList.get()
+                .getModContainerById(CreateTweakedControllers.ID)
+                .orElseThrow(() -> new IllegalStateException("CreateTweakedControllers mod container missing on LoadComplete"));
+            container.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class,
+                () -> new ConfigGuiHandler.ConfigGuiFactory(
+                    (mc, previousScreen) -> new ModConfigScreen(previousScreen)));
+        }
+    }
 }
