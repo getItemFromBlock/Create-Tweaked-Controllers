@@ -110,7 +110,7 @@ public class ControlProfile
             GLFW.GLFW_KEY_Y,
             GLFW.GLFW_KEY_T,
             GLFW.GLFW_KEY_H,
-            GLFW.GLFW_KEY_J,
+            GLFW.GLFW_KEY_ENTER,
             GLFW.GLFW_KEY_UP,
             GLFW.GLFW_KEY_RIGHT,
             GLFW.GLFW_KEY_DOWN,
@@ -133,9 +133,9 @@ public class ControlProfile
     {
         for (int i = 0; i < 15; i++)
         {
-            if (i == 9 || i == 10)
+            if (i == 9)
             {
-                layout[i] = new MouseButtonInput(i - 9);
+                layout[i] = new MouseButtonInput(0);
             }
             else
             {
