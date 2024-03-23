@@ -337,15 +337,12 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
             Vector3f ax = new Vector3f(-x, 0, -y);
             double angle = x * x + y * y;
             angle = Math.min(Math.sqrt(angle), 1.0) * 0.6f;
-            if (ax.lengthSquared() < 0.001f)
+            if (ax.dot(ax) < 0.001f)
             {
-                ax = new Vector3f(-1,0,-1).normalize();
+                ax = new Vector3f(-1,0,-1);
                 angle = 0;
             }
-            else
-            {
-                ax.normalize();
-            }
+            ax.normalize();
             ms.mulPose(new Quaternionf(new AxisAngle4f((float)angle, ax)));
             if (renderDepression)
             {

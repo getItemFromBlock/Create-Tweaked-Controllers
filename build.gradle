@@ -9,6 +9,7 @@ buildscript {
     dependencies {
 
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -17,10 +18,17 @@ plugins {
     id 'maven-publish'
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, "${modid}.refmap.json"
+
+    config "${modid}.mixins.json"
+}
 
 jarJar.enable()
 
-version = '1.20.1-1.2.2'
+version = "${modversion}"
 group = 'com.getItemFromBlock.create_tweaked_controllers' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'create_tweaked_controllers'
 

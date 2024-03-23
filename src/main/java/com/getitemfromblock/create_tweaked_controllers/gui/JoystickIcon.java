@@ -35,7 +35,7 @@ public class JoystickIcon extends AbstractSimiWidget
     }
 
     @Override
-    public void renderButton(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
         if (visible)
         {

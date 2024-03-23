@@ -1,9 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.input;
 
-import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.Blaze3D;
+import org.joml.Vector3f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
@@ -19,7 +19,7 @@ public class MouseCursorHandler
     private static double lastMouseEventTime;
     private static boolean mouseLockActive = false;
     private static float deltaT = 0;
-    private static Vector2f savedRot = new Vector2f();
+    private static Vector3f savedRot = new Vector3f();
 
     public static Vec2 GetMousePos()
     {
@@ -96,6 +96,7 @@ public class MouseCursorHandler
         LocalPlayer player = Minecraft.getInstance().player;
         savedRot.x = player.getXRot();
         savedRot.y = player.getYRot();
+        savedRot.z = 0;
         mouseLockActive = true;
         lastPos = GetMousePos();
         lastMouseEventTime = Blaze3D.getTime();
