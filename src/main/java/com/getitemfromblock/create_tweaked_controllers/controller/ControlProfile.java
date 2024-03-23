@@ -28,16 +28,38 @@ public class ControlProfile
     public GenericInput[] layout = new GenericInput[25];
     public boolean hasJoystickInput = false;
     public ArrayList<KeyMapping> duplicatedKeys = new ArrayList<KeyMapping>();
+
+    public static final byte CURRENT_VERSION_MAJOR = (byte) 0x01;
+    public static final byte CURRENT_VERSION_MINOR = (byte) 0x00;
     
     public ControlProfile()
     {
+        //this(ControlType.KEYBOARD_MOUSE);
         this(0);
+    }
+
+    public ControlProfile(ControlType type)
+    {
+        CheckProfileUpgrade();
+        Load(type);
+        Save(type);
     }
 
     public ControlProfile(int id)
     {
         Load(0);
         Save(0);
+    }
+
+    public void Load(ControlType type)
+    {
+        Load("config/gamepad_profiles/gamepad_profile_" + type.toString(), type);
+        UpdateProfileData();
+    }
+
+    public void Save(ControlType type)
+    {
+        Save("config/gamepad_profiles/gamepad_profile_" + type.toString());
     }
 
     public void Load(int id)
@@ -49,6 +71,31 @@ public class ControlProfile
     public void Save(int id)
     {
         Save("config/gamepad_profiles/gamepad_profile_" + id);
+    }
+
+    private void CheckProfileUpgrade()
+    {
+        File f = new File("config/gamepad_profiles/gamepad_profile_0");
+        if(!f.exists() || f.isDirectory())
+        {
+            return;
+        }
+        Load("config/gamepad_profiles/gamepad_profile_0", ControlType.CUSTOM_0, false);
+        Save(ControlType.CUSTOM_0);
+        try
+        {
+            f.delete();
+        }
+        catch (Exception e)
+        {
+            CreateTweakedControllers.error("Error upgrading old controller profile: could not delete old file \"config/gamepad_profiles/gamepad_profile_0\"!");
+            CreateTweakedControllers.error(e.getMessage());
+            for (StackTraceElement line : e.getStackTrace())
+            {
+                CreateTweakedControllers.error(line.toString());
+            }
+            return;
+        }
     }
 
     static final int[] keys = 
@@ -63,20 +110,32 @@ public class ControlProfile
             GLFW.GLFW_KEY_Y,
             GLFW.GLFW_KEY_T,
             GLFW.GLFW_KEY_H,
-            GLFW.GLFW_KEY_J,
+            GLFW.GLFW_KEY_ENTER,
             GLFW.GLFW_KEY_UP,
             GLFW.GLFW_KEY_RIGHT,
             GLFW.GLFW_KEY_DOWN,
             GLFW.GLFW_KEY_LEFT
         };
 
-    public void InitDefaultLayout()
+    public void InitDefaultLayout(ControlType fallbackType)
+    {
+        if (fallbackType == ControlType.JOYSTICK)
+        {
+            InitDefaultGamepadLayout();
+        }
+        else
+        {
+            InitDefaultKeyboardLayout();
+        }
+    }
+
+    public void InitDefaultKeyboardLayout()
     {
         for (int i = 0; i < 15; i++)
         {
-            if (i == 9 || i == 10)
+            if (i == 9)
             {
-                layout[i] = new MouseButtonInput(i - 9);
+                layout[i] = new MouseButtonInput(0);
             }
             else
             {
@@ -114,12 +173,121 @@ public class ControlProfile
         }
     }
 
-    public void Load(String path)
+    public void InitDefaultGamepadLayout()
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            layout[i] = new JoystickButtonInput(i);
+        }
+        for (int i = 15; i < 25; i++)
+        {
+            if (i == 16 || i == 18 || i == 20 || i == 22)
+            {
+                layout[i] = new JoystickAxisInput(i - 15, 0.05f, -1.0f);
+            }
+            else if (i > 22)
+            {
+                layout[i] = new JoystickAxisInput(i - 15, -1.0f, 1.0f);
+            }
+            else
+            {
+                layout[i] = new JoystickAxisInput(i - 15, 0.05f, 1.0f);
+            }
+        }
+    }
+
+    private void Load(String path, ControlType fallbackType)
+    {
+        Load(path, fallbackType, true);
+    }
+
+    static final byte[] headerNameData = 
+        {
+            'C',
+            'T',
+            'C',
+            'P',
+            'R',
+            'F',
+        };
+
+    private void Load(String path, ControlType fallbackType, boolean hasHeader)
     {
         File f = new File(path);
         if(!f.exists() || f.isDirectory())
         {
-            InitDefaultLayout();
+            InitDefaultLayout(fallbackType);
+            return;
+        }
+        else try
+        {
+            FileInputStream file = new FileInputStream(f);
+            DataInputStream buf = new DataInputStream(file);
+            int version = 0;
+            if (hasHeader)
+            {
+                byte[] header = buf.readNBytes(8);
+                boolean valid = header.length == 8;
+                for (int i = 0; i < 6 && valid; i++)
+                {
+                    if (header[i] != headerNameData[i])
+                    {
+                        valid = false;
+                    }
+                }
+                if (!valid)
+                {
+                    file.close();
+                    throw new IOException("Corrupted Profile Data!");
+                }
+                version = 256 * header[6] + header[7];
+            }
+            for (int i = 0; i < layout.length; i++)
+            {
+                switch (InputType.GetType(buf.readByte()))
+                {
+                    case NONE:
+                        layout[i] = null;
+                        break;
+                    case JOYSTICK_BUTTON:
+                        layout[i] = new JoystickButtonInput();
+                        break;
+                    case JOYSTICK_AXIS:
+                        layout[i] = new JoystickAxisInput();
+                        break;
+                    case MOUSE_BUTTON:
+                        layout[i] = new MouseButtonInput();
+                        break;
+                    case MOUSE_AXIS:
+                        layout[i] = new MouseAxisInput();
+                        break;
+                    case KEYBOARD_KEY:
+                        layout[i] = new KeyboardInput();
+                        break;
+                    default:
+                        throw new IOException("Corrupted Profile Data!");
+                }
+                if (layout[i] != null) layout[i].Deserialize(buf);
+            }
+            file.close();
+        }
+        catch (IOException e)
+        {
+            CreateTweakedControllers.error("Error loading controller profile \""+path+"\"!");
+            for (StackTraceElement line : e.getStackTrace())
+            {
+                CreateTweakedControllers.error(line.toString());
+            }
+            return;
+        }
+    }
+
+    private void Load(String path)
+    {
+        File f = new File(path);
+        if(!f.exists() || f.isDirectory())
+        {
+            InitDefaultLayout(ControlType.KEYBOARD_MOUSE);
             return;
         }
         else try
@@ -179,6 +347,14 @@ public class ControlProfile
             f.createNewFile();
             FileOutputStream file = new FileOutputStream(f);
             DataOutputStream buf = new DataOutputStream(file);
+            /*
+            for (int i = 0; i < headerNameData.length; i++)
+            {
+                buf.writeByte(headerNameData[i]);
+            }
+            buf.writeByte(CURRENT_VERSION_MAJOR);
+            buf.writeByte(CURRENT_VERSION_MINOR);
+            */
             for (int i = 0; i < layout.length; i++)
             {
                 if (layout[i] != null)

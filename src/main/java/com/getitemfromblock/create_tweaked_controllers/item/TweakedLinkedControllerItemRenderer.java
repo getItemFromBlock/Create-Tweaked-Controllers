@@ -333,11 +333,16 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
                 x = axis.get(0).getValue(pt);
                 y = axis.get(1).getValue(pt);
             }
-            Vector3f axis = new Vector3f(-x, 0, -y);
+            Vector3f ax = new Vector3f(-x, 0, -y);
             double angle = x * x + y * y;
             angle = Math.min(Math.sqrt(angle), 1.0) * 0.6f;
-            axis.normalize();
-            ms.mulPose(new Quaternion(axis, (float)angle, false));
+            if (ax.dot(ax) < 0.001f)
+            {
+                ax = new Vector3f(-1,0,-1);
+                angle = 0;
+            }
+            ax.normalize();
+            ms.mulPose(new Quaternion(ax, (float)angle, false));
             if (renderDepression)
             {
                 float depression = b * buttons.get(isRight ? 10 : 9).getValue(pt);
