@@ -6,6 +6,7 @@ A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you 
 
 CurseForge link [here](https://www.curseforge.com/minecraft/mc-mods/create-tweaked-controllers)  
 Modrinth link [here](https://modrinth.com/mod/create-tweaked-controllers)  
+Discord link [here](https://discord.gg/3AvrppcgG3) (search for the Tweaked Controllers channel)  
 
 ## Building
 
