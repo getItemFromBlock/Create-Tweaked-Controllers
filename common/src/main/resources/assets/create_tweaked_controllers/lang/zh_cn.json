@@ -61,9 +61,9 @@
     "create_tweaked_controllers.gui_gamepad_axis_8": "左扳机键",
     "create_tweaked_controllers.gui_gamepad_axis_9": "右扳机键",
     
-    "create_tweaked_controllers.gui_input_joystick_axis": "Joystick Axis %1$s",
-    "create_tweaked_controllers.gui_input_joystick_button": "Joystick Button %1$s",
-    "create_tweaked_controllers.gui_input_keyboard": "%1$s Key",
+    "create_tweaked_controllers.gui_input_joystick_axis": "移动摇杆 %1$s",
+    "create_tweaked_controllers.gui_input_joystick_button": "按下摇杆 %1$s",
+    "create_tweaked_controllers.gui_input_keyboard": "%1$s 按键",
     "create_tweaked_controllers.gui_input_cursor_vel": "指针 %1$s 速度",
     "create_tweaked_controllers.gui_input_cursor_pos": "指针 %1$s 位置",
     "create_tweaked_controllers.gui_input_mouse": "鼠标按键 %1$s",
