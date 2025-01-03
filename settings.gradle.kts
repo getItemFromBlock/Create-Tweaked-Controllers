@@ -9,10 +9,13 @@ pluginManagement {
             url = uri("https://maven.architectury.dev/")
         }
         maven {
-            name = "forgemc"
+            name = "forge"
             url = uri("https://maven.minecraftforge.net/")
         }
         gradlePluginPortal()
+    }
+    plugins {
+        kotlin("jvm") version "2.1.0"
     }
 }
 

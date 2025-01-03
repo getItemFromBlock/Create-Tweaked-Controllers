@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.github.johnrengelman.shadow" version "${shadow_plugin_version}"
 }
 
 architectury {
@@ -12,8 +12,8 @@ configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
-            runtimeClasspath.extendsFrom common
-            developmentFabric.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
 }
 
 repositories {
@@ -47,14 +47,27 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "mod_id", "${mod_id}"
+    inputs.property "version", "${version}"
+    inputs.property "name", "${name}"
+    inputs.property "description", "${description}"
+    inputs.property "authors", "${authors}"
+    inputs.property "github_project", "${github_project}"
+    inputs.property "fabric_loader_version", "${fabric_loader_version}"
+    inputs.property "minecraft_version", "${minecraft_version}"
+    inputs.property "architectury_version", "${architectury_version}"
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
-        expand "name": project.name
-        expand "archives_base_name": project.archives_base_name
-        expand "description": project.description
-        expand "github_project": project.github_project
+        expand( "mod_id": "${mod_id}",
+                "version": "${version}",
+                "name": "${name}",
+                "description": "${description}",
+                "authors": "${authors}",
+                "github_project": project.github_project,
+                "fabric_loader_version": "${fabric_loader_version}",
+                "minecraft_version": "${minecraft_version}",
+                "architectury_version": "${architectury_version}"
+        )
     }
 }
 

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "${archives_base_name}",
+  "id": "${mod_id}",
   "version": "${version}",
   "name": "${name}",
   "description": "${description}",
   "authors": [
-    "getItemFromBlock"
+    "${authors}"
   ],
   "contact": {
     "sources": "https://github.com/${github_project}/"
@@ -15,14 +15,17 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.getitemfromblock.create_tweaked_controller.fabric.TextBlockFabric"
+      "com.getitemfromblock.create_tweaked_controllers.fabric.TextBlockFabric"
     ],
     "client": [
       "io.github.slimeymc.text_block.fabric.TextBlockClientFabric"
     ]
   },
+  "mixins": [
+    "create_tweaked_controllers.mixins.json"
+  ],
   "depends": {
-    "minecraft": "1.18.2",
-    "fabricloader": ">=0.14.21"
+    "minecraft": "${minecraft_version}",
+    "fabricloader": ">=${fabric_loader_version}"
   }
 }

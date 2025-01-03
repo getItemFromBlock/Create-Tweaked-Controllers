@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.github.johnrengelman.shadow" version "${shadow_plugin_version}"
 }
 
 architectury {
@@ -11,8 +11,8 @@ configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
-            runtimeClasspath.extendsFrom common
-            developmentForge.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
 }
 
 repositories {
@@ -26,6 +26,11 @@ repositories {
         }
         maven { url = uri("https://thedarkcolour.github.io/KotlinForForge/") }
     }
+    maven {
+        // JEI
+        name 'Progwm16 maven'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
 }
 
 dependencies {
@@ -37,7 +42,8 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     // Create
-    modImplementation("com.simibubi.create:create-${rootProject.minecraft_version}:${rootProject.create_forge_version}") { transitive = false }
+    modImplementation("com.simibubi.create:create-${rootProject.minecraft_version}:${rootProject.create_forge_version}:slim") { transitive = false }
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-${rootProject.minecraft_version}:${rootProject.flywheel_version_forge}")
 
     // CC Tweaked
     modRuntimeOnly("maven.modrinth:cc-tweaked:${rootProject.minecraft_version}-${rootProject.cc_tweaked_version}")
@@ -46,14 +52,31 @@ dependencies {
     modRuntimeOnly("curse.maven:controllable-317269:${rootProject.controllable_version}")
 
     // Recipe viewer
-    modLocalRuntime("mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}")
+    modLocalRuntime("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}")
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "mod_id", "${mod_id}"
+    inputs.property "version", "${version}"
+    inputs.property "name", "${name}"
+    inputs.property "description", "${description}"
+    inputs.property "authors", "${authors}"
+    inputs.property "github_project", "${github_project}"
+    inputs.property "forge_range", "${forge_range}"
+    inputs.property "create_range", "${create_range}"
+    inputs.property "minecraft_range", "${minecraft_range}"
 
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand( "mod_id": "${mod_id}",
+                "version": "${version}",
+                "name": "${name}",
+                "description": "${description}",
+                "authors": "${authors}",
+                "github_project": project.github_project,
+                "forge_range": "${forge_range}",
+                "create_range": "${create_range}",
+                "minecraft_range": "${minecraft_range}"
+        )
     }
 }
 
