@@ -1,0 +1,47 @@
+[versions]
+kotlin = "1.8.21"
+minecraft = "1.18.2"
+architectury = "4.11.93" # Might check each subproject
+
+forge = "1.18.2-40.2.4"
+
+fabric_loader = "0.15.7"
+fabric_api = "0.77.0+1.18.2"
+
+create_fabric = "0.5.1-f-build.1415"
+create_forge = "0.5.1.f-332"
+
+cc_restitched = "1.100.8+1.18.2"
+cc_tweaked = "1.18.2-1.101.3"
+
+jei = "9.7.0.209"
+emi = "0.7.3+1.18.2"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+common_architectury = { module = "dev.architectury:architectury", version.ref = "architectury" }
+
+# Forge
+forge_architectury = { module = "dev.architectury:architectury-forge", version.ref = "architectury" }
+forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
+
+# Fabric
+fabric_architectury = { module = "dev.architectury:architectury-fabric", version.ref = "architectury" }
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
+
+# Create
+fabric_create = { module = "com.simibubi.create:create-fabric-1.18.2", version.ref = "create_fabric" }
+forge_create = { module = "com.simibubi.create:create-1.18.2", version.ref = "create_forge" }
+
+# ComputerCraft
+fabric_computercraft = { module = "maven.modrinth:cc-restitched", version.ref = "cc_restitched" }
+forge_computercraft = { module = "maven.modrinth:cc-tweaked", version.ref = "cc_tweaked" }
+
+# Controllable
+# forge_controllable = { module = "com.mrcrayfish:controllable-forge"}
+forge_controllable = { module = "curse.maven:controllable-317269", version = "4376751" }
+
+# Recipe Viewer
+fabric_emi = { module = "dev.emi:emi", version.ref = "emi" }
+forge_jei = { module = "mezz.jei:jei-1.18.2", version.ref = "jei"}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "${archives_base_name}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "${description}",
+  "authors": [
+    "getItemFromBlock"
+  ],
+  "contact": {
+    "sources": "https://github.com/${github_project}/"
+  },
+  "license": "MIT",
+  "icon": "assets/create_tweaked_controllers/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.getitemfromblock.create_tweaked_controller.fabric.TextBlockFabric"
+    ],
+    "client": [
+      "io.github.slimeymc.text_block.fabric.TextBlockClientFabric"
+    ]
+  },
+  "depends": {
+    "minecraft": "1.18.2",
+    "fabricloader": ">=0.14.21"
+  }
+}
