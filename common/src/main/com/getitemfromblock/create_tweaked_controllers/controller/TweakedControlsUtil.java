@@ -14,12 +14,38 @@ public class TweakedControlsUtil
     private static boolean lastFocusKeyState = false;
     private static boolean isFocusActive = false;
     private static boolean wasFocusActive = false;
+    private static ControlType controlType = ControlType.KEYBOARD_MOUSE;
+
+    public static ControlType GetActiveProfileType()
+    {
+        return controlType;
+    }
 
     public static void FreeFocus()
     {
         isFocusActive = false;
         lastFocusKeyState = false;
         wasFocusActive = false;
+    }
+
+    public static void SelectProfileType(ControlType type)
+    {
+        profile.Load(type);
+        controlType = type;
+    }
+
+    private static void BackgroundUpdate()
+    {
+        //if (!ModClientConfig.AUTO_DETECT_INPUT_TYPE.get() || controlType.IsAdapted()) return;
+        if (JoystickInputs.HasJoystick())
+        {
+            controlType = ControlType.JOYSTICK;
+        }
+        else
+        {
+            controlType = ControlType.KEYBOARD_MOUSE;
+        }
+        profile.Load(controlType);
     }
 
     public static void GuiUpdate()
@@ -96,6 +122,7 @@ public class TweakedControlsUtil
     {
         if (ModClientConfig.USE_CUSTOM_MAPPINGS.get())
         {
+            //BackgroundUpdate();
             HandleMouseKeyBinds();
             if (profile.hasJoystickInput)
             {

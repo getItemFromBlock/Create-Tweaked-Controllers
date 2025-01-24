@@ -1,7 +1,10 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import java.util.function.Consumer;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
+import com.getitemfromblock.create_tweaked_controllers.controller.ControlType;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.ColoredButton;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.InputList;
@@ -17,11 +20,14 @@ import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
+import com.simibubi.create.foundation.gui.ConfirmationScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
+import com.simibubi.create.foundation.gui.ConfirmationScreen.Response;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 
@@ -36,6 +42,8 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
 
     private int selectedInput = -1;
     private InputList inputBindsList;
+    //private ControlType selectedProfile = ControlType.KEYBOARD_MOUSE;
+    private boolean saved = true;
 
     public ModControllerConfigScreen(Screen p)
     {
@@ -47,12 +55,40 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
+        //selectedProfile = TweakedControlsUtil.GetActiveProfileType();
+        //saved = true;
         Populate();
     }
 
     @Override
     public void tick()
     {
+    }
+
+    private void attemptBackstep()
+    {
+        if (saved)
+        {
+            ScreenOpener.open(parent);
+            return;
+        }
+
+        showLeavingPrompt(success -> {
+            if (success == Response.Cancel)
+                return;
+            if (success == Response.Confirm)
+                //saveChanges();
+            ScreenOpener.open(parent);
+        });
+    }
+
+    protected void showLeavingPrompt(Consumer<ConfirmationScreen.Response> action)
+    {
+        ConfirmationScreen screen = new ConfirmationScreen()
+                .centered()
+                .withThreeActions(action)
+                .addText(FormattedText.of("Leaving with unsaved change(s) for this config"));
+        screen.open(this);
     }
 
     @Override
@@ -94,17 +130,71 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         }
     }
 
+    protected void renderSelectedInput()
+    {
+        if (selectedInput == -1) return;
+        float val = (Mth.sin((float)Blaze3D.getTime() * Mth.PI * 4) + 1) / 2;
+        if (selectedInput < 15)
+        {
+            controllerButtons[selectedInput].SetColorFactor(Mth.lerp(val, 50/255.0f, 1.0f));
+        }
+        else if (selectedInput < 23)
+        {
+            int vx = 0;
+            int vy = 0;
+            switch (selectedInput)
+            {
+                case 15:
+                    vx = (int)(val * 10);
+                    break;
+                case 16:
+                    vx = (int)(-val * 10);
+                    break;
+                case 17:
+                    vy = (int)(val * 10);
+                    break;
+                case 18:
+                    vy = (int)(-val * 10);
+                    break;
+                case 19:
+                    vx = (int)(val * 10);
+                    break;
+                case 20:
+                    vx = (int)(-val * 10);
+                    break;
+                case 21:
+                    vy = (int)(val * 10);
+                    break;
+                default:
+                vy = (int)(-val * 10);
+                    break;
+            }
+            if (selectedInput < 19)
+            {
+                lStick.move(vx, vy);
+                controllerButtons[9].move(vx, vy);
+            }
+            else
+            {
+                rStick.move(vx, vy);
+                controllerButtons[10].move(vx, vy);
+            }
+        }
+        else
+        {
+            triggerAxis[selectedInput-23].SetValue(val);
+        }
+    }
+
     @Override
     protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks)
     {
         TweakedControlsUtil.GuiUpdate();
-        if (selectedInput != -1)
+        if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
         {
-            if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
-            {
-                selectedInput = -1;
-                TweakedControlsUtil.profile.UpdateProfileData();
-            }
+            selectedInput = -1;
+            saved = false;
+            TweakedControlsUtil.profile.UpdateProfileData();
         }
         
         inputBindsList.render(ms, mouseX, mouseY, partialTicks);
@@ -133,60 +223,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         {
             controllerButtons[i].SetColorFactor(GamepadInputs.buttons[i] ? 1.0f : 50/255.0f);
         }
-        if (selectedInput != -1)
-        {
-            float val = (Mth.sin((float)Blaze3D.getTime() * Mth.PI * 4) + 1) / 2;
-            if (selectedInput < 15)
-            {
-                controllerButtons[selectedInput].SetColorFactor(Mth.lerp(val, 50/255.0f, 1.0f));
-            }
-            else if (selectedInput < 23)
-            {
-                vx = 0;
-                vy = 0;
-                switch (selectedInput)
-                {
-                    case 15:
-                        vx = (int)(val * 10);
-                        break;
-                    case 16:
-                        vx = (int)(-val * 10);
-                        break;
-                    case 17:
-                        vy = (int)(val * 10);
-                        break;
-                    case 18:
-                        vy = (int)(-val * 10);
-                        break;
-                    case 19:
-                        vx = (int)(val * 10);
-                        break;
-                    case 20:
-                        vx = (int)(-val * 10);
-                        break;
-                    case 21:
-                        vy = (int)(val * 10);
-                        break;
-                    default:
-                    vy = (int)(-val * 10);
-                        break;
-                }
-                if (selectedInput < 19)
-                {
-                    lStick.move(vx, vy);
-                    controllerButtons[9].move(vx, vy);
-                }
-                else
-                {
-                    rStick.move(vx, vy);
-                    controllerButtons[10].move(vx, vy);
-                }
-            }
-            else
-            {
-                triggerAxis[selectedInput-23].SetValue(val);
-            }
-        }
+        renderSelectedInput();
     }
 
     public void SetActiveInput(int index)
@@ -254,14 +291,16 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         inputBindsList = new InputList(this, minecraft);
         addWidget(inputBindsList);
         addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 90, 20, CommonComponents.GUI_DONE, (p_193996_) -> {
+            //attemptBackstep();
             ScreenOpener.open(parent);
         }));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 100, this.height - 29, 90, 20, CreateTweakedControllers.translateDirect("gui_config_reset_all"), (p_193999_) -> {
-            TweakedControlsUtil.profile.InitDefaultLayout();
+            TweakedControlsUtil.profile.InitDefaultLayout(ControlType.KEYBOARD_MOUSE);
             TweakedControlsUtil.profile.UpdateProfileData();
         }, new Vector3f(1.0f, 0.3f, 0.3f)));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 200, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_save"), (p_193996_) -> {
             TweakedControlsUtil.profile.Save(0);
+            saved = true;
         }, new Vector3f(0.5f, 0.5f, 1.0f)));
         addRenderableWidget(new ColoredButton(this.width / 2 - 155 + 250, this.height - 29, 40, 20, CreateTweakedControllers.translateDirect("gui_config_load"), (p_193996_) -> {
             TweakedControlsUtil.profile.Load(0);
