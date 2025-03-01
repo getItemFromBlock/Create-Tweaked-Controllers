@@ -21,11 +21,10 @@ import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedContr
 import com.getitemfromblock.create_tweaked_controllers.packet.TweakedLinkedControllerStopLecternPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.ControlsUtil;
+import net.createmod.catnip.outliner.Outliner;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -34,6 +33,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -246,7 +246,7 @@ public class TweakedLinkedControllerClientHandler
             VoxelShape shape = mc.level.getBlockState(selectedLocation)
                 .getShape(mc.level, selectedLocation);
             if (!shape.isEmpty())
-                CreateClient.OUTLINER.showAABB("controller", shape.bounds()
+                Outliner.getInstance().showAABB("controller", shape.bounds()
                     .move(selectedLocation))
                     .colored(0x0104FF)
                     .lineWidth(1 / 16f);
@@ -294,7 +294,7 @@ public class TweakedLinkedControllerClientHandler
             return;
 
         graphics.pose().pushPose();
-        Screen tooltipScreen = new Screen(Components.immutableEmpty()) {};
+        Screen tooltipScreen = new Screen(CommonComponents.EMPTY) {};
         tooltipScreen.init(mc, width1, height1);
 
         List<Component> list = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.simibubi.create.foundation.gui.element.ScreenElement;
+import net.createmod.catnip.gui.element.ScreenElement;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;

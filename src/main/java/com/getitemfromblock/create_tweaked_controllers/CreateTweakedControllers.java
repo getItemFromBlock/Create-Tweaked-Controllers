@@ -8,11 +8,10 @@ import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+import net.createmod.catnip.lang.LangBuilder;
 
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -68,12 +67,12 @@ public class CreateTweakedControllers
 
     public static MutableComponent translateDirect(String key, Object... args)
     {
-        return Components.translatable(CreateTweakedControllers.ID + "." + key, Lang.resolveBuilders(args));
+        return Component.translatable(CreateTweakedControllers.ID + "." + key, LangBuilder.resolveBuilders(args));
     }
 
     public static MutableComponent translateDirectRaw(String key, Object... args)
     {
-        return Components.translatable(key, Lang.resolveBuilders(args));
+        return Component.translatable(key, LangBuilder.resolveBuilders(args));
     }
 
     public static LangBuilder builder()

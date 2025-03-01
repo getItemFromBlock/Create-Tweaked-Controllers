@@ -4,12 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.google.common.collect.ImmutableList;
+
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModControllerConfigScreen;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
-import com.google.common.collect.ImmutableList;
-import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.createmod.catnip.gui.ScreenOpener;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

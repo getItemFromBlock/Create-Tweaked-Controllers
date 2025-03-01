@@ -2,10 +2,10 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
-import com.simibubi.create.foundation.config.ui.ConfigScreen;
-import com.simibubi.create.foundation.config.ui.SubMenuConfigScreen;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.createmod.catnip.config.ui.ConfigScreen;
+import net.createmod.catnip.config.ui.SubMenuConfigScreen;
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.ScreenOpener;
 
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;

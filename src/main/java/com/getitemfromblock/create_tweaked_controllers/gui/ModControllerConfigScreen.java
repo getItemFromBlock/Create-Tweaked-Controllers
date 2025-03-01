@@ -17,11 +17,13 @@ import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
+
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.ScreenOpener;
+import net.createmod.catnip.gui.ConfirmationScreen;
+import net.createmod.catnip.gui.ConfirmationScreen.Response;
+
 import com.mojang.blaze3d.Blaze3D;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.ScreenOpener;
-import com.simibubi.create.foundation.gui.ConfirmationScreen;
-import com.simibubi.create.foundation.gui.ConfirmationScreen.Response;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

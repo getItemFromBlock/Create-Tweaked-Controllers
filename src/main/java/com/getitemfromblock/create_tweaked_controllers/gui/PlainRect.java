@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.gui.widget.AbstractSimiWidget;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

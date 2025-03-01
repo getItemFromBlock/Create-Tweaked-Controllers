@@ -15,7 +15,7 @@ import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControl
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 
@@ -65,7 +65,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     @Override
     protected void init()
     {
-        setWindowSize(background0.width, background0.height + 4 + PLAYER_INVENTORY.height);
+        setWindowSize(background0.width, background0.height + 4 + PLAYER_INVENTORY.getHeight());
         setWindowOffset(1, 0);
         super.init();
 
@@ -126,7 +126,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
     {
-        int invX = getLeftOfCentered(PLAYER_INVENTORY.width);
+        int invX = getLeftOfCentered(PLAYER_INVENTORY.getWidth());
         int invY = topPos + background0.height + 4;
         renderPlayerInventory(graphics, invX, invY);
 

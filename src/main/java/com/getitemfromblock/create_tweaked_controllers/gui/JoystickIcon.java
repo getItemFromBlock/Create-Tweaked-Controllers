@@ -3,8 +3,8 @@ package com.getitemfromblock.create_tweaked_controllers.gui;
 import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.simibubi.create.foundation.gui.element.ScreenElement;
-import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.gui.widget.AbstractSimiWidget;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

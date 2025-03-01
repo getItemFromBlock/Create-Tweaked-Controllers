@@ -3,8 +3,8 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.ScreenOpener;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

@@ -6,7 +6,7 @@ import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import com.simibubi.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 

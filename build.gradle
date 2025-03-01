@@ -167,11 +167,20 @@ repositories {
         }
     }
 
+	maven {
+		// Create, Ponder, Flywheel
+		url = "https://maven.createmod.net"
+	}
+	
     maven {
-        //CREATE
-        name = 'tterrag maven'
-        url = 'https://maven.tterrag.com/'
-    }
+		// Registrate
+		url = "https://maven.tterrag.com"
+	}
+	
+    maven {
+		// ForgeConfigAPIPort
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
 /*
     maven {
         // JEI
@@ -199,9 +208,11 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     
     //CREATE
-    implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+    implementation(fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}") { transitive = false })
+	implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${create_minecraft_version}:${ponder_version}"))
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${flywheel_minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}"))
+    implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
 
     //CONTROLLABLE COMPAT
     compileOnly(fg.deobf("curse.maven:controllable-${controllable_version}"))

@@ -11,15 +11,16 @@ import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler.Mode;
 import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
-import com.mojang.blaze3d.vertex.PoseStack;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,40 +33,40 @@ import net.minecraft.world.phys.Vec3;
 
 public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModelRenderer
 {
-    protected static final PartialModel BASE = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
-    protected static final PartialModel CONTROLLERS[] =
+    protected static final PartialModel BASE = PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/powered"));
+    protected static final PartialModel[] CONTROLLERS =
     {
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_x")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_n")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_p"))
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_x")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_n")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/controller_p"))
 
     };
-    protected static final PartialModel BUTTON = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button"));
-    protected static final PartialModel JOYSTICK = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/joystick"));
-    protected static final PartialModel TRIGGER = new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/trigger"));
-    protected static final PartialModel BUTTONS_LEFT[] =
+    protected static final PartialModel BUTTON = PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button"));
+    protected static final PartialModel JOYSTICK = PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/joystick"));
+    protected static final PartialModel TRIGGER = PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/trigger"));
+    protected static final PartialModel[] BUTTONS_LEFT =
     {
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_x")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_y")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_s"))
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_x")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_y")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_s"))
     };
-    protected static final PartialModel BUTTONS_UP[] =
+    protected static final PartialModel[] BUTTONS_UP =
     {
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_y")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_x")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_t"))
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_y")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_x")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_t"))
     };
-    protected static final PartialModel BUTTONS_DOWN[] =
+    protected static final PartialModel[] BUTTONS_DOWN =
     {
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_a")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_b")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_x"))
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_a")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_b")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_x"))
     };
-    protected static final PartialModel BUTTONS_RIGHT[] =
+    protected static final PartialModel[] BUTTONS_RIGHT =
     {
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_b")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_a")),
-        new PartialModel(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_c"))
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_x_b")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_n_a")),
+            PartialModel.of(CreateTweakedControllers.asResource("item/tweaked_linked_controller/button_p_c"))
     };
     static LerpedFloat equipProgress;
     static ArrayList<LerpedFloat> buttons;
@@ -175,7 +176,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
           int light, RenderType renderType, boolean active, boolean renderDepression)
     {
         float pt = AnimationTickHolder.getPartialTicks();
-        TransformStack msr = TransformStack.cast(ms);
+        var msr = TransformStack.of(ms);
 
         ms.pushPose();
 
@@ -201,13 +202,13 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
                         // Number calculated based on the displacement in the model file and its scaling
                         final float modelDisplacementValue = 0.93106617f;
                         msr.translate(0.1f * equip, equip / 3, equip * handModifier * modelDisplacementValue);
-                        msr.rotateZ(equip * -10);
+                        msr.rotateZDegrees(equip * -10);
                     }
                     else
                     {
                         msr.translate(0, equip / 4, equip / 4 * handModifier);
-                        msr.rotateY(equip * -30 * handModifier);
-                        msr.rotateZ(equip * -30);
+                        msr.rotateYDegrees(equip * -30 * handModifier);
+                        msr.rotateZDegrees(equip * -30);
                     }
                 active = true;
             }
@@ -357,7 +358,7 @@ public class TweakedLinkedControllerItemRenderer extends CustomRenderedItemModel
     protected enum RenderType
     {
         NORMAL,
-        LECTERN;
+        LECTERN
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.getitemfromblock.create_tweaked_controllers.ModBlockEntityTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -25,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class TweakedLecternControllerBlock extends LecternBlock
-    implements IBE<TweakedLecternControllerBlockEntity>, ISpecialBlockItemRequirement
-    {
+    implements IBE<TweakedLecternControllerBlockEntity>, SpecialBlockItemRequirement
+{
 
     public TweakedLecternControllerBlock(Properties properties)
     {

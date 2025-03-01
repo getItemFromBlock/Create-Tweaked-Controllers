@@ -8,7 +8,7 @@ import com.getitemfromblock.create_tweaked_controllers.controller.ControllerReds
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
-import com.simibubi.create.foundation.utility.Couple;
+import net.createmod.catnip.data.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
