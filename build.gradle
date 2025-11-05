@@ -15,14 +15,15 @@ buildscript {
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 plugins {
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
-
     config "${modid}.mixins.json"
 }
 
@@ -174,7 +175,7 @@ repositories {
 	
     maven {
 		// Registrate
-		url = "https://maven.tterrag.com"
+        url = "https://maven.ithundxr.dev/mirror"
 	}
 	
     maven {
