@@ -233,6 +233,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         selectedInput = index;
         MouseCursorHandler.ResetCenter();
         JoystickInputs.StoreAxisValues();
+        JoystickInputs.StoreButtonsValues();
     }
 
     public int GetActiveInput()
@@ -263,7 +264,9 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         if (!JoystickInputs.HasJoystick()) return false;
         int val = JoystickInputs.GetFirstButton();
         if (val < 0) return false;
-        TweakedControlsUtil.profile.layout[selectedInput] = new JoystickButtonInput(val);
+        JoystickButtonInput input = new JoystickButtonInput(val);
+        input.invertValue = JoystickInputs.GetStoredButton(val);
+        TweakedControlsUtil.profile.layout[selectedInput] = input;
         return true;
     }
 

@@ -10,6 +10,7 @@ public class JoystickInputs
 {
     private static Vector<Boolean> buttons = new Vector<>(0);
     private static Vector<Float> axis = new Vector<>(0);
+    private static Vector<Boolean> storedButtons = new Vector<>(0);
     private static Vector<Float> storedAxis = new Vector<>(0);
 
     protected static int selectedJoystick = -1;
@@ -71,9 +72,11 @@ public class JoystickInputs
         selectedJoystick = id;
         ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
         buttons = new Vector<>(b.limit());
+        storedButtons = new Vector<>(b.limit());
         for (int i = 0; i < b.limit(); i++)
         {
             buttons.add(false);
+            storedButtons.add(false);
         }
         FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
         axis = new Vector<>(a.limit());
@@ -152,11 +155,19 @@ public class JoystickInputs
         }
     }
 
+    public static void StoreButtonsValues()
+    {
+        for (int i = 0; i < buttons.size(); i++)
+        {
+            storedButtons.set(i, buttons.get(i));
+        }
+    }
+
     public static int GetFirstButton()
     {
         for (int i = 0; i < buttons.size(); i++)
         {
-            if (buttons.get(i)) return i;
+            if (buttons.get(i) != storedButtons.get(i)) return i;
         }
         return -1;
     }
@@ -173,5 +184,10 @@ public class JoystickInputs
     public static float GetStoredAxis(int index)
     {
         return storedAxis.get(index);
+    }
+
+    public static boolean GetStoredButton(int index)
+    {
+        return storedButtons.get(index);
     }
 }
