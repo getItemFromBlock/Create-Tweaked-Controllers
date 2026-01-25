@@ -132,8 +132,8 @@ public class TweakedLinkedControllerMenu extends GhostItemMenu<ItemStack>
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player)
     {
-        if (slotId == playerInventory.selected && clickTypeIn != ClickType.THROW)
-            return;
+        //if (slotId == playerInventory.selected && clickTypeIn != ClickType.THROW)
+        //    return;
         super.clicked(slotId, dragType, clickTypeIn, player);
     }
 

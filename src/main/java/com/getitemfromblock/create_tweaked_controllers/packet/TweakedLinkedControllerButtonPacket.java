@@ -70,8 +70,17 @@ public class TweakedLinkedControllerButtonPacket extends TweakedLinkedController
         ArrayList<Boolean> buttonValues = new ArrayList<>(15);
         for (int i = 0; i < 15; ++i)
         {
-            buttonCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i));
-            buttonValues.add((buttonStates & 1 << i) != 0);
+            boolean buttonValue = (buttonStates & (1 << i)) != 0;
+            Couple<Frequency> targetFreq = TweakedLinkedControllerItem.toFrequency(heldItem, i);
+            int target = buttonCouples.indexOf(targetFreq);
+            if (target >= 0)
+            {
+                boolean other = buttonValues.get(target);
+                buttonValues.set(target, other || buttonValue);
+                continue;
+            }
+            buttonCouples.add(targetFreq);
+            buttonValues.add(buttonValue);
         }
         TweakedLinkedControllerServerHandler.ReceivePressed(world, pos, uniqueID, buttonCouples, buttonValues);
     }

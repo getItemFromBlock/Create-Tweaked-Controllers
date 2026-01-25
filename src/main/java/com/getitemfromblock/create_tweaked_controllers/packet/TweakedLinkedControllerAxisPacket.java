@@ -105,7 +105,6 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
         ArrayList<Byte> axisValues = new ArrayList<>(10);
         for (byte i = 0; i < 10; ++i)
         {
-            axisCouples.add(TweakedLinkedControllerItem.toFrequency(heldItem, i + 15));
             byte dt = 0;
             if (i < 8)
             {
@@ -119,6 +118,15 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
             {
                 dt = output.axis[i - 4];
             }
+            Couple<Frequency> targetFreq = TweakedLinkedControllerItem.toFrequency(heldItem, i + 15);
+            int target = axisCouples.indexOf(targetFreq);
+            if (target >= 0)
+            {
+                byte other = axisValues.get(target);
+                axisValues.set(target, dt > other ? dt : other);
+                continue;
+            }
+            axisCouples.add(targetFreq);
             axisValues.add(dt);
         }
         TweakedLinkedControllerServerHandler.ReceiveAxis(world, pos, uniqueID, axisCouples, axisValues);
