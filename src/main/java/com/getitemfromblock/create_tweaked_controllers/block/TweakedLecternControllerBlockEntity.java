@@ -91,7 +91,13 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
     {
         super.writeSafe(compound);
         compound.putBoolean("UseFullPrecision", useFullPrecision);
+        if (controller == null)
+        {
+            controller = new ItemStack(Blocks.AIR, 0);
+        }
         compound.put("Controller", controller.save(new CompoundTag()));
+        if (user != null)
+            compound.putUUID("User", user);
     }
 
     @Override
