@@ -71,20 +71,36 @@ public class JoystickInputs
     {
         selectedJoystick = id;
         ByteBuffer b = GLFW.glfwGetJoystickButtons(selectedJoystick);
-        buttons = new Vector<>(b.limit());
-        storedButtons = new Vector<>(b.limit());
-        for (int i = 0; i < b.limit(); i++)
+        if (b == null)
         {
-            buttons.add(false);
-            storedButtons.add(false);
+            buttons = new Vector<>();
+            storedButtons = new Vector<>();
         }
-        FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
-        axis = new Vector<>(a.limit());
-        storedAxis = new Vector<>(a.limit());
-        for (int i = 0; i < a.limit(); i++)
+        else
         {
-            axis.add(0.0f);
-            storedAxis.add(0.0f);
+            buttons = new Vector<>(b.limit());
+            storedButtons = new Vector<>(b.limit());
+            for (int i = 0; i < b.limit(); i++)
+            {
+                buttons.add(false);
+                storedButtons.add(false);
+            }
+        }
+
+        FloatBuffer a = GLFW.glfwGetJoystickAxes(selectedJoystick);
+        if (a == null)
+        {
+            axis = new Vector<>();
+            storedAxis = new Vector<>();
+        }
+        else {
+            axis = new Vector<>(a.limit());
+            storedAxis = new Vector<>(a.limit());
+            for (int i = 0; i < a.limit(); i++)
+            {
+                axis.add(0.0f);
+                storedAxis.add(0.0f);
+            }
         }
     }
 
@@ -125,14 +141,8 @@ public class JoystickInputs
 
     public static void Empty()
     {
-        for (int i = 0; i < buttons.size(); i++)
-        {
-            buttons.set(i, false);
-        }
-        for (int i = 0; i < axis.size(); i++)
-        {
-            axis.set(i, 0.0f);
-        }
+        buttons.replaceAll(ignored -> false);
+        axis.replaceAll(ignored -> 0.0f);
     }
 
     public static void Fill(ByteBuffer b, FloatBuffer a)
