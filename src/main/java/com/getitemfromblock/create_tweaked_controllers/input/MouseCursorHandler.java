@@ -117,5 +117,9 @@ public class MouseCursorHandler
         player.yBob = savedRot.y;
         player.xBobO = savedRot.x;
         player.yBobO = savedRot.y;
+        player.xRotO = savedRot.x;
+        player.yRotO = savedRot.y;
+        player.yHeadRot = savedRot.y;
+        player.yHeadRotO = savedRot.y;
     }
 }

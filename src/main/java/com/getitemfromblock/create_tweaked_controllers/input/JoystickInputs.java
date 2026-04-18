@@ -2,6 +2,7 @@ package com.getitemfromblock.create_tweaked_controllers.input;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Collections;
 import java.util.Vector;
 
 import org.lwjgl.glfw.GLFW;
@@ -141,8 +142,8 @@ public class JoystickInputs
 
     public static void Empty()
     {
-        buttons.replaceAll(ignored -> false);
-        axis.replaceAll(ignored -> 0.0f);
+        Collections.fill(buttons, false);
+        Collections.fill(axis, 0.0f);
     }
 
     public static void Fill(ByteBuffer b, FloatBuffer a)
