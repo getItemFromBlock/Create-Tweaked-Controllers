@@ -12,7 +12,6 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraftforge.network.PacketDistributor;
 
 public abstract class ModSyncedPeripheral<T extends SmartBlockEntity> implements IPeripheral
 {

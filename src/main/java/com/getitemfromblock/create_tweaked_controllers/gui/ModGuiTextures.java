@@ -5,8 +5,6 @@ import net.createmod.catnip.gui.element.ScreenElement;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement
 {

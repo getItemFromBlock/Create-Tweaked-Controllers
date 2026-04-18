@@ -2,8 +2,6 @@ package com.getitemfromblock.create_tweaked_controllers.config;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
 
 public class ModConfigs
 {

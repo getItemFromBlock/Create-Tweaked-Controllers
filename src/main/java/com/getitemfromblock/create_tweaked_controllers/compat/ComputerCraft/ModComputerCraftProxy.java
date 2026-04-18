@@ -6,7 +6,6 @@ import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.compat.computercraft.FallbackComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
-import net.minecraftforge.fml.ModList;
 
 public class ModComputerCraftProxy
 {

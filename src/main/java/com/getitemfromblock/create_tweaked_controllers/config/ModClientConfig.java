@@ -1,6 +1,5 @@
 package com.getitemfromblock.create_tweaked_controllers.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ModClientConfig
 {

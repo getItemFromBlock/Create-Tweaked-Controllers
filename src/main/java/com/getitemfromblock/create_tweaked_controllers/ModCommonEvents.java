@@ -6,23 +6,21 @@ import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedC
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber
 public class ModCommonEvents
 {
     
     @SubscribeEvent
-    public static void onServerWorldTick(LevelTickEvent event)
+    public static void onServerWorldTick(LevelTickEvent.Post event)
     {
-        if (event.phase == Phase.START || event.side == LogicalSide.CLIENT)
+        Level world = event.getLevel();
+        if (world.isClientSide())
             return;
-        Level world = event.level;
         TweakedLinkedControllerServerHandler.tick(world);
     }
 

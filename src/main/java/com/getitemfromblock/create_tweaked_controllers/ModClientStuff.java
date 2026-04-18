@@ -2,10 +2,9 @@ package com.getitemfromblock.create_tweaked_controllers;
 
 import com.getitemfromblock.create_tweaked_controllers.compat.Controllable.ControllerHandler;
 import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
-
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ModClientStuff
 {
