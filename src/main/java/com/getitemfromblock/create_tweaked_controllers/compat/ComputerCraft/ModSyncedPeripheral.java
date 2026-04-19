@@ -16,7 +16,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 public abstract class ModSyncedPeripheral<T extends SmartBlockEntity> implements IPeripheral
 {
     protected final T blockEntity;
-    protected final CopyOnWriteArrayList<IComputerAccess> computers = new CopyOnWriteArrayList<IComputerAccess>();
+    protected final CopyOnWriteArrayList<IComputerAccess> computers = new CopyOnWriteArrayList<>();
 
     public ModSyncedPeripheral(T blockEntity)
     {
