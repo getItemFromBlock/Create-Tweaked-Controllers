@@ -5,6 +5,8 @@ import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
@@ -30,8 +32,25 @@ public class ModClientEvents
         if (event.phase == Phase.START || Minecraft.getInstance().screen != null)
         {
             TweakedLinkedControllerClientHandler.tick();
-            return;
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onMouseScroll(InputEvent.MouseScrollingEvent event)
+    {
+        CreateTweakedControllers.log("Scroll: " + event.getScrollDelta());
+        MouseCursorHandler.AddScrollDelta(event.getScrollDelta());
+        if (MouseCursorHandler.ShouldCancelScroll())
+            event.setCanceled(true);
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onScreenMouseScrollPre(ScreenEvent.MouseScrolled.Pre event)
+    {
+        CreateTweakedControllers.log("Scroll: " + event.getScrollDelta() + " " + MouseCursorHandler.ShouldCancelScroll());
+        MouseCursorHandler.AddScrollDelta(event.getScrollDelta());
+        if (MouseCursorHandler.ShouldCancelScroll())
+            event.setCanceled(true);
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)

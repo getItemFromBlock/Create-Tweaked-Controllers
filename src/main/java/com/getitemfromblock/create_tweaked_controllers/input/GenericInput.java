@@ -39,6 +39,7 @@ public interface GenericInput
         JOYSTICK_AXIS,
         MOUSE_BUTTON,
         MOUSE_AXIS,
+        MOUSE_WHEEL,
         KEYBOARD_KEY;
 
         public static InputType GetType(byte v)

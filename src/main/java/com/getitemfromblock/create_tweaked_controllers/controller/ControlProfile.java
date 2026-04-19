@@ -8,15 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.getitemfromblock.create_tweaked_controllers.input.*;
 import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
-import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
-import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
-import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
-import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
-import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput.InputType;
 import com.mojang.blaze3d.platform.InputConstants.Key;
 
@@ -27,6 +22,7 @@ public class ControlProfile
 {
     public GenericInput[] layout = new GenericInput[25];
     public boolean hasJoystickInput = false;
+    public boolean hasMouseScroll = false;
     public ArrayList<KeyMapping> duplicatedKeys = new ArrayList<KeyMapping>();
 
     public static final byte CURRENT_VERSION_MAJOR = (byte) 0x01;
@@ -313,6 +309,9 @@ public class ControlProfile
                     case MOUSE_AXIS:
                         layout[i] = new MouseAxisInput();
                         break;
+                    case MOUSE_WHEEL:
+                        layout[i] = new MouseWheelInput();
+                        break;
                     case KEYBOARD_KEY:
                         layout[i] = new KeyboardInput();
                         break;
@@ -400,6 +399,7 @@ public class ControlProfile
             case MOUSE_BUTTON:
                 return i.GetValue();
             case MOUSE_AXIS:
+            case MOUSE_WHEEL:
                 return i.GetValue() + 60;
             case KEYBOARD_KEY:
                 return i.GetValue() + 512;
@@ -417,9 +417,10 @@ public class ControlProfile
         for (int i = 0; i < 25; i++)
         {
             if (layout[i] == null) continue;
-            if (layout[i].GetType() != InputType.JOYSTICK_AXIS && layout[i].GetType() != InputType.JOYSTICK_BUTTON) continue;
-            hasJoystickInput = true;
-            break;
+            if (layout[i].GetType() == InputType.JOYSTICK_AXIS || layout[i].GetType() == InputType.JOYSTICK_BUTTON)
+                hasJoystickInput = true;
+            else if (layout[i].GetType() == InputType.MOUSE_WHEEL)
+                hasMouseScroll = true;
         }
         for (KeyMapping key : Minecraft.getInstance().options.keyMappings)
         {
