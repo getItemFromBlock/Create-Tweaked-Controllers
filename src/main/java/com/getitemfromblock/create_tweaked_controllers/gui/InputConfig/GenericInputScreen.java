@@ -34,9 +34,7 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     protected void init()
     {
         super.init();
-        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (p_193996_) -> {
-            ScreenOpener.open(parent);
-        }).bounds(width / 2 - 75, height - 29, 150, 20).build());
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (p_193996_) -> ScreenOpener.open(parent)).bounds(width / 2 - 75, height - 29, 150, 20).build());
         outputs = new EditBox[2];
         outputs[0] = new EditBox(font, width / 2, height - 85, 50, 20, CreateTweakedControllers.translateDirect("gui_output_button"));
         outputs[0].setEditable(false);
@@ -102,7 +100,7 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     {
         float result;
         try {
-           result = Float.valueOf(box.getValue());
+           result = Float.parseFloat(box.getValue());
         } catch (NumberFormatException numberformatexception)
         {
            result = 0.0f;
@@ -114,6 +112,6 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     public String GetSafeFloatString(float input)
     {
         String output = String.format("%f", input);
-        return output.replaceAll(",", ".");
+        return output.replace(",", ".");
     }
 }

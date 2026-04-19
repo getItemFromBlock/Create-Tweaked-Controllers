@@ -51,7 +51,7 @@ public abstract class ModSyncedPeripheral<T extends SmartBlockEntity> implements
 
     private void updateBlockEntity()
     {
-        boolean hasAttachedComputer = computers.size() > 0;
+        boolean hasAttachedComputer = !computers.isEmpty();
 
         blockEntity.getBehaviour(ModComputerBehavior.TYPE).setHasAttachedComputer(hasAttachedComputer);
         CatnipServices.NETWORK.sendToAllClients(new AttachedComputerPacket(blockEntity.getBlockPos(), hasAttachedComputer));

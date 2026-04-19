@@ -39,7 +39,7 @@ public abstract class TweakedLinkedControllerPacketBase implements CustomPacketP
         }
     }
 
-    public static record BaseFields(BlockPos lecternPos, boolean useFullPrecision) {}
+    public record BaseFields(BlockPos lecternPos, boolean useFullPrecision) {}
 
     public static BaseFields readBase(FriendlyByteBuf buffer)
     {

@@ -6,7 +6,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ModClientStuff
 {
-    public static void onConstructor(IEventBus modEventBus, IEventBus forgeEventBus)
+    public static void onConstructor(IEventBus modEventBus)
     {
         modEventBus.addListener(ModClientStuff::clientInit);
     }

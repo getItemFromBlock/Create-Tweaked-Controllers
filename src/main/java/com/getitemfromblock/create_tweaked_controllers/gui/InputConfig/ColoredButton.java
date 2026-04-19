@@ -12,7 +12,7 @@ import net.minecraft.util.Mth;
 
 public class ColoredButton extends Button
 {
-    public Vector3f color = new Vector3f(1, 1, 1);
+    public Vector3f color;
 
     public ColoredButton(int p_93721_, int p_93722_, int p_93723_, int p_93724_, Component p_93725_, OnPress p_93726_, Vector3f color)
     {

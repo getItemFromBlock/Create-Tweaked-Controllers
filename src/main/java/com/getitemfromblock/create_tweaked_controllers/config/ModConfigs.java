@@ -9,6 +9,6 @@ public class ModConfigs
 {
     public static void register(ModContainer container)
     {
-        container.registerConfig(ModConfig.Type.CLIENT, ModClientConfig.SPEC, CreateTweakedControllers.ID.replaceAll("_", "") + "-client.toml");
+        container.registerConfig(ModConfig.Type.CLIENT, ModClientConfig.SPEC, CreateTweakedControllers.ID.replace("_", "") + "-client.toml");
     }
 }

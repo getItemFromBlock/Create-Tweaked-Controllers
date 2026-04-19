@@ -87,8 +87,8 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
             int p_193893_, int p_193894_, int p_193895_, boolean p_193896_, float p_193897_)
         {
             graphics.drawString(InputList.this.minecraft.font, name,
-                    (int) (InputList.this.minecraft.screen.width / 2 - width / 2),
-                    (int) (p_193890_ + p_193893_ - 9 - 1), 16777215);
+                    (InputList.this.minecraft.screen.width / 2 - width / 2),
+                    (p_193890_ + p_193893_ - 9 - 1), 16777215);
         }
 
         public boolean changeFocus(boolean value)
@@ -168,7 +168,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
                 int p_193928_, int p_193929_, int p_193930_, boolean p_193931_, float p_193932_)
         {
             float f = (float) (p_193926_ + 40 - InputList.this.maxNameWidth);
-            p_193923_.drawString(InputList.this.minecraft.font, name, (int)f, (int)(p_193925_ + p_193928_ / 2 - 9 / 2), 16777215);
+            p_193923_.drawString(InputList.this.minecraft.font, name, (int)f, (p_193925_ + p_193928_ / 2 - 9 / 2), 16777215);
                     boolean active = TweakedControlsUtil.profile.layout[key] != null;
             resetButton.setX(p_193926_ + 155);
             resetButton.setY(p_193925_);

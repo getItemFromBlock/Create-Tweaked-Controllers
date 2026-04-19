@@ -116,7 +116,7 @@ public class ModMainConfigButton extends Button
                 offsetX = ModClientConfig.CONFIG_BUTTON_INGAME_MENU_OFFSET.get();
             }
 
-            if (rowIdx != 0 && menu != null)
+            if (rowIdx != 0)
             {
                 boolean onLeft = offsetX < 0;
                 String target = (onLeft ? menu.leftButtons : menu.rightButtons).get(rowIdx - 1);
