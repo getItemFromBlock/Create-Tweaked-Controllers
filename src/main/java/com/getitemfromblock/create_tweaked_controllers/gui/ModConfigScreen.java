@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.neoforged.fml.config.ModConfig;
 
 public class ModConfigScreen extends AbstractSimiScreen
 {
@@ -61,7 +62,7 @@ public class ModConfigScreen extends AbstractSimiScreen
         }).bounds(center - 100, yStart + 92, bLongWidth, bHeight).build());
         addRenderableWidget(Button.builder(CreateTweakedControllers.translateDirect("menu.config_general", new Object[0]), ($) -> {
             ConfigScreen.modID = CreateTweakedControllers.ID;
-            this.linkTo((Screen)(new SubMenuConfigScreen(this, Type.CLIENT, ModClientConfig.SPEC)));
+            this.linkTo((Screen)(new SubMenuConfigScreen(this, ModConfig.Type.CLIENT, ModClientConfig.SPEC)));
         }).bounds(center - 100, yStart + 8, bLongWidth, bHeight).build());
         advancedConfigButton = new Button.Builder(CreateTweakedControllers.translateDirect("menu.config_controller", new Object[0]), ($) -> {
             this.linkTo((Screen)(new ModControllerConfigScreen(this)));

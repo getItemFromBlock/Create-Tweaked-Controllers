@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.simibubi.create.AllPackets;
 import com.simibubi.create.compat.computercraft.AttachedComputerPacket;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import net.createmod.catnip.platform.CatnipServices;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -54,7 +54,7 @@ public abstract class ModSyncedPeripheral<T extends SmartBlockEntity> implements
         boolean hasAttachedComputer = computers.size() > 0;
 
         blockEntity.getBehaviour(ModComputerBehavior.TYPE).setHasAttachedComputer(hasAttachedComputer);
-        AllPackets.getChannel().send(PacketDistributor.ALL.noArg(), new AttachedComputerPacket(blockEntity.getBlockPos(), hasAttachedComputer));
+        CatnipServices.NETWORK.sendToAllClients(new AttachedComputerPacket(blockEntity.getBlockPos(), hasAttachedComputer));
     }
 
     @Override

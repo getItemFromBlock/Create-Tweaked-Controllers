@@ -44,10 +44,6 @@ public class MouseAxisScreen extends GenericInputScreen
     @Override
     public void tick()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            bounds[i].tick();
-        }
         super.tick();
     }
 
@@ -66,11 +62,15 @@ public class MouseAxisScreen extends GenericInputScreen
         addRenderableWidget(valueRender);
         int l = Minecraft.getInstance().font.width(valueRender.getMessage()) + 10;
         if (l > textwidth) textwidth = l;
-        isYBox = new Checkbox(width / 2 - 60, height/2 - 95, 100, 20,
-            CreateTweakedControllers.translateDirect("gui_config_isyaxis"), source.isYAxis);
+        isYBox = Checkbox.builder(CreateTweakedControllers.translateDirect("gui_config_isyaxis"), this.font)
+            .pos(width / 2 - 60, height/2 - 95)
+            .selected(source.isYAxis)
+            .build();
         addRenderableWidget(isYBox);
-        useVelBox = new Checkbox(width / 2 - 60, height/2 - 70, 100, 20,
-            CreateTweakedControllers.translateDirect("gui_config_usevelocity"), source.useVelocity);
+        useVelBox = Checkbox.builder(CreateTweakedControllers.translateDirect("gui_config_usevelocity"), this.font)
+            .pos(width / 2 - 60, height/2 - 70)
+            .selected(source.useVelocity)
+            .build();
         addRenderableWidget(useVelBox);
         boundsTextWidth = Math.max(font.width(CreateTweakedControllers.translateDirect("gui_config_lower")), font.width(CreateTweakedControllers.translateDirect("gui_config_upper")));
         boundsTextWidth += 10;

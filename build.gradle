@@ -19,20 +19,11 @@ repositories {
         }
     }
 
-    maven {
-        // Create, Ponder, Flywheel
-        url = "https://maven.createmod.net"
-    }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
 
-    maven {
-        // Registrate
-        url = "https://maven.ithundxr.dev/mirror"
-    }
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate
 
-    maven {
-        // ForgeConfigAPIPort
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-    }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // ForgeConfigAPIPort
     maven {
         // location of the maven that hosts JEI files since January 2023
         // location of the maven for Vazkii's mods
@@ -42,7 +33,7 @@ repositories {
     maven {
         // location of maven for CC: Tweaked
         name = "squiddev"
-        url = "https://squiddev.cc/maven/"
+        url = "https://maven.squiddev.cc/"
     }
     mavenLocal()
 }
@@ -138,10 +129,6 @@ dependencies {
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    //CONTROLLABLE COMPAT
-    compileOnly("curse.maven:controllable-${controllable_version}")
-    implementation("curse.maven:framework-${framework_version}")
-
     //JEI
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
@@ -149,13 +136,11 @@ dependencies {
 
     // CC TWEAKED COMPAT
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-core-api:${cc_tweaked_version}")
-    compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-neoforge-api:${cc_tweaked_version}")
-    runtimeOnly("cc.tweaked:cc-tweaked-${minecraft_version}-neoforge:${cc_tweaked_version}")
+    compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:${cc_tweaked_version}")
+    runtimeOnly("cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cc_tweaked_version}")
 
     //MIXINS
-    if (System.getProperty('idea.sync.active') != 'true') {
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    }
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -182,18 +167,9 @@ sourceSets.main.resources.srcDir generateModMetadata
 // To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
 
-// Example configuration to allow publishing using the maven-publish plugin
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
-        }
-    }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

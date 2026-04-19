@@ -5,6 +5,8 @@ import net.createmod.catnip.gui.element.ScreenElement;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement
 {
@@ -30,7 +32,7 @@ public enum ModGuiTextures implements ScreenElement
 
     private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height)
     {
-        this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
+        this.location = ResourceLocation.fromNamespaceAndPath(namespace, "textures/gui/" + location + ".png");
         this.width = width;
         this.height = height;
         this.startX = startX;

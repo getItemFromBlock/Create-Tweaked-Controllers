@@ -4,8 +4,12 @@ import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import net.minecraft.client.KeyMapping;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CreateTweakedControllers.ID, value = Dist.CLIENT)
 public class ModKeyMappings
 {
     public static KeyMapping KEY_MOUSE_FOCUS;

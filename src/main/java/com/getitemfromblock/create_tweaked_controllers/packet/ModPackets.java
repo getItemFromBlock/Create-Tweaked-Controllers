@@ -1,91 +1,57 @@
 package com.getitemfromblock.create_tweaked_controllers.packet;
 
-//import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
-import static net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
-import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-public enum ModPackets
+public class ModPackets
 {
-    TWEAKED_LINKED_CONTROLLER_INPUT(TweakedLinkedControllerButtonPacket.class, TweakedLinkedControllerButtonPacket::new, PLAY_TO_SERVER),
-    TWEAKED_LINKED_CONTROLLER_INPUT_AXIS(TweakedLinkedControllerAxisPacket.class, TweakedLinkedControllerAxisPacket::new, PLAY_TO_SERVER),
-    TWEAKED_LINKED_CONTROLLER_BIND(TweakedLinkedControllerBindPacket.class, TweakedLinkedControllerBindPacket::new, PLAY_TO_SERVER),
-    TWEAKED_LINKED_CONTROLLER_USE_LECTERN(TweakedLinkedControllerStopLecternPacket.class, TweakedLinkedControllerStopLecternPacket::new,
-        PLAY_TO_SERVER),
-    ;
+    public static final String NETWORK_VERSION = "2";
 
-    public static final ResourceLocation CHANNEL_NAME = CreateTweakedControllers.asResource("main");
-    public static final int NETWORK_VERSION = 2;
-    public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
-    public static SimpleChannel channel;
-
-    private PacketType<?> packet;
-
-    <T extends SimplePacketBase> ModPackets(Class<T> type, Function<FriendlyByteBuf, T> factory,
-        NetworkDirection direction)
+    public static void registerBusListener(IEventBus modEventBus)
     {
-        packet = new PacketType<>(type, factory, direction);
+        modEventBus.addListener(ModPackets::register);
     }
 
-    public static void registerPackets()
+    private static void register(final RegisterPayloadHandlersEvent event)
     {
-        channel = NetworkRegistry.ChannelBuilder.named(CHANNEL_NAME)
-            .serverAcceptedVersions(NETWORK_VERSION_STR::equals)
-            .clientAcceptedVersions(NETWORK_VERSION_STR::equals)
-            .networkProtocolVersion(() -> NETWORK_VERSION_STR)
-            .simpleChannel();
-        for (ModPackets packet : values())
-            packet.packet.register();
+        PayloadRegistrar registrar = event.registrar(CreateTweakedControllers.ID).versioned(NETWORK_VERSION);
+        registrar.playToServer(TweakedLinkedControllerButtonPacket.TYPE,
+            TweakedLinkedControllerButtonPacket.STREAM_CODEC,
+            TweakedLinkedControllerPacketBase::handle);
+        registrar.playToServer(TweakedLinkedControllerAxisPacket.TYPE,
+            TweakedLinkedControllerAxisPacket.STREAM_CODEC,
+            TweakedLinkedControllerPacketBase::handle);
+        registrar.playToServer(TweakedLinkedControllerBindPacket.TYPE,
+            TweakedLinkedControllerBindPacket.STREAM_CODEC,
+            TweakedLinkedControllerPacketBase::handle);
+        registrar.playToServer(TweakedLinkedControllerStopLecternPacket.TYPE,
+            TweakedLinkedControllerStopLecternPacket.STREAM_CODEC,
+            TweakedLinkedControllerPacketBase::handle);
     }
 
-    public static void sendToNear(Level world, BlockPos pos, int range, Object message)
+    public static void sendToServer(CustomPacketPayload payload)
     {
-        channel.send(
-            PacketDistributor.NEAR.with(TargetPoint.p(pos.getX(), pos.getY(), pos.getZ(), range, world.dimension())),
-            message);
+        PacketDistributor.sendToServer(payload);
     }
 
-    private static class PacketType<T extends SimplePacketBase>
+    public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload)
     {
-        private static int index = 0;
+        PacketDistributor.sendToPlayer(player, payload);
+    }
 
-        private BiConsumer<T, FriendlyByteBuf> encoder;
-        private Function<FriendlyByteBuf, T> decoder;
-        private BiConsumer<T, Supplier<Context>> handler;
-        private Class<T> type;
-        private NetworkDirection direction;
-
-        private PacketType(Class<T> type, Function<FriendlyByteBuf, T> factory, NetworkDirection direction) {
-            encoder = T::write;
-            decoder = factory;
-            handler = (packet, contextSupplier) -> {
-                Context context = contextSupplier.get();
-                if (packet.handle(context))
-                {
-                    context.setPacketHandled(true);
-                }
-            };
-            this.type = type;
-            this.direction = direction;
-        }
-
-        private void register()
-        {
-            channel.messageBuilder(type, index++, direction)
-                .encoder(encoder)
-                .decoder(decoder)
-                .consumerNetworkThread(handler)
-                .add();
-        }
+    public static void sendToNear(Level world, BlockPos pos, int range, CustomPacketPayload payload)
+    {
+        if (!(world instanceof ServerLevel serverLevel))
+            return;
+        PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), range, payload);
     }
 }

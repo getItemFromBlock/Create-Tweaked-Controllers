@@ -29,8 +29,10 @@ public class MouseButtonScreen extends GenericInputScreen
     @Override
     protected void Populate()
     {
-        box = new Checkbox(width / 2 - 60, height/2 - 10, 100, 20,
-            CreateTweakedControllers.translateDirect("gui_config_invert"), source.invertValue);
+        box = Checkbox.builder(CreateTweakedControllers.translateDirect("gui_config_invert"), this.font)
+            .pos(width / 2 - 60, height/2 - 10)
+            .selected(source.invertValue)
+            .build();
         addRenderableWidget(box);
     }
     

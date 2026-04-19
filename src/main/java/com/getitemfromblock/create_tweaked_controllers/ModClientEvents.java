@@ -13,26 +13,24 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@EventBusSubscriber(value = Dist.CLIENT)
+@EventBusSubscriber(modid = CreateTweakedControllers.ID, value = Dist.CLIENT)
 public class ModClientEvents
 {
     @SubscribeEvent(priority = EventPriority.HIGHEST) // We need to catch the inputs as early as possible to cancel them
-    public static void onTick(ClientTickEvent event)
+    public static void onTick(ClientTickEvent.Pre event)
     {
         if (!isGameActive())
             return;
-
-        //Level world = Minecraft.getInstance().level;
-        if (event.phase == Phase.START || Minecraft.getInstance().screen != null)
-        {
-            TweakedLinkedControllerClientHandler.tick();
-            return;
-        }
+        TweakedLinkedControllerClientHandler.tick();
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
-    public static void renderTick(RenderTickEvent event) // Cancel player/camera rotation just before rendering
+    public static void renderTick(RenderFrameEvent.Pre event) // Cancel player/camera rotation just before rendering
     {
         if (!isGameActive())
             return;
@@ -44,7 +42,7 @@ public class ModClientEvents
         return !(Minecraft.getInstance().level == null || Minecraft.getInstance().player == null);
     }
 
-    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = CreateTweakedControllers.ID, value = Dist.CLIENT)
     public static class ModBusEvents
     {
         @SubscribeEvent
@@ -53,9 +51,16 @@ public class ModClientEvents
             ModContainer container = ModList.get()
                 .getModContainerById(CreateTweakedControllers.ID)
                 .orElseThrow(() -> new IllegalStateException("CreateTweakedControllers mod container missing on LoadComplete"));
-            container.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(
-                    (mc, previousScreen) -> new ModConfigScreen(previousScreen)));
+            container.registerExtensionPoint(IConfigScreenFactory.class,
+                (mc, previousScreen) -> new ModConfigScreen(previousScreen));
+        }
+
+        @SubscribeEvent
+        public static void onRegisterGuiLayers(RegisterGuiLayersEvent event)
+        {
+            event.registerAbove(VanillaGuiLayers.HOTBAR,
+                CreateTweakedControllers.asResource("controller_overlay"),
+                TweakedLinkedControllerClientHandler.OVERLAY);
         }
     }
 }

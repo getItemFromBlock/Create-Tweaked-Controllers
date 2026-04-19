@@ -1,8 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.packet;
 
-import java.util.UUID;
 import java.util.ArrayList;
+import java.util.UUID;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
@@ -12,14 +13,46 @@ import net.createmod.catnip.data.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPacketBase
 {
-    private int axis = 0;
-    private float fullAxis[];
+    public static final Type<TweakedLinkedControllerAxisPacket> TYPE = new Type<>(
+        ResourceLocation.fromNamespaceAndPath(CreateTweakedControllers.ID, "controller_axis"));
+
+    public static final StreamCodec<FriendlyByteBuf, TweakedLinkedControllerAxisPacket> STREAM_CODEC =
+        StreamCodec.of(
+            (buf, pkt) -> {
+                writeBase(buf, pkt);
+                if (pkt.useFullPrecision)
+                {
+                    for (byte i = 0; i < 6; i++)
+                        buf.writeFloat(pkt.fullAxis[i]);
+                }
+                buf.writeInt(pkt.axis);
+            },
+            buf -> {
+                BaseFields b = readBase(buf);
+                float[] full = null;
+                if (b.useFullPrecision())
+                {
+                    full = new float[6];
+                    for (byte i = 0; i < 6; i++)
+                        full[i] = buf.readFloat();
+                }
+                int axisVal = buf.readInt();
+                if (b.useFullPrecision())
+                    return new TweakedLinkedControllerAxisPacket(full, axisVal, b.lecternPos());
+                return new TweakedLinkedControllerAxisPacket(axisVal, b.lecternPos());
+            });
+
+    private final int axis;
+    private final float[] fullAxis;
 
     public TweakedLinkedControllerAxisPacket(int axisIn)
     {
@@ -28,48 +61,24 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
 
     public TweakedLinkedControllerAxisPacket(int axisIn, BlockPos lecternPos)
     {
-        super(lecternPos);
-        axis = axisIn;
+        super(lecternPos, false);
+        this.axis = axisIn;
+        this.fullAxis = null;
     }
 
     public TweakedLinkedControllerAxisPacket(float[] axisIn, int axisL, BlockPos lecternPos)
     {
-        super(lecternPos);
-        useFullPrecision = true;
-        fullAxis = new float[6];
-        axis = axisL;
+        super(lecternPos, true);
+        this.axis = axisL;
+        this.fullAxis = new float[6];
         for (byte i = 0; i < 6; i++)
-        {
-            fullAxis[i] = axisIn[i];
-        }
-    }
-
-    public TweakedLinkedControllerAxisPacket(FriendlyByteBuf buffer)
-    {
-        super(buffer);
-        if (useFullPrecision)
-        {
-            fullAxis = new float[6];
-            for (byte i = 0; i < 6; i++)
-            {
-                fullAxis[i] = buffer.readFloat();
-            }
-        }
-        axis = buffer.readInt();
+            this.fullAxis[i] = axisIn[i];
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer)
+    public Type<? extends CustomPacketPayload> type()
     {
-        super.write(buffer);
-        if (useFullPrecision)
-        {
-            for (byte i = 0; i < 6; i++)
-            {
-                buffer.writeFloat(fullAxis[i]);
-            }
-        }
-        buffer.writeInt(axis);
+        return TYPE;
     }
 
     @Override
@@ -98,7 +107,7 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
 
         if (player.isSpectator())
             return;
-        
+
         ControllerRedstoneOutput output = new ControllerRedstoneOutput();
         output.DecodeAxis(axis);
         ArrayList<Couple<Frequency>> axisCouples = new ArrayList<>(10);
@@ -131,5 +140,4 @@ public class TweakedLinkedControllerAxisPacket extends TweakedLinkedControllerPa
         }
         TweakedLinkedControllerServerHandler.ReceiveAxis(world, pos, uniqueID, axisCouples, axisValues);
     }
-
 }

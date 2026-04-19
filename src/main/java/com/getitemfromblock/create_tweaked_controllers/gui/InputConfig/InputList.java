@@ -24,6 +24,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class InputList extends ContainerObjectSelectionList<InputList.Entry>
@@ -33,7 +35,7 @@ public class InputList extends ContainerObjectSelectionList<InputList.Entry>
 
     public InputList(ModControllerConfigScreen screen, Minecraft mc)
     {
-        super(mc, screen.width + 45, screen.height, 120, screen.height - 32, 20);
+        super(mc, screen.width + 45, screen.height - 32 - 120, 120, 20);
         modControllerConfigScreen = screen;
         addEntry(new InputList.CategoryEntry(CreateTweakedControllers.translateDirect("gui_gamepad_buttons")));
         for (int i = 0; i < 15; i++)

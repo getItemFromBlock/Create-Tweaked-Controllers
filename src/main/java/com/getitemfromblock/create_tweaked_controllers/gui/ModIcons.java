@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class ModIcons implements ScreenElement
 {
@@ -82,11 +84,10 @@ public class ModIcons implements ScreenElement
     @OnlyIn(Dist.CLIENT)
     private void vertex(VertexConsumer builder, Matrix4f matrix, Vec3 vec, Color rgb, float u, float v, int light)
     {
-        builder.vertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
-            .color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
-            .uv(u, v)
-            .uv2(light)
-            .endVertex();
+        builder.addVertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
+            .setColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
+            .setUv(u, v)
+            .setLight(light);
     }
 
     @OnlyIn(Dist.CLIENT)

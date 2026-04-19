@@ -1,5 +1,7 @@
 package com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft;
 
+import java.util.function.Supplier;
+
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -8,18 +10,18 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 
 public class ModComputerBehavior extends AbstractComputerBehaviour
 {
-
-    protected static final Capability<IPeripheral> PERIPHERAL_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
-    LazyOptional<IPeripheral> peripheral;
-    NonNullSupplier<IPeripheral> peripheralSupplier;
+    private IPeripheral peripheral;
+    private final Supplier<IPeripheral> peripheralSupplier;
+    private final SmartBlockEntity be;
 
     public ModComputerBehavior(SmartBlockEntity te)
     {
         super(te);
         this.peripheralSupplier = getPeripheralFor(te);
+        this.be = te;
     }
 
-    public static NonNullSupplier<IPeripheral> getPeripheralFor(SmartBlockEntity be)
+    public static Supplier<IPeripheral> getPeripheralFor(SmartBlockEntity be)
     {
         if (be instanceof TweakedLecternControllerBlockEntity tlcbe)
             return () -> new TweakedLecternPeripheral(tlcbe);
@@ -29,24 +31,17 @@ public class ModComputerBehavior extends AbstractComputerBehaviour
     }
 
     @Override
-    public <T> boolean isPeripheralCap(Capability<T> cap)
+    public IPeripheral getPeripheralCapability()
     {
-        return cap == PERIPHERAL_CAPABILITY;
-    }
-
-    @Override
-    public <T> LazyOptional<T> getPeripheralCapability()
-    {
-        if (peripheral == null || !peripheral.isPresent())
-            peripheral = LazyOptional.of(peripheralSupplier);
-        return peripheral.cast();
+        if (peripheral == null)
+            peripheral = peripheralSupplier.get();
+        return peripheral;
     }
 
     @Override
     public void removePeripheral()
     {
-        if (peripheral != null)
-            peripheral.invalidate();
+        if (peripheral != null && getWorld() != null)
+            getWorld().invalidateCapabilities(be.getBlockPos());
     }
-    
 }

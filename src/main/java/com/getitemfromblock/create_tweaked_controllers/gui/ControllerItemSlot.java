@@ -1,6 +1,9 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
 
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
+
 public class ControllerItemSlot extends SlotItemHandler
 {
     protected boolean active = true;
