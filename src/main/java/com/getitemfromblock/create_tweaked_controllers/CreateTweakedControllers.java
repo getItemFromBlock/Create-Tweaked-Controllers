@@ -42,7 +42,7 @@ public class CreateTweakedControllers
         ModDataComponents.register(eventBus);
         ModPackets.registerBusListener(eventBus);
         if (FMLEnvironment.dist.isClient())
-            ModClientStuff.onConstructor(eventBus, forgeEventBus);
+            ModClientStuff.onConstructor(eventBus);
         ModComputerCraftProxy.register();
         eventBus.addListener(this::onRegisterCapabilities);
     }
