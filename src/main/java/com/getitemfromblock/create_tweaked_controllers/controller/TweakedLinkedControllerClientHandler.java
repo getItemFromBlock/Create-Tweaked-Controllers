@@ -79,6 +79,7 @@ public class TweakedLinkedControllerClientHandler
         {
             MODE = Mode.ACTIVE;
             lecternPos = null;
+
         }
         else
         {
@@ -122,6 +123,7 @@ public class TweakedLinkedControllerClientHandler
     {
         TweakedControlsUtil.FreeFocus();
         MouseCursorHandler.DeactivateMouseLock(); // Make sure to free the camera when exiting the controller
+        MouseCursorHandler.SetShouldCancelScroll(false); // ...and free the mouse scroll wheel too
         selectedLocation = BlockPos.ZERO;
         buttonPacketCooldown = 0;
         axisPacketCooldown = 0;
@@ -200,6 +202,7 @@ public class TweakedLinkedControllerClientHandler
 
         if (MODE == Mode.ACTIVE)
         {
+            MouseCursorHandler.SetShouldCancelScroll(TweakedControlsUtil.profile.hasMouseScroll);
             short pressedKeys = TweakedControlsUtil.output.EncodeButtons();
             if (pressedKeys != buttonStates)
             {

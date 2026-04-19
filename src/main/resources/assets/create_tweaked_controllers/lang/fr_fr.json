@@ -66,6 +66,7 @@
     "create_tweaked_controllers.gui_input_keyboard": "Touche %1$s",
     "create_tweaked_controllers.gui_input_cursor_vel": "Vélocité %1$s du curseur",
     "create_tweaked_controllers.gui_input_cursor_pos": "Position %1$s du curseur",
+    "create_tweaked_controllers.gui_input_mouse_wheel": "Rotation %1$s de la molette",
     "create_tweaked_controllers.gui_input_mouse": "Bouton %1$s de la souris",
     
     "create_tweaked_controllers.gui_config_reset": "Réinit.",

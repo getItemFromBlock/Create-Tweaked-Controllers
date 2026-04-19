@@ -66,6 +66,7 @@
     "create_tweaked_controllers.gui_input_keyboard": "%1$s Key",
     "create_tweaked_controllers.gui_input_cursor_vel": "Cursor %1$s Velocity",
     "create_tweaked_controllers.gui_input_cursor_pos": "Cursor %1$s Position",
+    "create_tweaked_controllers.gui_input_mouse_wheel": "Mouse Wheel %1$s Rotation",
     "create_tweaked_controllers.gui_input_mouse": "Mouse Button %1$s",
     
     "create_tweaked_controllers.gui_config_reset": "Reset",

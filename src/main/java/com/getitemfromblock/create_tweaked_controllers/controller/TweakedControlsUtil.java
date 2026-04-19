@@ -135,7 +135,7 @@ public class TweakedControlsUtil
             GamepadInputs.GetControls();
             FillGamepadInputs(useFullPrec);
         }
-        
+        MouseCursorHandler.ResetScrollDelta();
     }
 
     public static void FillInputs(boolean useFullPrec)
@@ -143,7 +143,7 @@ public class TweakedControlsUtil
         profile.duplicatedKeys.forEach(key ->
         {
             key.setDown(false);
-            while (key.consumeClick()) {};
+            while (key.consumeClick()) {}
         });
         for (int i = 0; i < GamepadInputs.buttons.length; i++)
         {

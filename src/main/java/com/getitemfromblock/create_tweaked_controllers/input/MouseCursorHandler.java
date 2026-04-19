@@ -17,7 +17,9 @@ public class MouseCursorHandler
     public static Vec2 vel = null;
     private static MouseHandler m = null;
     private static double lastMouseEventTime;
+    private static double scrollDelta;
     private static boolean mouseLockActive = false;
+    private static boolean shouldCancelScroll = false;
     private static float deltaT = 0;
     private static Vector3f savedRot = new Vector3f();
 
@@ -64,6 +66,31 @@ public class MouseCursorHandler
         delta = delta.add(vel);
         vel = vel.scale(1/deltaT);
         lastPos = tmp;
+    }
+
+    public static void AddScrollDelta(double delta)
+    {
+        scrollDelta += delta;
+    }
+
+    public static void ResetScrollDelta()
+    {
+        scrollDelta = 0;
+    }
+
+    public static double GetScrollDelta()
+    {
+        return scrollDelta;
+    }
+
+    public static void SetShouldCancelScroll(boolean cancel )
+    {
+        shouldCancelScroll = cancel;
+    }
+
+    public static boolean ShouldCancelScroll()
+    {
+        return shouldCancelScroll;
     }
 
     public static float GetX(boolean useVelocity)

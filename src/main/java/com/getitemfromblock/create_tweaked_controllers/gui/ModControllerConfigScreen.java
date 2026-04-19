@@ -1,5 +1,6 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
+import com.getitemfromblock.create_tweaked_controllers.input.*;
 import org.joml.Vector3f;
 import java.util.function.Consumer;
 
@@ -9,14 +10,6 @@ import com.getitemfromblock.create_tweaked_controllers.controller.ControlType;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.ColoredButton;
 import com.getitemfromblock.create_tweaked_controllers.gui.InputConfig.InputList;
-import com.getitemfromblock.create_tweaked_controllers.input.GamepadInputs;
-import com.getitemfromblock.create_tweaked_controllers.input.JoystickAxisInput;
-import com.getitemfromblock.create_tweaked_controllers.input.JoystickButtonInput;
-import com.getitemfromblock.create_tweaked_controllers.input.JoystickInputs;
-import com.getitemfromblock.create_tweaked_controllers.input.KeyboardInput;
-import com.getitemfromblock.create_tweaked_controllers.input.MouseAxisInput;
-import com.getitemfromblock.create_tweaked_controllers.input.MouseButtonInput;
-import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.ScreenOpener;
@@ -192,7 +185,8 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
     protected void renderWindow(GuiGraphics ms, int mouseX, int mouseY, float partialTicks)
     {
         TweakedControlsUtil.GuiUpdate();
-        if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis()))
+        MouseCursorHandler.SetShouldCancelScroll(selectedInput != -1);
+        if (selectedInput != -1 && (HandleMouseMovement() || HandleJoystickButtons() || HandleJoystickAxis() || HandleMouseScroll()))
         {
             selectedInput = -1;
             saved = false;
@@ -226,6 +220,7 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
             controllerButtons[i].SetColorFactor(GamepadInputs.buttons[i] ? 1.0f : 50/255.0f);
         }
         renderSelectedInput();
+        MouseCursorHandler.ResetScrollDelta();
     }
 
     public void SetActiveInput(int index)
@@ -254,6 +249,17 @@ public class ModControllerConfigScreen extends AbstractSimiScreen
         if (Math.abs(deltaM) > 250)
         {
             TweakedControlsUtil.profile.layout[selectedInput] = new MouseAxisInput(isY, 0, Math.copySign(1000.0f, deltaM), false);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean HandleMouseScroll()
+    {
+        float delta = (float)MouseCursorHandler.GetScrollDelta();
+        if (Math.abs(delta) >= 1)
+        {
+            TweakedControlsUtil.profile.layout[selectedInput] = new MouseWheelInput(0, Math.copySign(1.0f, delta));
             return true;
         }
         return false;

@@ -3,6 +3,7 @@ package com.getitemfromblock.create_tweaked_controllers.gui.InputConfig;
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedControlsUtil;
 import com.getitemfromblock.create_tweaked_controllers.input.GenericInput;
+import com.getitemfromblock.create_tweaked_controllers.input.MouseCursorHandler;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.ScreenOpener;
 
@@ -90,6 +91,7 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
         String name = inputName.getString() + " : " + comp.getString();
         int w = font.width(name);
         graphics.drawString(font, name, (width - w) / 2, 10, 0xffffff);
+        MouseCursorHandler.ResetScrollDelta();
     }
 
     protected abstract void Populate();
