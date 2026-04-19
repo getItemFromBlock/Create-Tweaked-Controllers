@@ -45,6 +45,6 @@ public class ModClientConfig
     {
         XBOX,
         NINTENDO,
-        PLAYSTATION;
+        PLAYSTATION
     }
 }

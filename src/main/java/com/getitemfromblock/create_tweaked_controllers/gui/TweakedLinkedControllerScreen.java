@@ -35,15 +35,10 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     protected ModGuiTextures background1;
     private List<Rect2i> extraAreas = Collections.emptyList();
 
-    private IconButton resetButton;
-    private IconButton confirmButton;
-    private IconButton refreshButton;
-    private IconButton firstTabButton;
-    private IconButton secondTabButton;
     private JoystickIcon lStick;
     private JoystickIcon rStick;
-    private DigitIcon controllerDigits[];
-    private DigitIcon axisDigits[];
+    private DigitIcon[] controllerDigits;
+    private DigitIcon[] axisDigits;
     private boolean isSecondPage = false;
 
     public TweakedLinkedControllerScreen(TweakedLinkedControllerMenu menu, Inventory inv, Component title)
@@ -72,31 +67,29 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
 
         int x = leftPos;
         int y = topPos;
-        
-        resetButton = new IconButton(x + background0.width - 62, y + background0.height - 24, AllIcons.I_TRASH);
+
+        IconButton resetButton = new IconButton(x + background0.width - 62, y + background0.height - 24, AllIcons.I_TRASH);
         resetButton.withCallback(() -> {
             menu.clearContents();
             menu.sendClearPacket();
         });
-        confirmButton = new IconButton(x + background0.width - 33, y + background0.height - 24, AllIcons.I_CONFIRM);
+        IconButton confirmButton = new IconButton(x + background0.width - 33, y + background0.height - 24, AllIcons.I_CONFIRM);
         confirmButton.withCallback(() -> {
             minecraft.player.closeContainer();
         });
-        refreshButton = new IconButton(x + background0.width - 91, y + background0.height - 24, AllIcons.I_REFRESH);
-        refreshButton.withCallback(() -> {
-            GamepadInputs.SearchGamepad();
-        });
+        IconButton refreshButton = new IconButton(x + background0.width - 91, y + background0.height - 24, AllIcons.I_REFRESH);
+        refreshButton.withCallback(GamepadInputs::SearchGamepad);
         refreshButton.setToolTip(CreateTweakedControllers.translateDirect("gui_button_refresh"));
-        firstTabButton = new IconButton(x + 17, y + background0.height - 27, ModIcons.I_BUTTON);
+        IconButton firstTabButton = new IconButton(x + 17, y + background0.height - 27, ModIcons.I_BUTTON);
         firstTabButton.withCallback(() -> {
             this.isSecondPage = false;
-            menu.SetPage(this.isSecondPage);
+            menu.SetPage(false);
         });
         firstTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_button"));
-        secondTabButton = new IconButton(x + 42, y + background0.height - 27, ModIcons.I_AXES);
+        IconButton secondTabButton = new IconButton(x + 42, y + background0.height - 27, ModIcons.I_AXES);
         secondTabButton.withCallback(() -> {
             this.isSecondPage = true;
-            menu.SetPage(this.isSecondPage);
+            menu.SetPage(true);
         });
         secondTabButton.setToolTip(CreateTweakedControllers.translateDirect("gui_tab_axis"));
         addRenderableWidget(resetButton);
@@ -174,9 +167,8 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
             background0.render(graphics, x, y);
             lStick.visible = false;
             rStick.visible = false;
-            for (int i = 0; i < axisDigits.length; i++)
-            {
-                axisDigits[i].visible = false;
+            for (DigitIcon axisDigit : axisDigits) {
+                axisDigit.visible = false;
             }
         }
         MutableComponent text;

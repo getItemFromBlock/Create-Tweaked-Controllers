@@ -28,9 +28,8 @@ public class ModCommonEvents
     @SubscribeEvent
     public static void onEntityJoinWorld(@Nonnull EntityJoinLevelEvent event)
     {
-        if(event.getEntity() != null && event.getEntity() instanceof Player)
+        if(event.getEntity() instanceof Player player)
         {
-            Player player = (Player)event.getEntity();
             if (player.getPersistentData().contains("IsUsingLecternController"))
             {
                 player.getPersistentData().remove("IsUsingLecternController");

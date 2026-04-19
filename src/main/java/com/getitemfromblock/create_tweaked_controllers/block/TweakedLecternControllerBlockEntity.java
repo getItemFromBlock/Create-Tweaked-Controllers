@@ -240,13 +240,12 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
                 return;
 
             Entity entity = ((ServerLevel) level).getEntity(user);
-            if (!(entity instanceof Player))
+            if (!(entity instanceof Player player))
             {
                 stopUsing(null);
                 return;
             }
 
-            Player player = (Player) entity;
             if (!playerInRange(player, level, worldPosition) || !playerIsUsingLectern(player))
                 stopUsing(player);
         }

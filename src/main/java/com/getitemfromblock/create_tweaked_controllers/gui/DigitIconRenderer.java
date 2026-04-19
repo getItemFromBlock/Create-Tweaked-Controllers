@@ -45,7 +45,6 @@ public class DigitIconRenderer implements ScreenElement
         D_EMPTY = newRow(),
         D_DASH = next(),
         D_CROSS = next();
-    ;
 
     public DigitIconRenderer(int x, int y)
     {
