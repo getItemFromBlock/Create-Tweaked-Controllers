@@ -39,7 +39,7 @@ public class ModClientEvents
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onScreenMouseScrollPre(ScreenEvent.MouseScrolled.Pre event)
     {
-        MouseCursorHandler.AddScrollDelta(event.getScrollDelta());
+        MouseCursorHandler.AddScrollDelta(event.getScrollDeltaY());
         if (MouseCursorHandler.ShouldCancelScroll())
             event.setCanceled(true);
     }
