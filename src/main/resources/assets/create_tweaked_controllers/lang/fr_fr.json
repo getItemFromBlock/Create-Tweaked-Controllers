@@ -1,7 +1,7 @@
 {
     "block.create_tweaked_controllers.tweaked_lectern_controller": "Pupitre avec télécommande avancée",
     
-    "item.create_tweaked_controllers.tweaked_linked_controller": "Télécommande avancéé",
+    "item.create_tweaked_controllers.tweaked_linked_controller": "Télécommande avancée",
     
     "item.create_tweaked_controllers.tweaked_linked_controller.tooltip": "TÉLÉCOMMANDE AVANCÉE",
     "item.create_tweaked_controllers.tweaked_linked_controller.tooltip.summary": "Permet un _contrôle à la main_ sur des fréquences de _liaisons redstone_ assignées à votre _Manette_.",

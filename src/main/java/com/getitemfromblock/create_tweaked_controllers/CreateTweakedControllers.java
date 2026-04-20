@@ -3,6 +3,10 @@ package com.getitemfromblock.create_tweaked_controllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.KineticStats;
+import com.simibubi.create.foundation.item.TooltipModifier;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
@@ -20,7 +24,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(CreateTweakedControllers.ID)
 public class CreateTweakedControllers
@@ -29,11 +32,14 @@ public class CreateTweakedControllers
     public static final String NAME = "Create: Tweaked Controllers";
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID)
-            .defaultCreativeTab((net.minecraft.resources.ResourceKey<CreativeModeTab>) null);
+            .defaultCreativeTab((net.minecraft.resources.ResourceKey<CreativeModeTab>) null)
+            .setTooltipModifierFactory(item ->
+                    new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
+                            .andThen(TooltipModifier.mapNull(KineticStats.create(item)))
+            );;
 
     public CreateTweakedControllers(IEventBus eventBus, ModContainer container)
     {
-        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
         REGISTRATE.registerEventListeners(eventBus);
         ModTab.register(eventBus);
         ModItems.register();

@@ -2,10 +2,12 @@ package com.getitemfromblock.create_tweaked_controllers.packet;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.item.ModDataComponents;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import com.simibubi.create.foundation.item.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -65,8 +67,7 @@ public class TweakedLinkedControllerBindPacket extends TweakedLinkedControllerPa
             .forEachWithContext((f, first) -> frequencyItems.setStackInSlot(button * 2 + (first ? 0 : 1), f.getStack()
                 .copy()));
 
-        // TODO Phase E: persist frequencyItems back to the controller stack via DataComponents instead of legacy NBT
-        TweakedLinkedControllerItem.setFrequencyItems(heldItem, frequencyItems);
+        heldItem.set(ModDataComponents.TWEAKED_CONTROLLER_ITEMS, ItemHelper.containerContentsFromHandler(frequencyItems));
     }
 
     @Override

@@ -23,6 +23,7 @@
     }
   },
   "result": {
-    "item": "create_tweaked_controllers:tweaked_linked_controller"
+    "id": "create_tweaked_controllers:tweaked_linked_controller",
+	"count": 1
   }
 }

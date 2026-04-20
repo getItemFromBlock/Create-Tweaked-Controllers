@@ -6,11 +6,14 @@ import java.util.UUID;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.TweakedLecternPeripheral;
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
+import com.getitemfromblock.create_tweaked_controllers.item.ModDataComponents;
+import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import net.createmod.catnip.codecs.CatnipCodecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,15 +34,14 @@ import net.neoforged.fml.loading.FMLEnvironment;
 
 public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 {
-
-    private ItemStack controller;
+    private ItemContainerContents controllerData = ItemContainerContents.EMPTY;
 
     private UUID user;
     private UUID prevUser;    // used only on client
     private boolean deactivatedThisTick;    // used only on server
     private boolean useFullPrecision = false;
-    private ControllerRedstoneOutput output;
-    private float[] axis;
+    private final ControllerRedstoneOutput output;
+    private final float[] axis;
     private TweakedLecternPeripheral peripheral = null;
 
     public AbstractComputerBehaviour computerBehaviour;
@@ -67,9 +70,7 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
     {
         super.write(compound, registries, clientPacket);
         compound.putBoolean("UseFullPrecision", useFullPrecision);
-        if (controller == null)
-            controller = ItemStack.EMPTY;
-        compound.put("Controller", controller.saveOptional(registries));
+        compound.put("ControllerData", CatnipCodecUtils.encode(ItemContainerContents.CODEC, registries, controllerData).orElseThrow());
         if (user != null)
             compound.putUUID("User", user);
     }
@@ -78,12 +79,7 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
     public void writeSafe(CompoundTag compound, HolderLookup.Provider registries)
     {
         super.writeSafe(compound, registries);
-        compound.putBoolean("UseFullPrecision", useFullPrecision);
-        if (controller == null)
-            controller = ItemStack.EMPTY;
-        compound.put("Controller", controller.saveOptional(registries));
-        if (user != null)
-            compound.putUUID("User", user);
+        compound.put("ControllerData", CatnipCodecUtils.encode(ItemContainerContents.CODEC, registries, controllerData).orElseThrow());
     }
 
     @Override
@@ -91,8 +87,14 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
     {
         super.read(compound, registries, clientPacket);
         useFullPrecision = compound.getBoolean("UseFullPrecision");
-        controller = ItemStack.parseOptional(registries, compound.getCompound("Controller"));
+        controllerData = CatnipCodecUtils.decode(ItemContainerContents.CODEC, registries, compound.get("ControllerData"))
+                .orElse(ItemContainerContents.EMPTY);
         user = compound.hasUUID("User") ? compound.getUUID("User") : null;
+    }
+
+    public ItemStack getController()
+    {
+        return createLinkedController();
     }
 
     public void AssignPeripheral(TweakedLecternPeripheral p)
@@ -143,11 +145,6 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
             }
             return result;
         }
-    }
-
-    public ItemStack getController()
-    {
-        return controller;
     }
 
     public boolean hasUser()
@@ -253,9 +250,9 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 
     public void setController(ItemStack newController)
     {
-        controller = newController;
         if (newController != null)
         {
+            controllerData = newController.getOrDefault(ModDataComponents.TWEAKED_CONTROLLER_ITEMS, ItemContainerContents.EMPTY);
             AllSoundEvents.CONTROLLER_PUT.playOnServer(level, worldPosition);
         }
     }
@@ -266,7 +263,7 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
         stack.setCount(0);
         if (player.getItemInHand(hand).isEmpty())
         {
-            player.setItemInHand(hand, controller);
+            player.setItemInHand(hand, createLinkedController());
         }
         else
         {
@@ -285,15 +282,22 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
         double x = worldPosition.getX() + 0.5 + 0.25*dir.getStepX();
         double y = worldPosition.getY() + 1;
         double z = worldPosition.getZ() + 0.5 + 0.25*dir.getStepZ();
-        ItemEntity itementity = new ItemEntity(level, x, y, z, controller.copy());
+        ItemEntity itementity = new ItemEntity(level, x, y, z, createLinkedController());
         itementity.setDefaultPickUpDelay();
         level.addFreshEntity(itementity);
-        controller = null;
+        controllerData = ItemContainerContents.EMPTY;
     }
 
     public static boolean playerInRange(Player player, Level world, BlockPos pos)
     {
         double reach = 0.4 * player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
         return player.distanceToSqr(Vec3.atCenterOf(pos)) < reach*reach;
+    }
+
+    private ItemStack createLinkedController()
+    {
+        ItemStack stack = ModItems.TWEAKED_LINKED_CONTROLLER.asStack();
+        stack.set(ModDataComponents.TWEAKED_CONTROLLER_ITEMS, controllerData);
+        return stack;
     }
 }
