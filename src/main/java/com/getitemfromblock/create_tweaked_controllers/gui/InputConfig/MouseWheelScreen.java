@@ -39,10 +39,6 @@ public class MouseWheelScreen extends GenericInputScreen
     @Override
     public void tick()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            bounds[i].tick();
-        }
         super.tick();
     }
 
