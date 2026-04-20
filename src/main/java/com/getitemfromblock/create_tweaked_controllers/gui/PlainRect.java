@@ -50,23 +50,21 @@ public class PlainRect extends AbstractSimiWidget
             int iw = Lerp(width, endW, extendValue);
             int ih = Lerp(height, endH, extendValue);
             if (iw == 0 || ih == 0) return;
-            RenderSystem.setShaderColor(color.x(), color.y(), color.z(), 1.0F);
+            //float[] prevColor = RenderSystem.getShaderColor();
+            graphics.setColor(color.x, color.y, color.z, this.alpha);
+            //RenderSystem.setShaderColor(color.x(), color.y(), color.z(), 1.0F);
             boolean reverse = (iw < 0) ^ (ih < 0);
             if (reverse)
             {
                 if (iw < 0)
-                {
                     PlainRectRenderer.render(graphics, ix + iw, iy, -iw, ih);
-                }
                 else
-                {
                     PlainRectRenderer.render(graphics, ix, iy + ih, iw, -ih);
-                }
             }
             else
-            {
                 PlainRectRenderer.render(graphics, ix, iy, iw, ih);
-            }
+            graphics.setColor(1, 1, 1, 1);
+            //RenderSystem.setShaderColor(prevColor[0], prevColor[1], prevColor[2], prevColor[3]);
         }
     }
 

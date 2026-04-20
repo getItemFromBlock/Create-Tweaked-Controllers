@@ -3,6 +3,8 @@ package com.getitemfromblock.create_tweaked_controllers.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.simibubi.create.foundation.item.TooltipHelper;
+import net.createmod.catnip.lang.FontHelper;
 import org.lwjgl.glfw.GLFW;
 
 import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
@@ -317,9 +319,9 @@ public class TweakedLinkedControllerClientHandler
         List<Component> list = new ArrayList<>();
         list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.bind_mode")
             .withStyle(ChatFormatting.GOLD));
-        
-        list.add(CreateTweakedControllers.translateDirect("tweaked_linked_controller.press_keybind")
-            .withStyle(ChatFormatting.GRAY));
+
+        list.addAll(TooltipHelper.cutTextComponent(CreateTweakedControllers.translateDirect("tweaked_linked_controller.press_keybind"),
+                FontHelper.Palette.ALL_GRAY));
 
         int width = 0;
         int height = list.size() * mc.font.lineHeight;
