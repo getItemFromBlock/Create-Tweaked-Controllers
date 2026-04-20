@@ -3,6 +3,7 @@ package com.getitemfromblock.create_tweaked_controllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
+import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.ModDataComponents;
@@ -27,7 +28,8 @@ public class CreateTweakedControllers
     public static final String ID = "create_tweaked_controllers";
     public static final String NAME = "Create: Tweaked Controllers";
 
-    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
+    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID)
+            .defaultCreativeTab((net.minecraft.resources.ResourceKey<CreativeModeTab>) null);
 
     public CreateTweakedControllers(IEventBus eventBus, ModContainer container)
     {

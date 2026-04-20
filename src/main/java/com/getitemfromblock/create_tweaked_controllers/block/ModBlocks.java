@@ -9,12 +9,6 @@ import com.getitemfromblock.create_tweaked_controllers.ModTab;
 
 public class ModBlocks
 {
-
-    static
-    {
-        CreateTweakedControllers.registrate().setCreativeTab(ModTab.MOD_TAB);
-    }
-
     public static final BlockEntry<TweakedLecternControllerBlock> TWEAKED_LECTERN_CONTROLLER =
         CreateTweakedControllers.registrate().block("tweaked_lectern_controller", TweakedLecternControllerBlock::new)
             .initialProperties(() -> Blocks.LECTERN)
