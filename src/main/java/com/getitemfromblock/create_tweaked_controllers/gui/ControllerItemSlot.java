@@ -1,7 +1,8 @@
 package com.getitemfromblock.create_tweaked_controllers.gui;
 
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class ControllerItemSlot extends SlotItemHandler
 {

@@ -27,8 +27,10 @@ import com.simibubi.create.foundation.utility.ControlsUtil;
 import net.createmod.catnip.outliner.Outliner;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -36,13 +38,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class TweakedLinkedControllerClientHandler
 {
 
-    public static final IGuiOverlay OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
+    public static final LayeredDraw.Layer OVERLAY = TweakedLinkedControllerClientHandler::renderOverlay;
 
     public static Mode MODE = Mode.IDLE;
     public static int PACKET_RATE = 5;
@@ -119,6 +119,19 @@ public class TweakedLinkedControllerClientHandler
         return lecternPos != null;
     }
 
+    public static void onLecternUserChanged(BlockPos pos, java.util.UUID prevUser, java.util.UUID currentUser)
+    {
+        java.util.UUID self = Minecraft.getInstance().player.getUUID();
+        if (currentUser == null && self.equals(prevUser))
+        {
+            deactivateInLectern();
+        }
+        else if (prevUser == null && self.equals(currentUser))
+        {
+            activateInLectern(pos);
+        }
+    }
+
     protected static void onReset()
     {
         TweakedControlsUtil.FreeFocus();
@@ -128,16 +141,16 @@ public class TweakedLinkedControllerClientHandler
         buttonPacketCooldown = 0;
         axisPacketCooldown = 0;
         if (inLectern())
-            ModPackets.channel.sendToServer(new TweakedLinkedControllerStopLecternPacket(lecternPos));
+            ModPackets.sendToServer(new TweakedLinkedControllerStopLecternPacket(lecternPos));
         lecternPos = null;
 
         if (buttonStates != 0)
         {
             buttonStates = 0;
-            ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(buttonStates));
+            ModPackets.sendToServer(new TweakedLinkedControllerButtonPacket(buttonStates));
         }
         axisStates = 0;
-        ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axisStates, null));
+        ModPackets.sendToServer(new TweakedLinkedControllerAxisPacket(axisStates, null));
         TweakedLinkedControllerItemRenderer.resetButtons();
     }
 
@@ -214,30 +227,30 @@ public class TweakedLinkedControllerClientHandler
                 {
                     AllSoundEvents.CONTROLLER_CLICK.playAt(player.level(), player.blockPosition(), 1f, .5f, true);
                 }
-                ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
+                ModPackets.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
                 buttonPacketCooldown = PACKET_RATE;
             }
             if (buttonPacketCooldown == 0 && pressedKeys != 0)
             {
-                ModPackets.channel.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
+                ModPackets.sendToServer(new TweakedLinkedControllerButtonPacket(pressedKeys, lecternPos));
                 buttonPacketCooldown = PACKET_RATE;
             }
             buttonStates = pressedKeys;
             int axis = TweakedControlsUtil.output.EncodeAxis();
             if (useFullPrec)
             {
-                ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(TweakedControlsUtil.output.fullAxis, axis, lecternPos));
+                ModPackets.sendToServer(new TweakedLinkedControllerAxisPacket(TweakedControlsUtil.output.fullAxis, axis, lecternPos));
             }
             else
             {
                 if (axis != axisStates)
                 {
-                    ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+                    ModPackets.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
                     axisPacketCooldown = PACKET_RATE;
                 }
                 if (axisPacketCooldown == 0 && axis != 0)
                 {
-                    ModPackets.channel.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
+                    ModPackets.sendToServer(new TweakedLinkedControllerAxisPacket(axis, lecternPos));
                     axisPacketCooldown = PACKET_RATE;
                 }
                 axisStates = axis;
@@ -261,7 +274,7 @@ public class TweakedLinkedControllerClientHandler
                 LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
                 if (linkBehaviour != null)
                 {
-                    ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(i, selectedLocation));
+                    ModPackets.sendToServer(new TweakedLinkedControllerBindPacket(i, selectedLocation));
                     CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetButtonName(i)).sendStatus(mc.player);
                 }
                 MODE = Mode.IDLE;
@@ -276,7 +289,7 @@ public class TweakedLinkedControllerClientHandler
                     if (linkBehaviour != null)
                     {
                         int a = i >= 4 ? i + 4 : i * 2 + (GamepadInputs.axis[i] < 0 ? 1 : 0);
-                        ModPackets.channel.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
+                        ModPackets.sendToServer(new TweakedLinkedControllerBindPacket(a + 15, selectedLocation));
                         CreateTweakedControllers.translate("tweaked_linked_controller.key_bound", GamepadInputs.GetAxisName(a)).sendStatus(mc.player);
                     }
                     MODE = Mode.IDLE;
@@ -287,8 +300,7 @@ public class TweakedLinkedControllerClientHandler
         }
     }
 
-    public static void renderOverlay(ForgeGui gui, GuiGraphics graphics, float partialTicks, int width1,
-        int height1) {
+    public static void renderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui)
             return;
@@ -296,6 +308,8 @@ public class TweakedLinkedControllerClientHandler
         if (MODE != Mode.BIND)
             return;
 
+        int width1 = mc.getWindow().getGuiScaledWidth();
+        int height1 = mc.getWindow().getGuiScaledHeight();
         graphics.pose().pushPose();
         Screen tooltipScreen = new Screen(CommonComponents.EMPTY) {};
         tooltipScreen.init(mc, width1, height1);

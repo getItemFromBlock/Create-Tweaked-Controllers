@@ -22,8 +22,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class PlainRectRenderer implements ScreenElement
 {
@@ -64,13 +64,12 @@ public class PlainRectRenderer implements ScreenElement
     private static void innerBlit(Matrix4f p_93113_, int p_93114_, int p_93115_, int p_93116_, int p_93117_, int p_93118_, float p_93119_, float p_93120_, float p_93121_, float p_93122_)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(p_93113_, (float)p_93114_, (float)p_93117_, (float)p_93118_).uv(p_93119_, p_93122_).endVertex();
-        bufferbuilder.vertex(p_93113_, (float)p_93115_, (float)p_93117_, (float)p_93118_).uv(p_93120_, p_93122_).endVertex();
-        bufferbuilder.vertex(p_93113_, (float)p_93115_, (float)p_93116_, (float)p_93118_).uv(p_93120_, p_93121_).endVertex();
-        bufferbuilder.vertex(p_93113_, (float)p_93114_, (float)p_93116_, (float)p_93118_).uv(p_93119_, p_93121_).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(p_93113_, (float)p_93114_, (float)p_93117_, (float)p_93118_).setUv(p_93119_, p_93122_);
+        bufferbuilder.addVertex(p_93113_, (float)p_93115_, (float)p_93117_, (float)p_93118_).setUv(p_93120_, p_93122_);
+        bufferbuilder.addVertex(p_93113_, (float)p_93115_, (float)p_93116_, (float)p_93118_).setUv(p_93120_, p_93121_);
+        bufferbuilder.addVertex(p_93113_, (float)p_93114_, (float)p_93116_, (float)p_93118_).setUv(p_93119_, p_93121_);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -100,11 +99,10 @@ public class PlainRectRenderer implements ScreenElement
     @OnlyIn(Dist.CLIENT)
     private void vertex(VertexConsumer builder, Matrix4f matrix, Vec3 vec, Color rgb, float u, float v, int light)
     {
-        builder.vertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
-            .color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
-            .uv(u, v)
-            .uv2(light)
-            .endVertex();
+        builder.addVertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
+            .setColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
+            .setUv(u, v)
+            .setLight(light);
     }
 
     @OnlyIn(Dist.CLIENT)

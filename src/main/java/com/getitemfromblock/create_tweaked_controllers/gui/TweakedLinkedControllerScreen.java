@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 
 public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<TweakedLinkedControllerMenu>
@@ -211,8 +212,7 @@ public class TweakedLinkedControllerScreen extends AbstractSimiContainerScreen<T
     @Override
     protected void containerTick()
     {
-        if (!menu.player.getMainHandItem()
-            .equals(menu.contentHolder, false))
+        if (!ItemStack.isSameItem(menu.player.getMainHandItem(), menu.contentHolder))
             menu.player.closeContainer();
 
         super.containerTick();

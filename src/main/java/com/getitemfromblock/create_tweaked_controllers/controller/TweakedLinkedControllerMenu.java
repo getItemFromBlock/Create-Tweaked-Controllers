@@ -5,19 +5,19 @@ import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
 import com.getitemfromblock.create_tweaked_controllers.item.TweakedLinkedControllerItem;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class TweakedLinkedControllerMenu extends GhostItemMenu<ItemStack>
 {
     private boolean isSecondPage = false;
 
-    public TweakedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData)
+    public TweakedLinkedControllerMenu(MenuType<?> type, int id, Inventory inv, RegistryFriendlyByteBuf extraData)
     {
         super(type, id, inv, extraData);
     }
@@ -53,9 +53,9 @@ public class TweakedLinkedControllerMenu extends GhostItemMenu<ItemStack>
     }
 
     @Override
-    protected ItemStack createOnClient(FriendlyByteBuf extraData)
+    protected ItemStack createOnClient(RegistryFriendlyByteBuf extraData)
     {
-        return extraData.readItem();
+        return ItemStack.STREAM_CODEC.decode(extraData);
     }
 
     @Override
@@ -119,8 +119,7 @@ public class TweakedLinkedControllerMenu extends GhostItemMenu<ItemStack>
     @Override
     protected void saveData(ItemStack contentHolder)
     {
-        contentHolder.getOrCreateTag()
-            .put("Items", ghostInventory.serializeNBT());
+        TweakedLinkedControllerItem.setFrequencyItems(contentHolder, ghostInventory);
     }
 
     @Override

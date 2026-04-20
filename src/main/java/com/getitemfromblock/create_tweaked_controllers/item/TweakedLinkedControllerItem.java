@@ -5,13 +5,13 @@ import java.util.function.Consumer;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerMenu;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import net.createmod.catnip.data.Couple;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -23,20 +23,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class TweakedLinkedControllerItem extends Item implements MenuProvider
 {
+    public static final int FREQUENCY_SLOTS = 50;
 
     public TweakedLinkedControllerItem(Properties properties)
     {
@@ -68,8 +69,8 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
             {
                 if (AllBlocks.REDSTONE_LINK.has(hitState))
                 {
-                    if (world.isClientSide)
-                        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.toggleBindMode(ctx.getClickedPos()));
+                    if (world.isClientSide && FMLEnvironment.dist.isClient())
+                        toggleBindMode(ctx.getClickedPos());
                     player.getCooldowns()
                             .addCooldown(this, 2);
                     return InteractionResult.SUCCESS;
@@ -100,17 +101,15 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
 
         if (player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND)
         {
-            if (!world.isClientSide && player instanceof ServerPlayer && player.mayBuild())
-                NetworkHooks.openScreen((ServerPlayer) player, this, buf -> {
-                    buf.writeItem(heldItem);
-                });
+            if (!world.isClientSide && player instanceof ServerPlayer serverPlayer && player.mayBuild())
+                serverPlayer.openMenu(this, buf -> ItemStack.STREAM_CODEC.encode(buf, heldItem));
             return InteractionResultHolder.success(heldItem);
         }
 
         if (!player.isShiftKeyDown())
         {
-            if (world.isClientSide)
-                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::toggleActive);
+            if (world.isClientSide && FMLEnvironment.dist.isClient())
+                toggleActive();
             player.getCooldowns()
                 .addCooldown(this, 2);
         }
@@ -132,13 +131,20 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
 
     public static ItemStackHandler getFrequencyItems(ItemStack stack)
     {
-        ItemStackHandler newInv = new ItemStackHandler(50);
+        ItemStackHandler newInv = new ItemStackHandler(FREQUENCY_SLOTS);
         if (ModItems.TWEAKED_LINKED_CONTROLLER.get() != stack.getItem())
             throw new IllegalArgumentException("Cannot get frequency items from non-controller: " + stack);
-        CompoundTag invNBT = stack.getOrCreateTagElement("Items");
-        if (!invNBT.isEmpty())
-            newInv.deserializeNBT(invNBT);
+        if (!stack.has(ModDataComponents.TWEAKED_CONTROLLER_ITEMS))
+            return newInv;
+        ItemHelper.fillItemStackHandler(
+            stack.getOrDefault(ModDataComponents.TWEAKED_CONTROLLER_ITEMS, ItemContainerContents.EMPTY),
+            newInv);
         return newInv;
+    }
+
+    public static void setFrequencyItems(ItemStack stack, ItemStackHandler handler)
+    {
+        stack.set(ModDataComponents.TWEAKED_CONTROLLER_ITEMS, ItemHelper.containerContentsFromHandler(handler));
     }
 
     public static Couple<Frequency> toFrequency(ItemStack controller, int slot)
@@ -167,5 +173,4 @@ public class TweakedLinkedControllerItem extends Item implements MenuProvider
     {
         consumer.accept(SimpleCustomRenderer.create(this, new TweakedLinkedControllerItemRenderer()));
     }
-
 }

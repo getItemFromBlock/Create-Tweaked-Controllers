@@ -3,46 +3,36 @@ package com.getitemfromblock.create_tweaked_controllers.block;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.TweakedLecternPeripheral;
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
-import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 {
 
     private ItemStack controller;
-    
+
     private UUID user;
     private UUID prevUser;    // used only on client
     private boolean deactivatedThisTick;    // used only on server
@@ -73,39 +63,35 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
     }
 
     @Override
-    protected void write(CompoundTag compound, boolean clientPacket)
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket)
     {
-        super.write(compound, clientPacket);
+        super.write(compound, registries, clientPacket);
         compound.putBoolean("UseFullPrecision", useFullPrecision);
         if (controller == null)
-        {
-            controller = new ItemStack(Blocks.AIR, 0);
-        }
-        compound.put("Controller", controller.save(new CompoundTag()));
+            controller = ItemStack.EMPTY;
+        compound.put("Controller", controller.saveOptional(registries));
         if (user != null)
             compound.putUUID("User", user);
     }
 
     @Override
-    public void writeSafe(CompoundTag compound)
+    public void writeSafe(CompoundTag compound, HolderLookup.Provider registries)
     {
-        super.writeSafe(compound);
+        super.writeSafe(compound, registries);
         compound.putBoolean("UseFullPrecision", useFullPrecision);
         if (controller == null)
-        {
-            controller = new ItemStack(Blocks.AIR, 0);
-        }
-        compound.put("Controller", controller.save(new CompoundTag()));
+            controller = ItemStack.EMPTY;
+        compound.put("Controller", controller.saveOptional(registries));
         if (user != null)
             compound.putUUID("User", user);
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket)
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket)
     {
-        super.read(compound, clientPacket);
+        super.read(compound, registries, clientPacket);
         useFullPrecision = compound.getBoolean("UseFullPrecision");
-        controller = ItemStack.of(compound.getCompound("Controller"));
+        controller = ItemStack.parseOptional(registries, compound.getCompound("Controller"));
         user = compound.hasUUID("User") ? compound.getUUID("User") : null;
     }
 
@@ -239,7 +225,9 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 
         if (level.isClientSide)
         {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::tryToggleActive);
+            if (FMLEnvironment.dist.isClient())
+                com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerClientHandler
+                    .onLecternUserChanged(worldPosition, prevUser, user);
             prevUser = user;
         }
         else
@@ -261,19 +249,6 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
             Player player = (Player) entity;
             if (!playerInRange(player, level, worldPosition) || !playerIsUsingLectern(player))
                 stopUsing(player);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void tryToggleActive()
-    {
-        if (user == null && Minecraft.getInstance().player.getUUID().equals(prevUser))
-        {
-            TweakedLinkedControllerClientHandler.deactivateInLectern();
-        }
-        else if (prevUser == null && Minecraft.getInstance().player.getUUID().equals(user))
-        {
-            TweakedLinkedControllerClientHandler.activateInLectern(worldPosition);
         }
     }
 
@@ -319,18 +294,7 @@ public class TweakedLecternControllerBlockEntity extends SmartBlockEntity
 
     public static boolean playerInRange(Player player, Level world, BlockPos pos)
     {
-        //double modifier = world.isRemote ? 0 : 1.0;
-        double reach = 0.4*player.getAttributeValue(ForgeMod.BLOCK_REACH.get());// + modifier;
+        double reach = 0.4 * player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
         return player.distanceToSqr(Vec3.atCenterOf(pos)) < reach*reach;
     }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
-    {
-        if (computerBehaviour.isPeripheralCap(cap))
-            return computerBehaviour.getPeripheralCapability();
-        return super.getCapability(cap, side);
-    }
-
 }

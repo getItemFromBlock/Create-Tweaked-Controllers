@@ -3,6 +3,7 @@ package com.getitemfromblock.create_tweaked_controllers.packet;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.block.TweakedLecternControllerBlockEntity;
 import com.getitemfromblock.create_tweaked_controllers.controller.ControllerRedstoneOutput;
 import com.getitemfromblock.create_tweaked_controllers.controller.TweakedLinkedControllerServerHandler;
@@ -12,14 +13,31 @@ import net.createmod.catnip.data.Couple;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class TweakedLinkedControllerButtonPacket extends TweakedLinkedControllerPacketBase
 {
+    public static final Type<TweakedLinkedControllerButtonPacket> TYPE = new Type<>(
+        ResourceLocation.fromNamespaceAndPath(CreateTweakedControllers.ID, "controller_button"));
 
-    private short buttonStates = 0;
+    public static final StreamCodec<FriendlyByteBuf, TweakedLinkedControllerButtonPacket> STREAM_CODEC =
+        StreamCodec.of(
+            (buf, pkt) -> {
+                writeBase(buf, pkt);
+                buf.writeShort(pkt.buttonStates);
+            },
+            buf -> {
+                BaseFields b = readBase(buf);
+                short buttons = buf.readShort();
+                return new TweakedLinkedControllerButtonPacket(buttons, b.lecternPos());
+            });
+
+    private final short buttonStates;
 
     public TweakedLinkedControllerButtonPacket(short buttons)
     {
@@ -28,21 +46,14 @@ public class TweakedLinkedControllerButtonPacket extends TweakedLinkedController
 
     public TweakedLinkedControllerButtonPacket(short button, BlockPos lecternPos)
     {
-        super(lecternPos);
+        super(lecternPos, false);
         this.buttonStates = button;
     }
 
-    public TweakedLinkedControllerButtonPacket(FriendlyByteBuf buffer)
-    {
-        super(buffer);
-        buttonStates = buffer.readShort();
-    }
-
     @Override
-    public void write(FriendlyByteBuf buffer)
+    public Type<? extends CustomPacketPayload> type()
     {
-        super.write(buffer);
-        buffer.writeShort(buttonStates);
+        return TYPE;
     }
 
     @Override
@@ -84,5 +95,4 @@ public class TweakedLinkedControllerButtonPacket extends TweakedLinkedController
         }
         TweakedLinkedControllerServerHandler.ReceivePressed(world, pos, uniqueID, buttonCouples, buttonValues);
     }
-
 }

@@ -55,10 +55,6 @@ public abstract class GenericInputScreen extends AbstractSimiScreen
     @Override
     public void tick()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            outputs[i].tick();
-        }
         super.tick();
     }
 

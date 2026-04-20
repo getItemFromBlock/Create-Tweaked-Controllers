@@ -3,7 +3,9 @@ package com.getitemfromblock.create_tweaked_controllers;
 import com.getitemfromblock.create_tweaked_controllers.block.ModBlocks;
 import com.getitemfromblock.create_tweaked_controllers.compat.ComputerCraft.ModComputerCraftProxy;
 import com.getitemfromblock.create_tweaked_controllers.config.ModConfigs;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import com.getitemfromblock.create_tweaked_controllers.gui.ModMenuTypes;
+import com.getitemfromblock.create_tweaked_controllers.item.ModDataComponents;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import com.getitemfromblock.create_tweaked_controllers.packet.ModPackets;
 import com.simibubi.create.Create;
@@ -13,18 +15,13 @@ import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(CreateTweakedControllers.ID)
-@Mod.EventBusSubscriber
 public class CreateTweakedControllers
 {
     public static final String ID = "create_tweaked_controllers";
@@ -32,27 +29,27 @@ public class CreateTweakedControllers
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
-    public CreateTweakedControllers()
+    public CreateTweakedControllers(IEventBus eventBus, ModContainer container)
     {
-        ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
-        forgeEventBus.register(this);
-        eventBus.addListener(CreateTweakedControllers::init);
+        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
         REGISTRATE.registerEventListeners(eventBus);
         ModTab.register(eventBus);
         ModItems.register();
         ModBlocks.register();
         ModBlockEntityTypes.register();
         ModMenuTypes.register();
-        ModConfigs.register(modLoadingContext);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ModClientStuff.onConstructor(eventBus, forgeEventBus));
+        ModConfigs.register(container);
+        ModDataComponents.register(eventBus);
+        ModPackets.registerBusListener(eventBus);
+        if (FMLEnvironment.dist.isClient())
+            ModClientStuff.onConstructor(eventBus, forgeEventBus);
         ModComputerCraftProxy.register();
+        eventBus.addListener(this::onRegisterCapabilities);
     }
 
-    public static void init(final FMLCommonSetupEvent event)
+    private void onRegisterCapabilities(final RegisterCapabilitiesEvent event)
     {
-        ModPackets.registerPackets();
+        ModComputerCraftProxy.registerCapabilities(event);
     }
 
     public static CreateRegistrate registrate()
@@ -62,7 +59,7 @@ public class CreateTweakedControllers
 
     public static ResourceLocation asResource(String path)
     {
-        return new ResourceLocation(ID, path);
+        return ResourceLocation.fromNamespaceAndPath(ID, path);
     }
 
     public static MutableComponent translateDirect(String key, Object... args)

@@ -6,11 +6,16 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableObject;
 
+import com.getitemfromblock.create_tweaked_controllers.CreateTweakedControllers;
 import com.getitemfromblock.create_tweaked_controllers.config.ModClientConfig;
 import com.getitemfromblock.create_tweaked_controllers.item.ModItems;
 import net.createmod.catnip.gui.ScreenOpener;
 
 import net.minecraft.client.Minecraft;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -22,10 +27,6 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class ModMainConfigButton extends Button
 {
@@ -92,12 +93,12 @@ public class ModMainConfigButton extends Button
         }
     }
 
-    @EventBusSubscriber(value = Dist.CLIENT)
+    @EventBusSubscriber(modid = CreateTweakedControllers.ID, value = Dist.CLIENT)
     public static class OpenConfigButtonHandler
     {
 
         @SubscribeEvent
-        public static void onGuiInit(ScreenEvent.Init event) {
+        public static void onGuiInit(ScreenEvent.Init.Post event) {
             Screen gui = event.getScreen();
 
             MenuRows menu = null;
