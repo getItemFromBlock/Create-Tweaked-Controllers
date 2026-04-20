@@ -2,10 +2,16 @@
 
 <img src="src/main/resources/logo.png" width="" height="100">
 
-A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you control your contraptions using an advanced controller, that you can use with your mouse, keyboard or even your gamepad !
+A [Create](https://github.com/Creators-of-Create/Create) mod addon that let you control your contraptions using an advanced controller, that you can use with your mouse, keyboard or even your gamepad!
 
 CurseForge link [here](https://www.curseforge.com/minecraft/mc-mods/create-tweaked-controllers)  
-Modrinth link [here](https://modrinth.com/mod/create-tweaked-controllers)  
+Modrinth link [here](https://modrinth.com/mod/create-tweaked-controllers)
+
+## Credits
+Thanks to [@McArctic](https://github.com/McArctic) for the original 1.21.1 port!  
+Thanks to [@xiewuzhiying](https://github.com/xiewuzhiying) and [@LogicWheat](https://github.com/LogicWheat)
+for the Chinese translations!  
+Thanks to [@AsseyGithub](https://github.com/AsseyGithub) for the Korean translations!
 
 ## Building
 
@@ -49,4 +55,4 @@ Due to a Create limitation, if a network is updated too many times it will break
 
 The joystick axis are directly read from GLFW. With most if not all gamepads, the +X axis points to the right, and the +Y axis points down.
 
-IF YOU USE A NINTENDO CONTROLLER, YOU MIGHT WANT TO TAKE A LOOK AT THIS: [https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1).
+IF YOU USE A NINTENDO CONTROLLER, PLEASE TAKE A LOOK AT THIS: [https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1](https://github.com/getItemFromBlock/Create-Tweaked-Controllers/issues/1).
