@@ -261,6 +261,7 @@ public class TweakedLinkedControllerClientHandler
 
         if (MODE == Mode.BIND)
         {
+            MouseCursorHandler.SetShouldCancelScroll(TweakedControlsUtil.profile.hasMouseScroll);
             VoxelShape shape = mc.level.getBlockState(selectedLocation)
                 .getShape(mc.level, selectedLocation);
             if (!shape.isEmpty())
