@@ -40,7 +40,10 @@ public class ModMainConfigButton extends Button
     @Override
     public void renderString(GuiGraphics graphics, Font pFont, int pColor)
     {
-        graphics.renderItem(ICON, getX() + 2, getY() + 2);
+        // This prevents a crash with "remove loading screens", don't listen to the code cleanup recommendation
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.getItemRenderer().getModel(ICON, null, null, 0) != null)
+            graphics.renderItem(ICON, getX() + 2, getY() + 2);
     }
 
     public static void click(Button b)
