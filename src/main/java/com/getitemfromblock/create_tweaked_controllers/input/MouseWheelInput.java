@@ -67,6 +67,13 @@ public class MouseWheelInput implements GenericInput
     }
 
     @Override
+    public boolean IsDataCoherent()
+    {
+        return !Float.isNaN(minBound) && !Float.isNaN(maxBound) &&
+                Float.isFinite(minBound) && Float.isFinite(maxBound);
+    }
+
+    @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
         buf.writeFloat(minBound);

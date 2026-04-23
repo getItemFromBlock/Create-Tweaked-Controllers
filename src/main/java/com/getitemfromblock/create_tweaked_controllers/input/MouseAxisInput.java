@@ -79,6 +79,13 @@ public class MouseAxisInput implements GenericInput
     }
 
     @Override
+    public boolean IsDataCoherent()
+    {
+        return !Float.isNaN(minBound) && !Float.isNaN(maxBound) &&
+                Float.isFinite(minBound) && Float.isFinite(maxBound);
+    }
+
+    @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
         byte val = (byte)((useVelocity ? 0x1 : 0) | (isYAxis ? 0x2 : 0));

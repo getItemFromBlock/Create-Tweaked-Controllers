@@ -56,6 +56,12 @@ public class KeyboardInput implements GenericInput
     }
 
     @Override
+    public boolean IsDataCoherent()
+    {
+        return key > GLFW.GLFW_KEY_UNKNOWN && key <= GLFW.GLFW_KEY_LAST;
+    }
+
+    @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
         buf.writeBoolean(invertValue);

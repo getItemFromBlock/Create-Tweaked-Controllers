@@ -74,6 +74,13 @@ public class JoystickAxisInput implements GenericInput
     }
 
     @Override
+    public boolean IsDataCoherent()
+    {
+        return axisID >= 0 && axisID < 256 && !Float.isNaN(minBound) && !Float.isNaN(maxBound) &&
+                Float.isFinite(minBound) && Float.isFinite(maxBound);
+    }
+
+    @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
         buf.writeFloat(minBound);

@@ -288,37 +288,76 @@ public class ControlProfile
         }
         else try
         {
+            boolean isOldFormat = false;
             FileInputStream file = new FileInputStream(f);
             DataInputStream buf = new DataInputStream(file);
             for (int i = 0; i < layout.length; i++)
             {
-                switch (InputType.GetType(buf.readByte()))
+                byte id = buf.readByte();
+
+                if (id < InputType.values().length)
                 {
-                    case NONE:
-                        layout[i] = null;
-                        break;
-                    case JOYSTICK_BUTTON:
-                        layout[i] = new JoystickButtonInput();
-                        break;
-                    case JOYSTICK_AXIS:
-                        layout[i] = new JoystickAxisInput();
-                        break;
-                    case MOUSE_BUTTON:
-                        layout[i] = new MouseButtonInput();
-                        break;
-                    case MOUSE_AXIS:
-                        layout[i] = new MouseAxisInput();
-                        break;
-                    case MOUSE_WHEEL:
-                        layout[i] = new MouseWheelInput();
-                        break;
-                    case KEYBOARD_KEY:
-                        layout[i] = new KeyboardInput();
-                        break;
-                    default:
-                        throw new IOException("Corrupted Profile Data!");
+                    switch (InputType.GetType(id))
+                    {
+                        case NONE:
+                            layout[i] = null;
+                            break;
+                        case JOYSTICK_BUTTON:
+                            layout[i] = new JoystickButtonInput();
+                            break;
+                        case JOYSTICK_AXIS:
+                            layout[i] = new JoystickAxisInput();
+                            break;
+                        case MOUSE_BUTTON:
+                            layout[i] = new MouseButtonInput();
+                            break;
+                        case MOUSE_AXIS:
+                            layout[i] = new MouseAxisInput();
+                            break;
+                        case MOUSE_WHEEL:
+                            if (isOldFormat)
+                                layout[i] = new KeyboardInput();
+                            else
+                                layout[i] = new MouseWheelInput();
+                            break;
+                        case KEYBOARD_KEY:
+                            layout[i] = new KeyboardInput();
+                            break;
+                        default:
+                            throw new IOException("Corrupted Profile Data!");
+                    }
                 }
-                if (layout[i] != null) layout[i].Deserialize(buf);
+                else
+                {
+                    layout[i] = null;
+                }
+
+                if (layout[i] != null)
+                    layout[i].Deserialize(buf);
+
+                // So turns out I messed up when adding mouse wheel inputs and accidentally made most of the
+                // controller save files before 1.2.6 invalid. This code attempts to detect it and try loading
+                if (layout[i] == null || !layout[i].IsDataCoherent())
+                {
+                    if (isOldFormat)
+                    {
+                        CreateTweakedControllers.error("Error loading controller profile \""+path+"\"!");
+                        return;
+                    }
+
+                    isOldFormat = true;
+                    file.close();
+                    file = new FileInputStream(f);
+                    buf = new DataInputStream(file);
+                    CreateTweakedControllers.log("Error loading controller profile, trying out the old format");
+                    i = -1;
+                    continue;
+                }
+            }
+            if (isOldFormat)
+            {
+                CreateTweakedControllers.log("Successfully recovered old format, saving again to avoid future issues");
+                Save(path);
             }
             file.close();
         }

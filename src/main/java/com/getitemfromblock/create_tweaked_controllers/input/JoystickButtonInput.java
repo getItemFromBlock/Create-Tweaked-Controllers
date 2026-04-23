@@ -52,6 +52,12 @@ public class JoystickButtonInput implements GenericInput
     }
 
     @Override
+    public boolean IsDataCoherent()
+    {
+        return buttonID >= 0 && buttonID < 512;
+    }
+
+    @Override
     public void Serialize(DataOutputStream buf) throws IOException
     {
         buf.writeBoolean(invertValue);

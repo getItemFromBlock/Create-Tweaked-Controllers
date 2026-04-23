@@ -12,6 +12,7 @@ import com.simibubi.create.AllKeys;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.lwjgl.glfw.GLFW;
 
 public class MouseButtonInput implements GenericInput
 {
@@ -50,6 +51,12 @@ public class MouseButtonInput implements GenericInput
     public boolean IsInputValid()
     {
         return buttonID >= 0;
+    }
+
+    @Override
+    public boolean IsDataCoherent()
+    {
+        return buttonID >= 0 && buttonID <= GLFW.GLFW_MOUSE_BUTTON_LAST;
     }
 
     @Override

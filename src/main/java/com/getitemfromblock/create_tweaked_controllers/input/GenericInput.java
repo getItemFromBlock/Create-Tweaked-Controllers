@@ -22,6 +22,8 @@ public interface GenericInput
 
     boolean IsInputValid();
 
+    boolean IsDataCoherent();
+
     void Serialize(DataOutputStream buf) throws IOException;
 
     void Deserialize(DataInputStream buf) throws IOException;
