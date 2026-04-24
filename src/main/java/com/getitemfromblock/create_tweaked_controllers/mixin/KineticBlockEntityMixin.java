@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.getitemfromblock.create_tweaked_controllers.config.ModCommonConfig;
 
 @Mixin(KineticBlockEntity.class)
 public class KineticBlockEntityMixin
@@ -13,6 +14,9 @@ public class KineticBlockEntityMixin
     @Inject(method = "getFlickerScore", at = @At("HEAD"), cancellable = true, remap = false)
     private void getFlickerScoreMixin(CallbackInfoReturnable<Integer> callback)
     {
-        callback.setReturnValue(0);
+        if (ModCommonConfig.DISABLE_FLICKER_LIMIT.get())
+        {
+            callback.setReturnValue(0);
+        }
     }
 }

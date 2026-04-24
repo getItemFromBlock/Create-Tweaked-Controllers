@@ -20,7 +20,7 @@ public class ModClientConfig
     static {
         BUILDER.push("Configs for Create: Tweaked Controllers");
 
-        USE_CUSTOM_MAPPINGS = BUILDER.comment("Wether or not to use custom axis/button mappings, default is false")
+        USE_CUSTOM_MAPPINGS = BUILDER.comment("Whether or not to use custom axis/button mappings, default is false")
             .define("use_custom_mappings", false);
         TOGGLE_MOUSE_FOCUS = BUILDER.comment("Does the mouse cursor focus key acts as toggle instead of hold, default is false")
             .define("toggle_mouse_focus", false);
