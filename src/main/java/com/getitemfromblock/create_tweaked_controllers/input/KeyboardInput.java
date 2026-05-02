@@ -20,6 +20,8 @@ public class KeyboardInput implements GenericInput
 {
     public int key = GLFW.GLFW_KEY_UNKNOWN;
     public boolean invertValue = false;
+    public boolean springbackEnabled = true;
+    public AxisSpringback springback = new AxisSpringback();
 
     public KeyboardInput(int key)
     {
@@ -40,7 +42,12 @@ public class KeyboardInput implements GenericInput
     @Override
     public float GetAxisValue()
     {
-        return GetButtonValue() ? 1.0f : 0.0f;
+        if (springbackEnabled) {
+            float target = GetButtonValue() ? 1.0f : 0.0f;
+            return springback.smooth(target);
+        } else {
+            return GetButtonValue() ? 1.0f : 0.0f;
+        }
     }
 
     @Override
@@ -66,6 +73,13 @@ public class KeyboardInput implements GenericInput
     {
         buf.writeBoolean(invertValue);
         buf.writeInt(key);
+        buf.writeBoolean(springbackEnabled);
+        buf.writeBoolean(springback.isExponential);
+        buf.writeBoolean(springback.useGlobalRate);
+        buf.writeFloat(springback.globalRate);
+        buf.writeFloat(springback.riseRate);
+        buf.writeFloat(springback.fallRate);
+        buf.writeFloat(springback.holdTime);
     }
 
     @Override
@@ -73,6 +87,13 @@ public class KeyboardInput implements GenericInput
     {
         invertValue = buf.readBoolean();
         key = buf.readInt();
+        springbackEnabled = buf.readBoolean();
+        springback.isExponential = buf.readBoolean();
+        springback.useGlobalRate = buf.readBoolean();
+        springback.globalRate = buf.readFloat();
+        springback.riseRate = buf.readFloat();
+        springback.fallRate = buf.readFloat();
+        springback.holdTime = buf.readFloat();
     }
 
     @Override
