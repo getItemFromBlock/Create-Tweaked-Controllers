@@ -23,7 +23,7 @@ public class TweakedControlsUtil
 
     public static void FreeFocus()
     {
-        isFocusActive = false;
+        isFocusActive = ModClientConfig.INVERT_MOUSE_FOCUS.get() && ModClientConfig.TOGGLE_MOUSE_FOCUS.get();
         lastFocusKeyState = false;
         wasFocusActive = false;
     }
@@ -70,7 +70,29 @@ public class TweakedControlsUtil
 
     private static void HandleMouseKeyBinds()
     {
-        if (ModClientConfig.TOGGLE_MOUSE_FOCUS.get())
+        if (ModClientConfig.INVERT_MOUSE_FOCUS.get())
+        {
+            if (ModClientConfig.TOGGLE_MOUSE_FOCUS.get())
+            {
+                if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
+                {
+                    if (!lastFocusKeyState)
+                    {
+                        lastFocusKeyState = true;
+                        isFocusActive = !isFocusActive;
+                    }
+                }
+                else
+                {
+                    lastFocusKeyState = false;
+                }
+            }
+            else
+            {
+                isFocusActive = !ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS);
+            }
+        }
+        else if (ModClientConfig.TOGGLE_MOUSE_FOCUS.get())
         {
             if (ControlsUtil.isActuallyPressed(ModKeyMappings.KEY_MOUSE_FOCUS))
             {

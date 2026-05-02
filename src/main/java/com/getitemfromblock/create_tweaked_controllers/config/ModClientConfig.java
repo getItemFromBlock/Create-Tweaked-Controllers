@@ -9,6 +9,7 @@ public class ModClientConfig
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_CUSTOM_MAPPINGS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TOGGLE_MOUSE_FOCUS;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> INVERT_MOUSE_FOCUS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> AUTO_RESET_MOUSE_FOCUS;
     //public static final ForgeConfigSpec.ConfigValue<Boolean> AUTO_DETECT_INPUT_TYPE;
     public static final ForgeConfigSpec.ConfigValue<Integer> CONFIG_BUTTON_MAIN_MENU_ROW;
@@ -24,6 +25,8 @@ public class ModClientConfig
             .define("use_custom_mappings", false);
         TOGGLE_MOUSE_FOCUS = BUILDER.comment("Does the mouse cursor focus key acts as toggle instead of hold, default is false")
             .define("toggle_mouse_focus", false);
+        INVERT_MOUSE_FOCUS = BUILDER.comment("Inverts the mouse focus behaviour: mouse is grabbed immediately when the controller is active, and released while the focus key (Alt by default) is held, default is false")
+            .define("invert_mouse_focus", false);
         AUTO_RESET_MOUSE_FOCUS = BUILDER.comment("Does the mouse cursor inputs are automatically reset when the controller item is put down, default is true")
             .define("auto_reset_mouse_focus", true);
         //AUTO_DETECT_INPUT_TYPE = BUILDER.comment("Does the mod will automatically change the controller profile dependind on what is available on your computer, default is true")
